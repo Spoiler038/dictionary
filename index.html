@@ -1192,76 +1192,72 @@
   
   /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
   .result-item .word-row {
-    display: block;
+    display: table;
     width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
   }
   
   .result-item .word-row .word-cell {
-    display: block;
-    width: 100%;
-    padding: 4px 0;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 6px 4px;
+    white-space: nowrap;
   }
   
   .result-item .word-row .word-cell-left {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    flex-wrap: nowrap;
+    text-align: left;
+    width: auto;
   }
   
   .result-item .word-row .word-cell-center {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    flex-wrap: nowrap;
+    text-align: left;
+    width: auto;
   }
   
   .result-item .word-row .word-cell-right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    flex-wrap: nowrap;
+    text-align: right;
+    width: 32px;
+    padding-left: 0;
   }
   
   .result-item .word-row .word-gr {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: #2c3e50;
     word-break: break-word;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex-shrink: 1;
-    min-width: 0;
+    display: inline-block;
+    max-width: 100%;
   }
   
   .result-item .word-row .word-ru {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: #2c3e50;
     word-break: break-word;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex-shrink: 1;
-    min-width: 0;
+    display: inline-block;
+    max-width: 100%;
   }
   
   .result-item .word-row .copy-btn {
-    font-size: 18px;
-    padding: 4px 8px;
+    font-size: 16px;
+    padding: 2px 4px;
     opacity: 0.7;
-    flex-shrink: 0;
     background: none;
     border: none;
     cursor: pointer;
     transition: all 0.3s;
     color: #95a5a6;
     line-height: 1;
-    min-width: 32px;
+    display: inline-block;
+    white-space: nowrap;
+    min-width: 28px;
   }
   
   .result-item .word-row .copy-btn:hover {
@@ -1912,11 +1908,32 @@
     }
     
     function clearThemeInput() {
-      document.getElementById('themeInput').value = '';
-      document.getElementById('themeClearInputBtn').classList.remove('visible');
-      document.getElementById('themeInput').focus();
-      showAllThemes();
-    }
+  // Очищаем поле ввода темы
+  document.getElementById('themeInput').value = '';
+  document.getElementById('themeClearInputBtn').classList.remove('visible');
+  
+  // Сбрасываем выбранную тему
+  selectedTheme = '';
+  
+  // Закрываем выпадающий список
+  document.getElementById('themeDropdown').classList.remove('active');
+  themeDropdownVisible = false;
+  
+  // Снимаем активность с кнопки темы
+  document.getElementById('themeToggleBtn').classList.remove('active-theme');
+  document.getElementById('themeSection').classList.remove('active');
+  
+  // Очищаем поле поиска и результаты
+  document.getElementById('searchInput').value = '';
+  document.getElementById('clearBtn').classList.remove('visible');
+  isShowingAll = false;
+  
+  // Показываем начальное сообщение
+  showInitialMessage();
+  
+  // Фокус на поле поиска
+  document.getElementById('searchInput').focus();
+}
     
     document.addEventListener('click', function(e) {
       const dropdown = document.getElementById('themeDropdown');
@@ -2006,14 +2023,14 @@
   document.getElementById('themeDropdown').classList.remove('active');
   themeDropdownVisible = false;
   
-  // Сбрасываем флаг показа всех слов
-  isShowingAll = false;
-  
   // Снимаем активность с кнопки темы
   document.getElementById('themeToggleBtn').classList.remove('active-theme');
   document.getElementById('themeSection').classList.remove('active');
   
-  // Возвращаем начальное сообщение
+  // Сбрасываем флаг показа всех слов
+  isShowingAll = false;
+  
+  // Показываем начальное сообщение
   showInitialMessage();
   
   // Фокус на поле поиска
