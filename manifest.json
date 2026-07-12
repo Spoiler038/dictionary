@@ -2,7 +2,7 @@
   "name": "Греческо-русский словарь",
   "short_name": "Словарь",
   "description": "Словарь греческого языка с русским переводом",
-  "start_url": "https://ВАШ_ПОЛЬЗОВАТЕЛЬ.github.io/НАЗВАНИЕ_РЕПО/",
+  "start_url": "https://spoiler038.github.io/dictionary/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#3498db",
@@ -97,13 +97,13 @@
       "name": "Поиск слова",
       "short_name": "Поиск",
       "description": "Быстрый поиск слова",
-      "url": "https://ВАШ_ПОЛЬЗОВАТЕЛЬ.github.io/НАЗВАНИЕ_РЕПО/?action=search"
+      "url": "https://spoiler038.github.io/dictionary/?action=search"
     },
     {
       "name": "Темы",
       "short_name": "Темы",
       "description": "Просмотр слов по темам",
-      "url": "https://ВАШ_ПОЛЬЗОВАТЕЛЬ.github.io/НАЗВАНИЕ_РЕПО/?action=themes"
+      "url": "https://spoiler038.github.io/dictionary/?action=themes"
     }
   ]
 }
