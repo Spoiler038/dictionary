@@ -91,19 +91,5 @@
       "sizes": "180x180",
       "type": "image/png"
     }
-  ],
-  "shortcuts": [
-    {
-      "name": "Поиск слова",
-      "short_name": "Поиск",
-      "description": "Быстрый поиск слова",
-      "url": "https://spoiler038.github.io/dictionary/?action=search"
-    },
-    {
-      "name": "Темы",
-      "short_name": "Темы",
-      "description": "Просмотр слов по темам",
-      "url": "https://spoiler038.github.io/dictionary/?action=themes"
-    }
   ]
 }
