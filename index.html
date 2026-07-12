@@ -1982,9 +1982,10 @@ html, body {
     container.innerHTML = `
       <span class="editor-badge">✏️ РЕДАКТОР</span>
       <button onclick="openAdminModal()">🔑 Пароль</button>
+      <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
       <button class="active-btn" onclick="openAddModal()">➕ Добавить</button>
       <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
-      <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
+      
     `;
   } else {
     container.innerHTML = ``;
