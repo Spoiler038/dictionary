@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Словарь">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Словарь">
+  <meta name="theme-color" content="#3498db">
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  
   <title>Словарь</title>
   <style>
     * {
@@ -122,6 +131,17 @@
     
     .btn-logout:hover {
       background: #c0392b !important;
+      color: white !important;
+    }
+    
+    .btn-show-all {
+      background: #8e44ad;
+      color: white !important;
+      border-color: #8e44ad !important;
+    }
+    
+    .btn-show-all:hover {
+      background: #7d3c98 !important;
       color: white !important;
     }
     
@@ -307,7 +327,6 @@
       background: #2980b9;
     }
     
-    /* Кнопка добавления темы (только в режиме редактора) */
     .controls-row .add-theme-btn {
       padding: 8px 16px;
       background: #27ae60;
@@ -903,8 +922,7 @@
       font-size: 14px;
     }
     
-    .form-group input,
-    .form-group select {
+    .form-group input {
       width: 100%;
       padding: 12px 14px;
       border: 2px solid #e0e0e0;
@@ -914,8 +932,7 @@
       background: #fafafa;
     }
     
-    .form-group input:focus,
-    .form-group select:focus {
+    .form-group input:focus {
       border-color: #3498db;
       outline: none;
       background: white;
@@ -1026,7 +1043,6 @@
       transform: translateY(-50%) scale(0.9);
     }
     
-    /* Стили для datalist (выпадающий список тем при редактировании) */
     .theme-datalist {
       position: absolute;
       top: 100%;
@@ -1061,6 +1077,7 @@
       border-bottom: none;
     }
     
+    /* Десктопная версия */
     @media (min-width: 768px) {
       #app {
         padding: 30px;
@@ -1079,6 +1096,7 @@
       }
     }
     
+    /* Мобильная версия */
     @media (max-width: 767px) {
       #app {
         padding: 15px;
@@ -1173,28 +1191,43 @@
       }
       
       .result-item .word-row {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
       }
       
       .result-item .word-row .word-cell {
-        display: table-cell;
-        vertical-align: middle;
-        padding: 4px 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        width: 100%;
+      }
+      
+      .result-item .word-row .word-cell-left {
+        justify-content: flex-start;
+      }
+      
+      .result-item .word-row .word-cell-center {
+        justify-content: center;
+      }
+      
+      .result-item .word-row .word-cell-right {
+        justify-content: flex-end;
       }
       
       .result-item .word-row .word-gr {
-        font-size: 18px;
+        font-size: 20px;
       }
       
       .result-item .word-row .word-ru {
-        font-size: 18px;
+        font-size: 20px;
       }
       
       .result-item .word-row .copy-btn {
-        font-size: 14px;
-        padding: 4px;
+        font-size: 18px;
+        padding: 4px 10px;
         opacity: 0.7;
       }
       
@@ -1470,10 +1503,11 @@
     let themeDropdownVisible = false;
     let currentVersion = '';
     let deleteTarget = null;
-    let deleteType = 'word'; // 'word' or 'theme'
+    let deleteType = 'word';
     let isSearchingNow = false;
     let isLoading = false;
-    let themeEditingTarget = null; // null = add, {gr, ru} = edit
+    let themeEditingTarget = null;
+    let isShowingAll = false;
     
     // ========== JSONP ВЫЗОВЫ GAS ==========
     function callGAS(action, params) {
@@ -1545,7 +1579,7 @@
       }
     }
     
-    // ========== БЛОКИРОВКА СКРОЛЛА ПРИ МОДАЛЬНОМ ОКНЕ ==========
+    // ========== БЛОКИРОВКА СКРОЛЛА ==========
     function toggleBodyScroll(disable) {
       if (disable) {
         document.body.classList.add('modal-open');
@@ -1703,8 +1737,6 @@
         updateHeaderButtons();
         updateEditorUI();
         setupEventListeners();
-        
-        // Показываем кнопку добавления темы если редактор
         updateAddThemeButton();
         
       } catch (error) {
@@ -1837,6 +1869,7 @@
       selectedTheme = gr;
       document.getElementById('themeDropdown').classList.remove('active');
       themeDropdownVisible = false;
+      isShowingAll = false;
       performSearch();
     }
     
@@ -1868,6 +1901,7 @@
       if (isEditor) {
         container.innerHTML = `
           <button class="active-btn" onclick="openAddModal()">➕ Добавить</button>
+          <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
           <button onclick="openAdminModal()">🔑 Пароль</button>
           <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
           <span class="editor-badge">✏️ РЕДАКТОР</span>
@@ -1892,9 +1926,30 @@
         el.style.display = isEditor ? 'flex' : 'none';
       });
       updateHeaderButtons();
-      // Обновляем список тем с кнопками
       if (document.getElementById('themeDropdown').classList.contains('active')) {
         showAllThemes();
+      }
+    }
+    
+    // ========== ПОКАЗ ВСЕХ СЛОВ ==========
+    function showAllWords() {
+      if (!isEditor) return;
+      
+      isShowingAll = true;
+      selectedTheme = '';
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      
+      if (allData && allData.words) {
+        const results = {
+          results: allData.words,
+          total: allData.words.length,
+          searchMode: 'auto'
+        };
+        handleResults(results);
+        showToast(`📚 Показано ${allData.words.length} слов`);
       }
     }
     
@@ -1903,6 +1958,13 @@
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('visible');
       document.getElementById('searchInput').focus();
+      // Очищаем результаты поиска
+      if (!selectedTheme && !isShowingAll) {
+        showInitialMessage();
+      } else {
+        performSearch();
+      }
+      isShowingAll = false;
     }
     
     document.addEventListener('DOMContentLoaded', function() {
@@ -2010,7 +2072,7 @@
       openModal('logoutModal');
     }
     
-    // ========== РАБОТА С ТЕМАМИ (модальное окно) ==========
+    // ========== РАБОТА С ТЕМАМИ ==========
     
     function openAddThemeModal() {
       if (!isEditor) {
@@ -2050,7 +2112,6 @@
       
       document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
       
-      // Проверяем дубликаты
       const exists = allThemes.some(t => 
         t.gr.toLowerCase() === gr.toLowerCase() && 
         (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
@@ -2062,10 +2123,8 @@
       }
       
       try {
-        // Обновляем тему во всех словах
         let updatedCount = 0;
         if (themeEditingTarget) {
-          // Редактирование темы
           for (const word of allData.words) {
             if (word.themeGr === themeEditingTarget.gr) {
               word.themeGr = gr;
@@ -2073,7 +2132,6 @@
               updatedCount++;
             }
           }
-          // Обновляем в GAS
           const result = await callGAS('editTheme', { 
             oldGr: themeEditingTarget.gr, 
             newGr: gr, 
@@ -2082,9 +2140,6 @@
           if (result.error) {
             throw new Error(result.error);
           }
-        } else {
-          // Добавление темы - просто добавляем в список
-          allThemes.push({ gr: gr, ru: ru });
         }
         
         document.getElementById('themeEditMessage').innerHTML = 
@@ -2104,7 +2159,7 @@
       }
     }
     
-    // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ПРИ РЕДАКТИРОВАНИИ ==========
+    // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ==========
     
     function filterThemeDatalist() {
       const input = document.getElementById('editThemeGr');
@@ -2112,7 +2167,6 @@
       const query = input.value.toLowerCase().trim();
       
       if (!query) {
-        // Показываем все темы
         const filtered = allThemes;
         if (filtered.length === 0) {
           datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
@@ -2152,7 +2206,6 @@
       checkDuplicate();
     }
     
-    // Закрытие datalist при клике вне
     document.addEventListener('click', function(e) {
       const datalist = document.getElementById('themeDatalist');
       if (!e.target.closest('#editThemeGr') && !e.target.closest('.theme-datalist')) {
@@ -2268,6 +2321,7 @@
         return;
       }
       
+      isShowingAll = false;
       isSearchingNow = true;
       
       document.getElementById('resultsContainer').innerHTML = `
@@ -2424,7 +2478,7 @@
       console.error('Ошибка:', error);
     }
     
-    // ========== КОПИРОВАНИЕ В БУФЕР ==========
+    // ========== КОПИРОВАНИЕ ==========
     function copyText(text, button) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
@@ -2508,11 +2562,7 @@
       
       try {
         if (deleteType === 'theme') {
-          // Удаление темы - обновляем все слова с этой темой
           const themeGr = deleteTarget.gr;
-          const themeRu = deleteTarget.ru;
-          
-          // Проверяем, есть ли слова с этой темой
           const wordsWithTheme = allData.words.filter(w => w.themeGr === themeGr);
           if (wordsWithTheme.length > 0) {
             document.getElementById('deleteMessage').innerHTML = 
@@ -2537,7 +2587,6 @@
           return;
         }
         
-        // Удаление слова
         const result = await callGAS('deleteWord', { id: deleteTarget });
         if (result.error) {
           throw new Error(result.error);
