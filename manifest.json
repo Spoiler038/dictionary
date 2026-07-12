@@ -1,0 +1,109 @@
+﻿{
+  "name": "Греческо-русский словарь",
+  "short_name": "Словарь",
+  "description": "Словарь греческого языка с русским переводом",
+  "start_url": "https://ВАШ_ПОЛЬЗОВАТЕЛЬ.github.io/НАЗВАНИЕ_РЕПО/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#3498db",
+  "background_color": "#f5f5f5",
+  "categories": ["education", "reference"],
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icons/android/48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/android/72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/android/96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/android/144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/android/192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/android/512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/ios/57.png",
+      "sizes": "57x57",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/60.png",
+      "sizes": "60x60",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/76.png",
+      "sizes": "76x76",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/114.png",
+      "sizes": "114x114",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/ios/180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Поиск слова",
+      "short_name": "Поиск",
+      "description": "Быстрый поиск слова",
+      "url": "https://ВАШ_ПОЛЬЗОВАТЕЛЬ.github.io/НАЗВАНИЕ_РЕПО/?action=search"
+    },
+    {
+      "name": "Темы",
+      "short_name": "Темы",
+      "description": "Просмотр слов по темам",
+      "url": "https://ВАШ_ПОЛЬЗОВАТЕЛЬ.github.io/НАЗВАНИЕ_РЕПО/?action=themes"
+    }
+  ]
+}
