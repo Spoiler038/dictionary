@@ -7,7 +7,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Словарь</title>
   <style>
-    /* ... весь CSS остаётся без изменений ... */
     * {
       margin: 0;
       padding: 0;
@@ -617,6 +616,45 @@
       margin-bottom: 16px;
     }
     
+    /* Индикатор прогресса загрузки */
+    .progress-container {
+      display: none;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .progress-container.active {
+      display: block;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #ecf0f1;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .progress-bar .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+    
+    .progress-text {
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+    
+    .progress-text .percent {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
     .toast {
       position: fixed;
       top: 20px;
@@ -1123,6 +1161,16 @@
       </div>
     </div>
     
+    <!-- Индикатор прогресса загрузки -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-text">
+        Загрузка данных... <span class="percent" id="progressPercent">0</span>%
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+    
     <div id="resultsContainer">
       <div class="no-results">Введите слово для поиска или выберите тему</div>
     </div>
@@ -1262,6 +1310,7 @@
     // ========== НАСТРОЙКИ ==========
     // ЗАМЕНИТЕ ЭТОТ URL НА ВАШ!
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsF633XdFiInhTqFLNUp3Q98sp6Z7AXlVeyvKhr8xaR3yKw2FRdVLBoH0k8R3eLHiapQ/exec';
+    const PAGE_SIZE = 100; // Размер страницы для загрузки
     
     // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
     let currentMode = 'auto';
@@ -1275,13 +1324,13 @@
     let currentVersion = '';
     let deleteTargetId = null;
     let isSearchingNow = false;
+    let isLoading = false;
     
     // ========== JSONP ВЫЗОВЫ GAS ==========
     function callGAS(action, params) {
       return new Promise((resolve, reject) => {
         const callback = 'callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
         
-        // Создаём глобальную функцию для JSONP
         window[callback] = function(data) {
           delete window[callback];
           resolve(data);
@@ -1304,13 +1353,11 @@
           reject(new Error('Ошибка соединения с сервером'));
         };
         
-        // Таймаут на случай если скрипт не загрузится
         const timeout = setTimeout(() => {
           delete window[callback];
           reject(new Error('Превышено время ожидания ответа'));
-        }, 10000);
+        }, 30000);
         
-        // Очищаем таймаут при загрузке
         const originalCallback = window[callback];
         window[callback] = function(data) {
           clearTimeout(timeout);
@@ -1332,21 +1379,159 @@
       }, 2000);
     }
     
-    // ========== ЗАГРУЗКА ДАННЫХ В КЕШ ==========
+    // ========== ИНДИКАТОР ПРОГРЕССА ==========
+    function showProgress(percent) {
+      const container = document.getElementById('progressContainer');
+      const fill = document.getElementById('progressFill');
+      const text = document.getElementById('progressPercent');
+      
+      container.classList.add('active');
+      fill.style.width = percent + '%';
+      text.textContent = percent;
+      
+      if (percent >= 100) {
+        setTimeout(() => {
+          container.classList.remove('active');
+        }, 500);
+      }
+    }
+    
+    // ========== ЗАГРУЗКА ДАННЫХ С ПАГИНАЦИЕЙ ==========
     async function loadData() {
+      if (isLoading) return;
+      isLoading = true;
+      
       try {
-        const data = await callGAS('getAll');
-        if (data.error) {
-          throw new Error(data.error);
+        // Сначала получаем метаданные
+        const meta = await callGAS('getAll');
+        if (meta.error) {
+          throw new Error(meta.error);
         }
-        allData = data;
-        allThemes = data.themes || [];
-        currentVersion = data.version || '';
+        
+        currentVersion = meta.version;
+        allThemes = meta.themes || [];
         document.getElementById('versionBadge').textContent = 'v' + currentVersion;
-        return data;
+        
+        const totalPages = meta.totalPages || 0;
+        const totalWords = meta.total || 0;
+        
+        if (totalWords === 0) {
+          allData = { words: [], themes: allThemes, version: currentVersion, total: 0 };
+          isLoading = false;
+          showInitialMessage();
+          return;
+        }
+        
+        // Загружаем все страницы параллельно
+        let loadedPages = 0;
+        const pagePromises = [];
+        
+        for (let page = 1; page <= totalPages; page++) {
+          const promise = loadPage(page, PAGE_SIZE).then(data => {
+            loadedPages++;
+            const progress = Math.round((loadedPages / totalPages) * 100);
+            showProgress(progress);
+            return data;
+          });
+          pagePromises.push(promise);
+        }
+        
+        // Ждём загрузки всех страниц
+        const pagesData = await Promise.all(pagePromises);
+        
+        // Объединяем все слова
+        let allWords = [];
+        pagesData.forEach(pageData => {
+          if (pageData.words) {
+            allWords = allWords.concat(pageData.words);
+          }
+        });
+        
+        allData = {
+          words: allWords,
+          themes: allThemes,
+          version: currentVersion,
+          total: totalWords,
+          totalPages: totalPages
+        };
+        
+        // Сохраняем в localStorage
+        try {
+          localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          localStorage.setItem('dictionary_version', currentVersion);
+        } catch (e) {
+          console.warn('Не удалось сохранить в localStorage:', e);
+        }
+        
+        isLoading = false;
+        showInitialMessage();
+        return allData;
+        
       } catch (error) {
+        isLoading = false;
         console.error('Ошибка загрузки данных:', error);
+        
+        // Пробуем загрузить из localStorage
+        try {
+          const cached = localStorage.getItem('dictionary_data');
+          if (cached) {
+            allData = JSON.parse(cached);
+            allThemes = allData.themes || [];
+            currentVersion = allData.version || '0';
+            document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+            showInitialMessage();
+            return allData;
+          }
+        } catch (e) {}
+        
         throw error;
+      }
+    }
+    
+    function loadPage(page, pageSize) {
+      return new Promise((resolve, reject) => {
+        callGAS('getPage', { page: page, pageSize: pageSize })
+          .then(data => {
+            if (data.error) {
+              reject(new Error(data.error));
+            } else {
+              resolve(data);
+            }
+          })
+          .catch(reject);
+      });
+    }
+    
+    // ========== ПРОВЕРКА ВЕРСИИ ==========
+    async function checkVersion() {
+      try {
+        const data = await callGAS('getVersion');
+        const serverVersion = data.version || '0';
+        const cachedVersion = localStorage.getItem('dictionary_version') || '0';
+        
+        if (serverVersion !== cachedVersion) {
+          console.log('🔄 Версия изменилась, обновляем данные...');
+          return true;
+        }
+        
+        const cached = localStorage.getItem('dictionary_data');
+        if (cached) {
+          try {
+            allData = JSON.parse(cached);
+            allThemes = allData.themes || [];
+            currentVersion = allData.version || '0';
+            document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+            return false;
+          } catch (e) {
+            return true;
+          }
+        }
+        
+        return true;
+        
+      } catch (error) {
+        console.warn('Ошибка проверки версии:', error);
+        return false;
       }
     }
     
@@ -1358,13 +1543,20 @@
       }
       
       try {
-        await loadData();
+        const needUpdate = await checkVersion();
+        
+        if (needUpdate) {
+          await loadData();
+        } else {
+          showInitialMessage();
+        }
+        
         updateHeaderButtons();
         updateEditorUI();
         setupEventListeners();
-        showInitialMessage();
+        
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
+        console.error('Ошибка инициализации:', error);
         document.getElementById('resultsContainer').innerHTML = 
           `<div class="error">❌ Ошибка загрузки данных: ${error.message}</div>`;
       }
@@ -1385,7 +1577,7 @@
         container.innerHTML = `
           <div class="no-results">
             📚 Готов к работе<br>
-            <small>Введите слово для поиска или выберите тему</small>
+            <small>Загружено ${allData.total} слов</small>
           </div>
         `;
       } else {
