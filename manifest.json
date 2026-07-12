@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "Греческо-русский словарь",
   "short_name": "Словарь",
   "description": "Словарь греческого языка с русским переводом",
@@ -14,25 +14,25 @@
       "src": "icons/android/48.png",
       "sizes": "48x48",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icons/android/72.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icons/android/96.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icons/android/144.png",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icons/android/192.png",
