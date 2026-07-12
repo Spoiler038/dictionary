@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Словарь</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10px;
+    }
+    
+    #app {
+      max-width: 1200px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s;
+      position: relative;
+    }
+    
+    h1:active {
+      transform: scale(0.95);
+    }
+    
+    .version-badge {
+      position: absolute;
+      bottom: -15px;
+      right: 10px;
+      font-size: 11px;
+      color: rgba(0,0,0,0.15);
+      user-select: none;
+      pointer-events: none;
+    }
+    
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+      font-size: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .header-buttons button {
+      padding: 6px 14px;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .header-buttons button:hover {
+      background: #e8f4fd;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .header-buttons button:active {
+      transform: scale(0.95);
+    }
+    
+    .header-buttons button.active-btn {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+    
+    .header-buttons button.active-btn:hover {
+      background: #2980b9;
+    }
+    
+    .btn-logout {
+      background: #e74c3c;
+      color: white !important;
+      border-color: #e74c3c !important;
+    }
+    
+    .btn-logout:hover {
+      background: #c0392b !important;
+      color: white !important;
+    }
+    
+    .editor-badge {
+      background: #f39c12;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    .search-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .search-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .search-input-wrapper {
+      flex: 1;
+      position: relative;
+      min-width: 200px;
+    }
+    
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 12px 45px 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    
+    .search-input-wrapper input:focus {
+      border-color: #3498db;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    .search-input-wrapper .clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      display: none;
+      color: #95a5a6;
+      line-height: 1;
+    }
+    
+    .search-input-wrapper .clear-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .search-input-wrapper .clear-btn:active {
+      transform: translateY(-50%) scale(0.9);
+    }
+    
+    .search-input-wrapper .clear-btn.visible {
+      display: block;
+    }
+    
+    .search-row .search-btn {
+      padding: 12px 24px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    
+    .search-row .search-btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    }
+    
+    .search-row .search-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .controls-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .controls-row .theme-toggle-btn {
+      padding: 8px 20px;
+      background: #f39c12;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    
+    .controls-row .theme-toggle-btn:hover {
+      background: #e67e22;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(243, 156, 18, 0.3);
+    }
+    
+    .controls-row .theme-toggle-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .controls-row .theme-toggle-btn.active-theme {
+      background: #27ae60;
+    }
+    
+    .controls-row .mode-selector {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      justify-content: center;
+      min-width: 200px;
+    }
+    
+    .controls-row .mode-selector button {
+      padding: 8px 16px;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex: 1;
+      max-width: 120px;
+    }
+    
+    .controls-row .mode-selector button.active {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+    
+    .controls-row .mode-selector button:hover {
+      background: #e8f4fd;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .controls-row .mode-selector button:active {
+      transform: scale(0.95);
+    }
+    
+    .controls-row .mode-selector button.active:hover {
+      background: #2980b9;
+    }
+    
+    .theme-row {
+      display: none;
+      animation: slideDown 0.3s ease;
+      width: 100%;
+    }
+    
+    .theme-row.active {
+      display: block;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .theme-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    
+    .theme-input-wrapper input {
+      width: 100%;
+      padding: 12px 45px 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    
+    .theme-input-wrapper input:focus {
+      border-color: #f39c12;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+    }
+    
+    .theme-input-wrapper .theme-clear-input-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      display: none;
+      color: #95a5a6;
+      line-height: 1;
+    }
+    
+    .theme-input-wrapper .theme-clear-input-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .theme-input-wrapper .theme-clear-input-btn:active {
+      transform: translateY(-50%) scale(0.9);
+    }
+    
+    .theme-input-wrapper .theme-clear-input-btn.visible {
+      display: block;
+    }
+    
+    .theme-dropdown {
+      width: 100%;
+      max-height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: white;
+      border: 2px solid #f39c12;
+      border-radius: 8px;
+      margin-top: 5px;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      animation: slideDown 0.2s ease;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 100;
+    }
+    
+    .theme-dropdown.active {
+      display: block;
+    }
+    
+    .theme-dropdown .theme-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    
+    .theme-dropdown .theme-item:hover {
+      background: #fef9e7;
+      transform: translateX(4px);
+    }
+    
+    .theme-dropdown .theme-item:active {
+      background: #fdebd0;
+    }
+    
+    .theme-dropdown .theme-item:last-child {
+      border-bottom: none;
+    }
+    
+    .theme-dropdown .theme-item .theme-gr {
+      font-weight: 600;
+      color: #2c3e50;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .theme-dropdown .theme-item .theme-ru {
+      color: #7f8c8d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 10px;
+    }
+    
+    .results {
+      margin-top: 20px;
+    }
+    
+    .result-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 15px;
+      margin-bottom: 12px;
+      background: #fafafa;
+      border-radius: 8px;
+      border-left: 4px solid #3498db;
+      transition: all 0.3s;
+      position: relative;
+      animation: fadeInItem 0.3s ease;
+    }
+    
+    .result-item:hover {
+      background: #f0f7ff;
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .result-item .theme {
+      font-size: 14px;
+      color: #7f8c8d;
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    .result-item .word-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .result-item .word-row .word-gr {
+      font-size: 22px;
+      font-weight: 600;
+      color: #2c3e50;
+      word-break: break-word;
+      flex: 1;
+      text-align: right;
+      min-width: 80px;
+    }
+    
+    .result-item .word-row .word-ru {
+      font-size: 22px;
+      font-weight: 600;
+      color: #2c3e50;
+      word-break: break-word;
+      flex: 1;
+      text-align: left;
+      min-width: 80px;
+    }
+    
+    .result-item .word-row .copy-btn {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      transition: all 0.3s;
+      color: #95a5a6;
+      opacity: 0.5;
+      line-height: 1;
+    }
+    
+    .result-item:hover .copy-btn {
+      opacity: 1;
+    }
+    
+    .result-item .word-row .copy-btn:hover {
+      background: #ecf0f1;
+      color: #2c3e50;
+      transform: scale(1.1);
+    }
+    
+    .result-item .word-row .copy-btn:active {
+      transform: scale(0.9);
+    }
+    
+    .result-item .word-row .copy-btn.copied {
+      color: #27ae60;
+    }
+    
+    .result-item .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      justify-content: flex-end;
+    }
+    
+    .result-item .actions button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+    
+    .result-item .actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    
+    .result-item .actions button:active {
+      transform: scale(0.95);
+    }
+    
+    .btn-edit {
+      background: #f39c12;
+      color: white;
+    }
+    
+    .btn-edit:hover {
+      background: #e67e22;
+    }
+    
+    .btn-delete {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .btn-delete:hover {
+      background: #c0392b;
+    }
+    
+    .no-results {
+      text-align: center;
+      color: #95a5a6;
+      font-size: 16px;
+      padding: 40px 20px;
+      animation: fadeInItem 0.3s ease;
+    }
+    
+    .error {
+      color: #e74c3c;
+      text-align: center;
+      padding: 20px;
+      background: #fde8e8;
+      border-radius: 8px;
+      animation: fadeInItem 0.3s ease;
+    }
+    
+    .success {
+      color: #27ae60;
+      text-align: center;
+      padding: 20px;
+      background: #e8f8ed;
+      border-radius: 8px;
+      animation: fadeInItem 0.3s ease;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 18px;
+      color: #3498db;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .result-info {
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    
+    /* Toast уведомление */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    /* Кнопка "Наверх" */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #3498db;
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+      transition: all 0.3s;
+      display: none;
+      z-index: 999;
+      opacity: 0;
+      transform: scale(0);
+    }
+    
+    .scroll-top-btn.visible {
+      display: block;
+      opacity: 1;
+      transform: scale(1);
+      animation: bounceIn 0.5s ease;
+    }
+    
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .scroll-top-btn:hover {
+      background: #2980b9;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+    }
+    
+    .scroll-top-btn:active {
+      transform: scale(0.9);
+    }
+    
+    /* Модальное окно - общий стиль */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .modal-content .modal-icon {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    
+    .modal-content h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      font-size: 24px;
+    }
+    
+    .modal-content .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #95a5a6;
+      transition: all 0.3s;
+      background: none;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content .close:hover {
+      background: #f0f0f0;
+      color: #2c3e50;
+      transform: rotate(90deg);
+    }
+    
+    .modal-message {
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 18px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #3498db;
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    .form-group .duplicate-warning {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+    
+    .form-group .duplicate-warning.visible {
+      display: block;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    .form-actions button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .form-actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .form-actions button:active {
+      transform: scale(0.95);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #2980b9, #1a6e9e);
+    }
+    
+    .btn-secondary {
+      background: #ecf0f1;
+      color: #555;
+    }
+    
+    .btn-secondary:hover {
+      background: #dde1e3;
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #27ae60, #229954);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: linear-gradient(135deg, #229954, #1a7a3e);
+    }
+    
+    .btn-danger-modal {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+    }
+    
+    .btn-danger-modal:hover {
+      background: linear-gradient(135deg, #c0392b, #962d22);
+    }
+    
+    .password-input {
+      position: relative;
+    }
+    
+    .password-input input {
+      padding-right: 50px;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 20px;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+    
+    .password-toggle:hover {
+      background: #f0f0f0;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .password-toggle:active {
+      transform: translateY(-50%) scale(0.9);
+    }
+    
+    /* Десктопная версия */
+    @media (min-width: 768px) {
+      #app {
+        padding: 30px;
+      }
+      
+      .results-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .result-item {
+        margin-bottom: 0;
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .result-item .word-row {
+        justify-content: center;
+      }
+      
+      .result-item .word-row .word-gr {
+        text-align: right;
+        flex: 1;
+      }
+      
+      .result-item .word-row .word-ru {
+        text-align: left;
+        flex: 1;
+      }
+    }
+    
+    /* Мобильная версия */
+    @media (max-width: 767px) {
+      #app {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 20px;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .header-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .search-row {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .search-input-wrapper {
+        width: 100%;
+        min-width: unset;
+      }
+      
+      .search-input-wrapper input {
+        width: 100%;
+        font-size: 18px;
+        padding: 14px 50px 14px 16px;
+      }
+      
+      .search-input-wrapper .clear-btn {
+        right: 12px;
+        font-size: 22px;
+      }
+      
+      .search-row .search-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 18px;
+      }
+      
+      .controls-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+      
+      .controls-row .theme-toggle-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 16px;
+      }
+      
+      .controls-row .mode-selector {
+        width: 100%;
+        min-width: unset;
+      }
+      
+      .controls-row .mode-selector button {
+        max-width: unset;
+        font-size: 16px;
+        padding: 10px 12px;
+      }
+      
+      .theme-row {
+        width: 100%;
+      }
+      
+      .theme-input-wrapper {
+        width: 100%;
+      }
+      
+      .theme-input-wrapper input {
+        width: 100%;
+        font-size: 18px;
+        padding: 14px 50px 14px 16px;
+      }
+      
+      .theme-input-wrapper .theme-clear-input-btn {
+        right: 12px;
+        font-size: 22px;
+      }
+      
+      .result-item .word-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: nowrap;
+      }
+      
+      .result-item .word-row .word-gr {
+        text-align: right;
+        flex: 1;
+        font-size: 18px;
+        min-width: 60px;
+      }
+      
+      .result-item .word-row .word-ru {
+        text-align: left;
+        flex: 1;
+        font-size: 18px;
+        min-width: 60px;
+      }
+      
+      .result-item .word-row .copy-btn {
+        font-size: 14px;
+        padding: 4px;
+        opacity: 0.7;
+        flex-shrink: 0;
+      }
+      
+      .result-item .actions {
+        flex-direction: column;
+      }
+      
+      .result-item .actions button {
+        width: 100%;
+        padding: 10px;
+      }
+      
+      .modal-content {
+        padding: 20px;
+        margin: 10px;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .scroll-top-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .scroll-top-btn {
+        bottom: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1 id="headerTitle" onclick="handleTitleClick()">
+      📖 Словарь
+      <span class="version-badge" id="versionBadge">v1.0.0</span>
+      <div class="header-buttons" id="headerButtons">
+        <!-- Кнопки будут динамически обновляться -->
+      </div>
+    </h1>
+    
+    <div class="search-section">
+      <!-- Строка поиска слова -->
+      <div class="search-row">
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" placeholder="Введите слово для поиска..." autofocus>
+          <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        </div>
+        <button class="search-btn" id="searchBtn">🔍 Найти</button>
+      </div>
+      
+      <!-- Вторая строка: Темы + переключатели языка -->
+      <div class="controls-row">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+          📂 Темы
+        </button>
+        <div class="mode-selector" id="modeSelector">
+          <button id="modeGreek" data-mode="greek">🇬🇷</button>
+          <button id="modeAuto" class="active" data-mode="auto">🤖 Авто</button>
+          <button id="modeRussian" data-mode="russian">🇷🇺</button>
+        </div>
+      </div>
+      
+      <!-- Строка темы -->
+      <div class="theme-row" id="themeSection">
+        <div class="theme-input-wrapper">
+          <input type="text" id="themeInput" placeholder="Введите тему для поиска..." oninput="filterThemes()" onfocus="filterThemes()">
+          <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput()">✕</button>
+          <div class="theme-dropdown" id="themeDropdown"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="resultsContainer">
+      <div class="no-results">Введите слово для поиска или выберите тему</div>
+    </div>
+  </div>
+  
+  <!-- Toast уведомление -->
+  <div class="toast" id="toast"></div>
+  
+  <!-- Кнопка "Наверх" -->
+  <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">⬆</button>
+  
+  <!-- Модальное окно для входа -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('loginModal')">&times;</button>
+      <div class="modal-icon">🔐</div>
+      <h2>Вход в режим редактора</h2>
+      <div id="loginMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Введите пароль редактора</label>
+        <div class="password-input">
+          <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter') login()">
+          <button class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('loginModal')">Отмена</button>
+        <button class="btn-success" onclick="login()">🔓 Войти</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для добавления/редактирования -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('editModal')">&times;</button>
+      <div class="modal-icon" id="editIcon">➕</div>
+      <h2 id="modalTitle">Добавить слово</h2>
+      <div id="editMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Тема (греческий)</label>
+        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="checkDuplicate()">
+        <div class="duplicate-warning" id="duplicateThemeGr">⚠️ Такая тема уже существует</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Тема (русский)</label>
+        <input type="text" id="editThemeRu" placeholder="например: Работа" oninput="checkDuplicate()">
+        <div class="duplicate-warning" id="duplicateThemeRu">⚠️ Такая тема уже существует</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Слово (греческий)</label>
+        <input type="text" id="editWordGr" placeholder="π.χ. Δουλειά" oninput="checkDuplicate()">
+        <div class="duplicate-warning" id="duplicateWordGr">⚠️ Такое слово уже существует</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Слово (русский)</label>
+        <input type="text" id="editWordRu" placeholder="например: Работа" oninput="checkDuplicate()">
+        <div class="duplicate-warning" id="duplicateWordRu">⚠️ Такое слово уже существует</div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('editModal')">Отмена</button>
+        <button class="btn-primary" id="saveBtn">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для подтверждения удаления -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('deleteModal')">&times;</button>
+      <div class="modal-icon">🗑️</div>
+      <h2>Удаление слова</h2>
+      <div id="deleteMessage" class="modal-message"></div>
+      <p style="text-align: center; color: #555; margin-bottom: 20px;">
+        Вы уверены, что хотите удалить это слово?<br>
+        <small style="color: #95a5a6;">Это действие нельзя отменить</small>
+      </p>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('deleteModal')">Отмена</button>
+        <button class="btn-danger-modal" onclick="confirmDelete()">🗑️ Удалить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для смены пароля -->
+  <div id="adminModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('adminModal')">&times;</button>
+      <div class="modal-icon">🔑</div>
+      <h2>Смена пароля</h2>
+      <div id="adminMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Текущий пароль</label>
+        <div class="password-input">
+          <input type="password" id="oldPassword" placeholder="Введите текущий пароль">
+          <button class="password-toggle" onclick="togglePassword('oldPassword')">👁️</button>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Новый пароль (мин. 4 символа)</label>
+        <div class="password-input">
+          <input type="password" id="newPassword" placeholder="Введите новый пароль">
+          <button class="password-toggle" onclick="togglePassword('newPassword')">👁️</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('adminModal')">Отмена</button>
+        <button class="btn-danger-modal" onclick="changePassword()">🔄 Сменить пароль</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для подтверждения выхода -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('logoutModal')">&times;</button>
+      <div class="modal-icon">🚪</div>
+      <h2>Выход из режима редактора</h2>
+      <div id="logoutMessage" class="modal-message"></div>
+      <p style="text-align: center; color: #555; margin-bottom: 20px;">
+        Вы уверены, что хотите выйти из режима редактора?<br>
+        <small style="color: #95a5a6;">Редактирование слов станет недоступно</small>
+      </p>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('logoutModal')">Остаться</button>
+        <button class="btn-danger-modal" onclick="logout()">🚪 Выйти</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
+    let currentMode = 'auto';
+    let isSearching = false;
+    let editingId = null;
+    let isEditor = false;
+    let allData = null;
+    let allThemes = [];
+    let selectedTheme = '';
+    let themeDropdownVisible = false;
+    let currentVersion = '';
+    let deleteTargetId = null;
+    let isSearchingNow = false;
+    
+    // ========== TOAST УВЕДОМЛЕНИЕ ==========
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toast.timeout);
+      toast.timeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+    
+    // ========== ЗАГРУЗКА ДАННЫХ В КЕШ ==========
+    function loadData() {
+      return new Promise((resolve, reject) => {
+        google.script.run
+          .withSuccessHandler(function(data) {
+            if (data.error) {
+              reject(data.error);
+              return;
+            }
+            allData = data;
+            allThemes = data.themes || [];
+            currentVersion = data.version || '';
+            document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+            resolve(data);
+          })
+          .withFailureHandler(function(error) {
+            reject(error);
+          })
+          .getAllData();
+      });
+    }
+    
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    document.addEventListener('DOMContentLoaded', async function() {
+      const savedStatus = localStorage.getItem('dictionary_editor');
+      if (savedStatus === 'true') {
+        isEditor = true;
+      }
+      
+      try {
+        await loadData();
+        updateHeaderButtons();
+        updateEditorUI();
+        setupEventListeners();
+        showInitialMessage();
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+        document.getElementById('resultsContainer').innerHTML = 
+          `<div class="error">❌ Ошибка загрузки данных: ${error}</div>`;
+      }
+      
+      window.addEventListener('scroll', function() {
+        const btn = document.getElementById('scrollTopBtn');
+        if (window.scrollY > 300) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+      });
+    });
+    
+    function showInitialMessage() {
+      const container = document.getElementById('resultsContainer');
+      if (allData && allData.total > 0) {
+        container.innerHTML = `
+          <div class="no-results">
+            📚 Готов к работе<br>
+            <small>Введите слово для поиска или выберите тему</small>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="no-results">
+            📚 Словарь пуст<br>
+            <small>Добавьте слова через режим редактора</small>
+          </div>
+        `;
+      }
+    }
+    
+    // ========== ОБНОВЛЕНИЕ КЕША ==========
+    async function refreshCache() {
+      try {
+        await loadData();
+        return true;
+      } catch (error) {
+        console.error('Ошибка обновления кеша:', error);
+        return false;
+      }
+    }
+    
+    // ========== УПРАВЛЕНИЕ ТЕМАМИ ==========
+    function toggleThemeSection() {
+      const section = document.getElementById('themeSection');
+      const input = document.getElementById('themeInput');
+      const btn = document.getElementById('themeToggleBtn');
+      
+      section.classList.toggle('active');
+      btn.classList.toggle('active-theme');
+      
+      if (section.classList.contains('active')) {
+        input.focus();
+        showAllThemes();
+      } else {
+        document.getElementById('themeDropdown').classList.remove('active');
+        themeDropdownVisible = false;
+      }
+    }
+    
+    function showAllThemes() {
+      const dropdown = document.getElementById('themeDropdown');
+      
+      if (allThemes.length === 0) {
+        dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+      } else {
+        dropdown.innerHTML = allThemes.map(t => `
+          <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <span class="theme-gr">${t.gr}</span>
+            <span class="theme-ru">${t.ru}</span>
+          </div>
+        `).join('');
+      }
+      
+      dropdown.classList.add('active');
+      themeDropdownVisible = true;
+    }
+    
+    function filterThemes() {
+      const input = document.getElementById('themeInput');
+      const dropdown = document.getElementById('themeDropdown');
+      const clearBtn = document.getElementById('themeClearInputBtn');
+      const query = input.value.toLowerCase().trim();
+      
+      if (input.value.length > 0) {
+        clearBtn.classList.add('visible');
+      } else {
+        clearBtn.classList.remove('visible');
+      }
+      
+      const filtered = allThemes.filter(t => 
+        t.gr.toLowerCase().includes(query) || 
+        t.ru.toLowerCase().includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+      } else {
+        dropdown.innerHTML = filtered.map(t => `
+          <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <span class="theme-gr">${t.gr}</span>
+            <span class="theme-ru">${t.ru}</span>
+          </div>
+        `).join('');
+      }
+      
+      dropdown.classList.add('active');
+      themeDropdownVisible = true;
+    }
+    
+    function selectTheme(gr, ru) {
+      document.getElementById('themeInput').value = gr;
+      document.getElementById('themeClearInputBtn').classList.add('visible');
+      selectedTheme = gr;
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      performSearch();
+    }
+    
+    function clearThemeInput() {
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      document.getElementById('themeInput').focus();
+      showAllThemes();
+    }
+    
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('themeDropdown');
+      if (!e.target.closest('.theme-input-wrapper') && !e.target.closest('#themeToggleBtn')) {
+        dropdown.classList.remove('active');
+        themeDropdownVisible = false;
+      }
+    });
+    
+    // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
+    
+    function handleTitleClick() {
+      if (!isEditor) {
+        openLoginModal();
+      }
+    }
+    
+    function updateHeaderButtons() {
+      const container = document.getElementById('headerButtons');
+      if (isEditor) {
+        container.innerHTML = `
+          <button class="active-btn" onclick="openAddModal()">➕ Добавить</button>
+          <button onclick="openAdminModal()">🔑 Пароль</button>
+          <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
+          <span class="editor-badge">✏️ РЕДАКТОР</span>
+        `;
+      } else {
+        container.innerHTML = ``;
+      }
+    }
+    
+    function updateEditorUI() {
+      document.querySelectorAll('.result-item .actions').forEach(el => {
+        el.style.display = isEditor ? 'flex' : 'none';
+      });
+      updateHeaderButtons();
+    }
+    
+    // ========== ОЧИСТКА ПОЛЯ ПОИСКА ==========
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      document.getElementById('searchInput').focus();
+      // Не выполняем поиск автоматически
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const input = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearBtn');
+      input.addEventListener('input', function() {
+        if (this.value.length > 0) {
+          clearBtn.classList.add('visible');
+        } else {
+          clearBtn.classList.remove('visible');
+        }
+      });
+    });
+    
+    // ========== МОДАЛЬНЫЕ ОКНА ==========
+    
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      const messageEl = document.getElementById(id.replace('Modal', 'Message'));
+      if (messageEl) messageEl.innerHTML = '';
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    function openLoginModal() {
+      document.getElementById('loginPassword').value = '';
+      openModal('loginModal');
+      setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+    }
+    
+    function openAddModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('modalTitle').textContent = 'Добавить слово';
+      document.getElementById('editIcon').textContent = '➕';
+      document.getElementById('editThemeGr').value = '';
+      document.getElementById('editThemeRu').value = '';
+      document.getElementById('editWordGr').value = '';
+      document.getElementById('editWordRu').value = '';
+      document.getElementById('editMessage').innerHTML = '';
+      editingId = null;
+      hideAllWarnings();
+      openModal('editModal');
+      document.getElementById('saveBtn').onclick = saveWord;
+    }
+    
+    function openEditModal(id, themeGr, themeRu, wordGr, wordRu) {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('modalTitle').textContent = 'Редактировать слово';
+      document.getElementById('editIcon').textContent = '✏️';
+      document.getElementById('editThemeGr').value = themeGr;
+      document.getElementById('editThemeRu').value = themeRu;
+      document.getElementById('editWordGr').value = wordGr;
+      document.getElementById('editWordRu').value = wordRu;
+      document.getElementById('editMessage').innerHTML = '';
+      editingId = id;
+      hideAllWarnings();
+      checkDuplicate();
+      openModal('editModal');
+      document.getElementById('saveBtn').onclick = saveWord;
+    }
+    
+    function openDeleteModal(id) {
+      if (!isEditor) return;
+      deleteTargetId = id;
+      openModal('deleteModal');
+    }
+    
+    function openAdminModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('oldPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('adminMessage').innerHTML = '';
+      openModal('adminModal');
+    }
+    
+    function openLogoutModal() {
+      openModal('logoutModal');
+    }
+    
+    // ========== ПРОВЕРКА ДУБЛИКАТОВ ==========
+    function hideAllWarnings() {
+      document.querySelectorAll('.duplicate-warning').forEach(el => {
+        el.classList.remove('visible');
+      });
+    }
+    
+    function checkDuplicate() {
+      const themeGr = document.getElementById('editThemeGr').value.trim();
+      const themeRu = document.getElementById('editThemeRu').value.trim();
+      const wordGr = document.getElementById('editWordGr').value.trim();
+      const wordRu = document.getElementById('editWordRu').value.trim();
+      
+      // Проверка темы
+      if (themeGr) {
+        const exists = allThemes.some(t => t.gr.toLowerCase() === themeGr.toLowerCase());
+        document.getElementById('duplicateThemeGr').classList.toggle('visible', exists && editingId === null);
+      }
+      
+      if (themeRu) {
+        const exists = allThemes.some(t => t.ru.toLowerCase() === themeRu.toLowerCase());
+        document.getElementById('duplicateThemeRu').classList.toggle('visible', exists && editingId === null);
+      }
+      
+      // Проверка слова
+      if (wordGr && allData) {
+        const exists = allData.words.some(w => 
+          w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
+          (editingId === null || w.id !== editingId)
+        );
+        document.getElementById('duplicateWordGr').classList.toggle('visible', exists);
+      }
+      
+      if (wordRu && allData) {
+        const exists = allData.words.some(w => 
+          w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
+          (editingId === null || w.id !== editingId)
+        );
+        document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
+      }
+    }
+    
+    // ========== АВТОРИЗАЦИЯ ==========
+    
+    function login() {
+      const password = document.getElementById('loginPassword').value.trim();
+      if (!password) {
+        document.getElementById('loginMessage').innerHTML = '<div class="error">❌ Введите пароль</div>';
+        return;
+      }
+      
+      document.getElementById('loginMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Проверка...</div>';
+      
+      google.script.run
+        .withSuccessHandler(function(result) {
+          if (result) {
+            isEditor = true;
+            localStorage.setItem('dictionary_editor', 'true');
+            closeModal('loginModal');
+            updateEditorUI();
+            performSearch();
+          } else {
+            document.getElementById('loginMessage').innerHTML = '<div class="error">❌ Неверный пароль</div>';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginPassword').focus();
+          }
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('loginMessage').innerHTML = `<div class="error">❌ Ошибка: ${error}</div>`;
+        })
+        .checkPassword(password);
+    }
+    
+    function logout() {
+      isEditor = false;
+      localStorage.removeItem('dictionary_editor');
+      closeModal('logoutModal');
+      updateEditorUI();
+      performSearch();
+    }
+    
+    // ========== ПОИСК ==========
+    
+    function setupEventListeners() {
+      document.querySelectorAll('#modeSelector button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentMode = this.dataset.mode;
+        });
+      });
+      
+      document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          performSearch();
+        }
+      });
+      
+      document.getElementById('searchBtn').addEventListener('click', performSearch);
+    }
+    
+    function performSearch() {
+      if (isSearchingNow) return;
+      
+      const query = document.getElementById('searchInput').value.trim();
+      const theme = selectedTheme;
+      
+      if (!query && !theme) {
+        showInitialMessage();
+        return;
+      }
+      
+      isSearchingNow = true;
+      
+      document.getElementById('resultsContainer').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <br>Поиск...
+        </div>
+      `;
+      
+      if (allData && allData.words) {
+        setTimeout(() => {
+          const results = searchInCache(query, currentMode, theme);
+          handleResults(results);
+          isSearchingNow = false;
+        }, 100);
+      } else {
+        loadData().then(() => {
+          const results = searchInCache(query, currentMode, theme);
+          handleResults(results);
+          isSearchingNow = false;
+        }).catch(error => {
+          handleError(error);
+          isSearchingNow = false;
+        });
+      }
+    }
+    
+    function searchInCache(query, searchMode, theme) {
+      const queryLower = query.toLowerCase().trim();
+      const themeLower = theme ? theme.toLowerCase().trim() : '';
+      
+      let searchInGreek = searchMode === 'greek';
+      let searchInRussian = searchMode === 'russian';
+      
+      if (searchMode === 'auto' && queryLower) {
+        const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
+        searchInGreek = greekRegex.test(queryLower);
+        searchInRussian = !searchInGreek;
+      }
+      
+      let results = allData.words || [];
+      
+      if (themeLower) {
+        results = results.filter(w => 
+          w.themeGr.toLowerCase().includes(themeLower) || 
+          w.themeRu.toLowerCase().includes(themeLower)
+        );
+      }
+      
+      if (queryLower) {
+        if (searchInGreek) {
+          results = results.filter(w => 
+            w.themeGr.toLowerCase().includes(queryLower) || 
+            w.wordGr.toLowerCase().includes(queryLower)
+          );
+        } else if (searchInRussian) {
+          results = results.filter(w => 
+            w.themeRu.toLowerCase().includes(queryLower) || 
+            w.wordRu.toLowerCase().includes(queryLower)
+          );
+        }
+      }
+      
+      return {
+        results: results,
+        total: results.length,
+        searchMode: searchInGreek ? 'greek' : 'russian',
+        version: allData.version
+      };
+    }
+    
+    function handleResults(data) {
+      if (data.error) {
+        document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ ${data.error}</div>`;
+        return;
+      }
+      
+      if (!data.results || data.results.length === 0) {
+        const modeText = data.searchMode === 'greek' ? 'греческом' : 'русском';
+        document.getElementById('resultsContainer').innerHTML = `
+          <div class="no-results">
+            🔍 Ничего не найдено<br>
+            <small>Поиск в ${modeText} языке</small>
+            ${selectedTheme ? `<br><small>Тема: ${selectedTheme}</small>` : ''}
+          </div>
+        `;
+        return;
+      }
+      
+      const isMobile = window.innerWidth < 768;
+      let html = '';
+      
+      if (isMobile) {
+        html = `<div class="results">`;
+        data.results.forEach(item => {
+          html += createResultItem(item);
+        });
+        html += `</div>`;
+      } else {
+        html = `<div class="results-grid">`;
+        data.results.forEach(item => {
+          html += createResultItem(item);
+        });
+        html += `</div>`;
+      }
+      
+      const infoHtml = `
+        <div class="result-info">
+          Найдено ${data.results.length}
+          ${selectedTheme ? `| Тема: ${selectedTheme}` : ''}
+        </div>
+        ${html}
+      `;
+      
+      document.getElementById('resultsContainer').innerHTML = infoHtml;
+    }
+    
+    function createResultItem(item) {
+      const actionsHtml = isEditor ? `
+        <div class="actions">
+          <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">✏️ Редактировать</button>
+          <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id})">🗑️ Удалить</button>
+        </div>
+      ` : '';
+      
+      return `
+        <div class="result-item" data-id="${item.id}">
+          <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
+          <div class="word-row">
+            <span class="word-gr">🇬🇷 ${item.wordGr}</span>
+            <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+            <span class="word-ru">🇷🇺 ${item.wordRu}</span>
+            <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+          </div>
+          ${actionsHtml}
+        </div>
+      `;
+    }
+    
+    function escapeHTML(str) {
+      return str.replace(/['"\\]/g, '\\$&');
+    }
+    
+    function handleError(error) {
+      document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ Ошибка: ${error}</div>`;
+      console.error('Ошибка:', error);
+    }
+    
+    // ========== КОПИРОВАНИЕ В БУФЕР ==========
+    function copyText(text, button) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showCopySuccess(button);
+          showToast('✓ Скопировано: ' + text);
+        }).catch(() => {
+          fallbackCopy(text, button);
+        });
+      } else {
+        fallbackCopy(text, button);
+      }
+    }
+    
+    function fallbackCopy(text, button) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showCopySuccess(button);
+        showToast('✓ Скопировано: ' + text);
+      } catch (err) {
+        console.error('Ошибка копирования:', err);
+      }
+      document.body.removeChild(textarea);
+    }
+    
+    function showCopySuccess(button) {
+      const originalText = button.textContent;
+      button.textContent = '✓';
+      button.classList.add('copied');
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('copied');
+      }, 2000);
+    }
+    
+    // ========== ОПЕРАЦИИ С ДАННЫМИ ==========
+    
+    async function saveWord() {
+      const themeGr = document.getElementById('editThemeGr').value.trim();
+      const themeRu = document.getElementById('editThemeRu').value.trim();
+      const wordGr = document.getElementById('editWordGr').value.trim();
+      const wordRu = document.getElementById('editWordRu').value.trim();
+      
+      if (!themeGr || !themeRu || !wordGr || !wordRu) {
+        document.getElementById('editMessage').innerHTML = '<div class="error">❌ Все поля должны быть заполнены</div>';
+        return;
+      }
+      
+      document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
+      const action = editingId === null ? 'addWord' : 'editWord';
+      const params = editingId === null 
+        ? [themeGr, themeRu, wordGr, wordRu]
+        : [editingId, themeGr, themeRu, wordGr, wordRu];
+      
+      google.script.run
+        .withSuccessHandler(async function(result) {
+          if (result.success) {
+            document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
+            await refreshCache();
+            setTimeout(() => {
+              closeModal('editModal');
+              performSearch();
+            }, 1500);
+          } else {
+            document.getElementById('editMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+          }
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('editMessage').innerHTML = `<div class="error">❌ Ошибка: ${error}</div>`;
+        })
+        [action].apply(null, params);
+    }
+    
+    function confirmDelete() {
+      if (deleteTargetId === null) return;
+      
+      google.script.run
+        .withSuccessHandler(async function(result) {
+          if (result.success) {
+            closeModal('deleteModal');
+            await refreshCache();
+            showToast('✅ Слово удалено');
+            performSearch();
+          } else {
+            document.getElementById('deleteMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+          }
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('deleteMessage').innerHTML = `<div class="error">❌ Ошибка: ${error}</div>`;
+        })
+        .deleteWord(deleteTargetId);
+    }
+    
+    function changePassword() {
+      const oldPassword = document.getElementById('oldPassword').value.trim();
+      const newPassword = document.getElementById('newPassword').value.trim();
+      
+      if (!oldPassword || !newPassword) {
+        document.getElementById('adminMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
+      }
+      
+      if (newPassword.length < 4) {
+        document.getElementById('adminMessage').innerHTML = '<div class="error">❌ Пароль должен быть минимум 4 символа</div>';
+        return;
+      }
+      
+      document.getElementById('adminMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Смена пароля...</div>';
+      
+      google.script.run
+        .withSuccessHandler(function(result) {
+          if (result.success) {
+            document.getElementById('adminMessage').innerHTML = '<div class="success">✅ Пароль успешно изменён!</div>';
+            setTimeout(() => {
+              closeModal('adminModal');
+            }, 1500);
+          } else {
+            document.getElementById('adminMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+          }
+        })
+        .withFailureHandler(function(error) {
+          document.getElementById('adminMessage').innerHTML = `<div class="error">❌ Ошибка: ${error}</div>`;
+        })
+        .changePassword(oldPassword, newPassword);
+    }
+    
+    // ========== КНОПКА "НАВЕРХ" ==========
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+    
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+    
+    window.onclick = function(event) {
+      const modals = ['loginModal', 'editModal', 'deleteModal', 'adminModal', 'logoutModal'];
+      modals.forEach(id => {
+        const modal = document.getElementById(id);
+        if (event.target === modal) {
+          closeModal(id);
+        }
+      });
+    };
+    
+    window.addEventListener('load', function() {
+      setTimeout(() => document.getElementById('searchInput').focus(), 300);
+    });
+  </script>
+</body>
+</html>
