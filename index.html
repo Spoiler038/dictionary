@@ -1907,7 +1907,7 @@
       performSearch();
     }
     
-    function clearThemeInput() {
+   function clearThemeInput() {
   // Очищаем поле ввода темы
   document.getElementById('themeInput').value = '';
   document.getElementById('themeClearInputBtn').classList.remove('visible');
@@ -1919,9 +1919,9 @@
   document.getElementById('themeDropdown').classList.remove('active');
   themeDropdownVisible = false;
   
-  // Снимаем активность с кнопки темы
-  document.getElementById('themeToggleBtn').classList.remove('active-theme');
-  document.getElementById('themeSection').classList.remove('active');
+  // НЕ закрываем панель темы
+  // document.getElementById('themeToggleBtn').classList.remove('active-theme');
+  // document.getElementById('themeSection').classList.remove('active');
   
   // Очищаем поле поиска и результаты
   document.getElementById('searchInput').value = '';
@@ -1931,8 +1931,11 @@
   // Показываем начальное сообщение
   showInitialMessage();
   
-  // Фокус на поле поиска
-  document.getElementById('searchInput').focus();
+  // Показываем все темы в выпадающем списке (чтобы пользователь мог сразу выбрать)
+  showAllThemes();
+  
+  // Фокус на поле ввода темы
+  document.getElementById('themeInput').focus();
 }
     
     document.addEventListener('click', function(e) {
