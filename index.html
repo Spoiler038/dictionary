@@ -1097,7 +1097,7 @@
     }
     
     /* Мобильная версия */
-    @media (max-width: 767px) {
+   @media (max-width: 767px) {
   #app {
     padding: 15px;
   }
@@ -1190,7 +1190,7 @@
     font-size: 22px;
   }
   
-  /* ===== ИСПРАВЛЕННЫЙ БЛОК ===== */
+  /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
   .result-item .word-row {
     display: flex;
     flex-direction: column;
@@ -1199,45 +1199,71 @@
   }
 
   .result-item .word-row .word-cell {
-    display: flex;
+    display: inline-flex !important;
     align-items: center;
     padding: 4px 0;
     width: 100%;
+    flex-wrap: nowrap !important;
   }
 
   /* Греческий вариант - слева */
   .result-item .word-row .word-cell-left {
+    display: inline-flex !important;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
 
   /* Русский вариант - слева */
   .result-item .word-row .word-cell-center {
+    display: inline-flex !important;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
 
-  /* Кнопка копирования для русского - справа */
   .result-item .word-row .word-cell-right {
+    display: inline-flex !important;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
 
   .result-item .word-row .word-gr {
     font-size: 20px;
+    display: inline-block !important;
+    white-space: nowrap;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: calc(100% - 40px);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .result-item .word-row .word-ru {
     font-size: 20px;
+    display: inline-block !important;
+    white-space: nowrap;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: calc(100% - 40px);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .result-item .word-row .copy-btn {
     font-size: 18px;
-    padding: 4px 8px;
+    padding: 4px 6px;
     opacity: 0.7;
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 30px;
+    max-width: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #95a5a6;
   }
-  /* ===== КОНЕЦ ИСПРАВЛЕННОГО БЛОКА ===== */
+  /* ===== КОНЕЦ БЛОКА РЕЗУЛЬТАТОВ ===== */
   
   .result-item .actions {
     flex-direction: column;
