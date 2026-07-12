@@ -1993,29 +1993,51 @@
     
     // ========== ОЧИСТКА ПОЛЯ ПОИСКА ==========
     function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('clearBtn').classList.remove('visible');
-      document.getElementById('searchInput').focus();
-      // Очищаем результаты поиска
-      if (!selectedTheme && !isShowingAll) {
-        showInitialMessage();
-      } else {
-        performSearch();
-      }
-      isShowingAll = false;
-    }
+  // Очищаем поле поиска
+  document.getElementById('searchInput').value = '';
+  document.getElementById('clearBtn').classList.remove('visible');
+  
+  // Сбрасываем выбранную тему
+  selectedTheme = '';
+  document.getElementById('themeInput').value = '';
+  document.getElementById('themeClearInputBtn').classList.remove('visible');
+  
+  // Закрываем выпадающий список тем
+  document.getElementById('themeDropdown').classList.remove('active');
+  themeDropdownVisible = false;
+  
+  // Сбрасываем флаг показа всех слов
+  isShowingAll = false;
+  
+  // Снимаем активность с кнопки темы
+  document.getElementById('themeToggleBtn').classList.remove('active-theme');
+  document.getElementById('themeSection').classList.remove('active');
+  
+  // Возвращаем начальное сообщение
+  showInitialMessage();
+  
+  // Фокус на поле поиска
+  document.getElementById('searchInput').focus();
+}
     
     document.addEventListener('DOMContentLoaded', function() {
-      const input = document.getElementById('searchInput');
-      const clearBtn = document.getElementById('clearBtn');
-      input.addEventListener('input', function() {
-        if (this.value.length > 0) {
-          clearBtn.classList.add('visible');
-        } else {
-          clearBtn.classList.remove('visible');
-        }
-      });
-    });
+  const input = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearBtn');
+  input.addEventListener('input', function() {
+    if (this.value.length > 0) {
+      clearBtn.classList.add('visible');
+    } else {
+      clearBtn.classList.remove('visible');
+      // Если поле пустое и нет выбранной темы - показываем начальное сообщение
+      if (!selectedTheme) {
+        showInitialMessage();
+      } else {
+        // Если есть выбранная тема - показываем слова по теме
+        performSearch();
+      }
+    }
+  });
+});
     
     // ========== МОДАЛЬНЫЕ ОКНА ==========
     
