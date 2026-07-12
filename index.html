@@ -22,6 +22,14 @@
       justify-content: center;
       align-items: flex-start;
       padding: 10px;
+      overflow: auto;
+    }
+    
+    body.modal-open {
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+      height: 100%;
     }
     
     #app {
@@ -299,6 +307,36 @@
       background: #2980b9;
     }
     
+    /* Кнопка добавления темы (только в режиме редактора) */
+    .controls-row .add-theme-btn {
+      padding: 8px 16px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: none;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    
+    .controls-row .add-theme-btn:hover {
+      background: #229954;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+    }
+    
+    .controls-row .add-theme-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .controls-row .add-theme-btn.visible {
+      display: flex;
+    }
+    
     .theme-row {
       display: none;
       animation: slideDown 0.3s ease;
@@ -395,6 +433,7 @@
       border-bottom: 1px solid #f0f0f0;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -425,6 +464,44 @@
       overflow: hidden;
       text-overflow: ellipsis;
       margin-left: 10px;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions {
+      display: none;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions.visible {
+      display: flex;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions button {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions .theme-edit-btn {
+      background: #f39c12;
+      color: white;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions .theme-edit-btn:hover {
+      background: #e67e22;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions .theme-delete-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions .theme-delete-btn:hover {
+      background: #c0392b;
     }
     
     .results {
@@ -459,11 +536,27 @@
     }
     
     .result-item .word-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    
+    .result-item .word-row .word-cell {
+      display: table-cell;
+      vertical-align: middle;
+      padding: 4px 8px;
+    }
+    
+    .result-item .word-row .word-cell-left {
+      text-align: left;
+    }
+    
+    .result-item .word-row .word-cell-center {
+      text-align: center;
+    }
+    
+    .result-item .word-row .word-cell-right {
+      text-align: right;
     }
     
     .result-item .word-row .word-gr {
@@ -471,9 +564,6 @@
       font-weight: 600;
       color: #2c3e50;
       word-break: break-word;
-      flex: 1;
-      text-align: right;
-      min-width: 80px;
     }
     
     .result-item .word-row .word-ru {
@@ -481,9 +571,6 @@
       font-weight: 600;
       color: #2c3e50;
       word-break: break-word;
-      flex: 1;
-      text-align: left;
-      min-width: 80px;
     }
     
     .result-item .word-row .copy-btn {
@@ -616,7 +703,6 @@
       margin-bottom: 16px;
     }
     
-    /* Индикатор прогресса загрузки */
     .progress-container {
       display: none;
       width: 100%;
@@ -817,7 +903,8 @@
       font-size: 14px;
     }
     
-    .form-group input {
+    .form-group input,
+    .form-group select {
       width: 100%;
       padding: 12px 14px;
       border: 2px solid #e0e0e0;
@@ -827,7 +914,8 @@
       background: #fafafa;
     }
     
-    .form-group input:focus {
+    .form-group input:focus,
+    .form-group select:focus {
       border-color: #3498db;
       outline: none;
       background: white;
@@ -938,6 +1026,41 @@
       transform: translateY(-50%) scale(0.9);
     }
     
+    /* Стили для datalist (выпадающий список тем при редактировании) */
+    .theme-datalist {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 2px solid #3498db;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .theme-datalist.active {
+      display: block;
+    }
+    
+    .theme-datalist .datalist-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .theme-datalist .datalist-item:hover {
+      background: #e8f4fd;
+    }
+    
+    .theme-datalist .datalist-item:last-child {
+      border-bottom: none;
+    }
+    
     @media (min-width: 768px) {
       #app {
         padding: 30px;
@@ -953,20 +1076,6 @@
         margin-bottom: 0;
         flex-direction: column;
         width: 100%;
-      }
-      
-      .result-item .word-row {
-        justify-content: center;
-      }
-      
-      .result-item .word-row .word-gr {
-        text-align: right;
-        flex: 1;
-      }
-      
-      .result-item .word-row .word-ru {
-        text-align: left;
-        flex: 1;
       }
     }
     
@@ -1026,6 +1135,13 @@
         font-size: 16px;
       }
       
+      .controls-row .add-theme-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 16px;
+      }
+      
       .controls-row .mode-selector {
         width: 100%;
         min-width: unset;
@@ -1057,31 +1173,29 @@
       }
       
       .result-item .word-row {
-        flex-direction: row;
-        align-items: center;
-        gap: 4px;
-        flex-wrap: nowrap;
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
+      
+      .result-item .word-row .word-cell {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 4px 4px;
       }
       
       .result-item .word-row .word-gr {
-        text-align: right;
-        flex: 1;
         font-size: 18px;
-        min-width: 60px;
       }
       
       .result-item .word-row .word-ru {
-        text-align: left;
-        flex: 1;
         font-size: 18px;
-        min-width: 60px;
       }
       
       .result-item .word-row .copy-btn {
         font-size: 14px;
         padding: 4px;
         opacity: 0.7;
-        flex-shrink: 0;
       }
       
       .result-item .actions {
@@ -1145,6 +1259,9 @@
         <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
           📂 Темы
         </button>
+        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+          ➕ Добавить тему
+        </button>
         <div class="mode-selector" id="modeSelector">
           <button id="modeGreek" data-mode="greek">🇬🇷</button>
           <button id="modeAuto" class="active" data-mode="auto">🤖 Авто</button>
@@ -1180,6 +1297,7 @@
   
   <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">⬆</button>
   
+  <!-- Модальное окно для входа -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
       <button class="close" onclick="closeModal('loginModal')">&times;</button>
@@ -1202,6 +1320,7 @@
     </div>
   </div>
   
+  <!-- Модальное окно для добавления/редактирования слова -->
   <div id="editModal" class="modal">
     <div class="modal-content">
       <button class="close" onclick="closeModal('editModal')">&times;</button>
@@ -1209,9 +1328,10 @@
       <h2 id="modalTitle">Добавить слово</h2>
       <div id="editMessage" class="modal-message"></div>
       
-      <div class="form-group">
+      <div class="form-group" style="position: relative;">
         <label>Тема (греческий)</label>
-        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="checkDuplicate()">
+        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
+        <div class="theme-datalist" id="themeDatalist"></div>
         <div class="duplicate-warning" id="duplicateThemeGr">⚠️ Такая тема уже существует</div>
       </div>
       
@@ -1240,14 +1360,40 @@
     </div>
   </div>
   
+  <!-- Модальное окно для добавления/редактирования темы -->
+  <div id="themeEditModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('themeEditModal')">&times;</button>
+      <div class="modal-icon" id="themeEditIcon">📂</div>
+      <h2 id="themeEditTitle">Добавить тему</h2>
+      <div id="themeEditMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Тема (греческий)</label>
+        <input type="text" id="editThemeGrOnly" placeholder="π.χ. Εργασία">
+      </div>
+      
+      <div class="form-group">
+        <label>Тема (русский)</label>
+        <input type="text" id="editThemeRuOnly" placeholder="например: Работа">
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('themeEditModal')">Отмена</button>
+        <button class="btn-primary" id="saveThemeBtn">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для подтверждения удаления -->
   <div id="deleteModal" class="modal">
     <div class="modal-content">
       <button class="close" onclick="closeModal('deleteModal')">&times;</button>
       <div class="modal-icon">🗑️</div>
-      <h2>Удаление слова</h2>
+      <h2>Удаление</h2>
       <div id="deleteMessage" class="modal-message"></div>
       <p style="text-align: center; color: #555; margin-bottom: 20px;">
-        Вы уверены, что хотите удалить это слово?<br>
+        Вы уверены, что хотите удалить это?<br>
         <small style="color: #95a5a6;">Это действие нельзя отменить</small>
       </p>
       
@@ -1258,6 +1404,7 @@
     </div>
   </div>
   
+  <!-- Модальное окно для смены пароля -->
   <div id="adminModal" class="modal">
     <div class="modal-content">
       <button class="close" onclick="closeModal('adminModal')">&times;</button>
@@ -1288,6 +1435,7 @@
     </div>
   </div>
   
+  <!-- Модальное окно для подтверждения выхода -->
   <div id="logoutModal" class="modal">
     <div class="modal-content">
       <button class="close" onclick="closeModal('logoutModal')">&times;</button>
@@ -1310,11 +1458,10 @@
     // ========== НАСТРОЙКИ ==========
     // ЗАМЕНИТЕ ЭТОТ URL НА ВАШ!
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsF633XdFiInhTqFLNUp3Q98sp6Z7AXlVeyvKhr8xaR3yKw2FRdVLBoH0k8R3eLHiapQ/exec';
-    const PAGE_SIZE = 100; // Размер страницы для загрузки
+    const PAGE_SIZE = 100;
     
     // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
     let currentMode = 'auto';
-    let isSearching = false;
     let editingId = null;
     let isEditor = false;
     let allData = null;
@@ -1322,9 +1469,11 @@
     let selectedTheme = '';
     let themeDropdownVisible = false;
     let currentVersion = '';
-    let deleteTargetId = null;
+    let deleteTarget = null;
+    let deleteType = 'word'; // 'word' or 'theme'
     let isSearchingNow = false;
     let isLoading = false;
+    let themeEditingTarget = null; // null = add, {gr, ru} = edit
     
     // ========== JSONP ВЫЗОВЫ GAS ==========
     function callGAS(action, params) {
@@ -1396,13 +1545,21 @@
       }
     }
     
-    // ========== ЗАГРУЗКА ДАННЫХ С ПАГИНАЦИЕЙ ==========
+    // ========== БЛОКИРОВКА СКРОЛЛА ПРИ МОДАЛЬНОМ ОКНЕ ==========
+    function toggleBodyScroll(disable) {
+      if (disable) {
+        document.body.classList.add('modal-open');
+      } else {
+        document.body.classList.remove('modal-open');
+      }
+    }
+    
+    // ========== ЗАГРУЗКА ДАННЫХ ==========
     async function loadData() {
       if (isLoading) return;
       isLoading = true;
       
       try {
-        // Сначала получаем метаданные
         const meta = await callGAS('getAll');
         if (meta.error) {
           throw new Error(meta.error);
@@ -1422,7 +1579,6 @@
           return;
         }
         
-        // Загружаем все страницы параллельно
         let loadedPages = 0;
         const pagePromises = [];
         
@@ -1436,10 +1592,8 @@
           pagePromises.push(promise);
         }
         
-        // Ждём загрузки всех страниц
         const pagesData = await Promise.all(pagePromises);
         
-        // Объединяем все слова
         let allWords = [];
         pagesData.forEach(pageData => {
           if (pageData.words) {
@@ -1455,13 +1609,10 @@
           totalPages: totalPages
         };
         
-        // Сохраняем в localStorage
         try {
           localStorage.setItem('dictionary_data', JSON.stringify(allData));
           localStorage.setItem('dictionary_version', currentVersion);
-        } catch (e) {
-          console.warn('Не удалось сохранить в localStorage:', e);
-        }
+        } catch (e) {}
         
         isLoading = false;
         showInitialMessage();
@@ -1471,7 +1622,6 @@
         isLoading = false;
         console.error('Ошибка загрузки данных:', error);
         
-        // Пробуем загрузить из localStorage
         try {
           const cached = localStorage.getItem('dictionary_data');
           if (cached) {
@@ -1510,7 +1660,6 @@
         const cachedVersion = localStorage.getItem('dictionary_version') || '0';
         
         if (serverVersion !== cachedVersion) {
-          console.log('🔄 Версия изменилась, обновляем данные...');
           return true;
         }
         
@@ -1555,6 +1704,9 @@
         updateEditorUI();
         setupEventListeners();
         
+        // Показываем кнопку добавления темы если редактор
+        updateAddThemeButton();
+        
       } catch (error) {
         console.error('Ошибка инициализации:', error);
         document.getElementById('resultsContainer').innerHTML = 
@@ -1577,7 +1729,7 @@
         container.innerHTML = `
           <div class="no-results">
             📚 Готов к работе<br>
-            <small>Загружено ${allData.total} слов</small>
+            <small>Введите слово для поиска или выберите тему</small>
           </div>
         `;
       } else {
@@ -1621,6 +1773,7 @@
     
     function showAllThemes() {
       const dropdown = document.getElementById('themeDropdown');
+      const isEditorMode = isEditor;
       
       if (allThemes.length === 0) {
         dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
@@ -1629,6 +1782,10 @@
           <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
             <span class="theme-gr">${t.gr}</span>
             <span class="theme-ru">${t.ru}</span>
+            <div class="theme-actions ${isEditorMode ? 'visible' : ''}">
+              <button class="theme-edit-btn" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">✏️</button>
+              <button class="theme-delete-btn" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">🗑️</button>
+            </div>
           </div>
         `).join('');
       }
@@ -1642,6 +1799,7 @@
       const dropdown = document.getElementById('themeDropdown');
       const clearBtn = document.getElementById('themeClearInputBtn');
       const query = input.value.toLowerCase().trim();
+      const isEditorMode = isEditor;
       
       if (input.value.length > 0) {
         clearBtn.classList.add('visible');
@@ -1661,6 +1819,10 @@
           <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
             <span class="theme-gr">${t.gr}</span>
             <span class="theme-ru">${t.ru}</span>
+            <div class="theme-actions ${isEditorMode ? 'visible' : ''}">
+              <button class="theme-edit-btn" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">✏️</button>
+              <button class="theme-delete-btn" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">🗑️</button>
+            </div>
           </div>
         `).join('');
       }
@@ -1687,7 +1849,7 @@
     
     document.addEventListener('click', function(e) {
       const dropdown = document.getElementById('themeDropdown');
-      if (!e.target.closest('.theme-input-wrapper') && !e.target.closest('#themeToggleBtn')) {
+      if (!e.target.closest('.theme-input-wrapper') && !e.target.closest('#themeToggleBtn') && !e.target.closest('.theme-actions')) {
         dropdown.classList.remove('active');
         themeDropdownVisible = false;
       }
@@ -1713,6 +1875,16 @@
       } else {
         container.innerHTML = ``;
       }
+      updateAddThemeButton();
+    }
+    
+    function updateAddThemeButton() {
+      const btn = document.getElementById('addThemeBtn');
+      if (isEditor) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
     }
     
     function updateEditorUI() {
@@ -1720,6 +1892,10 @@
         el.style.display = isEditor ? 'flex' : 'none';
       });
       updateHeaderButtons();
+      // Обновляем список тем с кнопками
+      if (document.getElementById('themeDropdown').classList.contains('active')) {
+        showAllThemes();
+      }
     }
     
     // ========== ОЧИСТКА ПОЛЯ ПОИСКА ==========
@@ -1745,12 +1921,14 @@
     
     function openModal(id) {
       document.getElementById(id).classList.add('active');
+      toggleBodyScroll(true);
       const messageEl = document.getElementById(id.replace('Modal', 'Message'));
       if (messageEl) messageEl.innerHTML = '';
     }
     
     function closeModal(id) {
       document.getElementById(id).classList.remove('active');
+      toggleBodyScroll(false);
     }
     
     function openLoginModal() {
@@ -1771,6 +1949,7 @@
       document.getElementById('editWordGr').value = '';
       document.getElementById('editWordRu').value = '';
       document.getElementById('editMessage').innerHTML = '';
+      document.getElementById('themeDatalist').classList.remove('active');
       editingId = null;
       hideAllWarnings();
       openModal('editModal');
@@ -1789,6 +1968,7 @@
       document.getElementById('editWordGr').value = wordGr;
       document.getElementById('editWordRu').value = wordRu;
       document.getElementById('editMessage').innerHTML = '';
+      document.getElementById('themeDatalist').classList.remove('active');
       editingId = id;
       hideAllWarnings();
       checkDuplicate();
@@ -1796,11 +1976,23 @@
       document.getElementById('saveBtn').onclick = saveWord;
     }
     
-    function openDeleteModal(id) {
+    function openDeleteModal(id, type) {
       if (!isEditor) return;
-      deleteTargetId = id;
+      deleteTarget = id;
+      deleteType = type || 'word';
       document.getElementById('deleteMessage').innerHTML = '';
       openModal('deleteModal');
+    }
+    
+    function openDeleteThemeModal(gr, ru) {
+      if (!isEditor) return;
+      const themeToDelete = allThemes.find(t => t.gr === gr && t.ru === ru);
+      if (themeToDelete) {
+        deleteTarget = themeToDelete;
+        deleteType = 'theme';
+        document.getElementById('deleteMessage').innerHTML = '';
+        openModal('deleteModal');
+      }
     }
     
     function openAdminModal() {
@@ -1817,6 +2009,156 @@
     function openLogoutModal() {
       openModal('logoutModal');
     }
+    
+    // ========== РАБОТА С ТЕМАМИ (модальное окно) ==========
+    
+    function openAddThemeModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      themeEditingTarget = null;
+      document.getElementById('themeEditTitle').textContent = '➕ Добавить тему';
+      document.getElementById('themeEditIcon').textContent = '📂';
+      document.getElementById('editThemeGrOnly').value = '';
+      document.getElementById('editThemeRuOnly').value = '';
+      document.getElementById('themeEditMessage').innerHTML = '';
+      openModal('themeEditModal');
+      document.getElementById('saveThemeBtn').onclick = saveTheme;
+    }
+    
+    function openEditThemeModal(gr, ru) {
+      if (!isEditor) return;
+      themeEditingTarget = { gr: gr, ru: ru };
+      document.getElementById('themeEditTitle').textContent = '✏️ Редактировать тему';
+      document.getElementById('themeEditIcon').textContent = '📂';
+      document.getElementById('editThemeGrOnly').value = gr;
+      document.getElementById('editThemeRuOnly').value = ru;
+      document.getElementById('themeEditMessage').innerHTML = '';
+      openModal('themeEditModal');
+      document.getElementById('saveThemeBtn').onclick = saveTheme;
+    }
+    
+    async function saveTheme() {
+      const gr = document.getElementById('editThemeGrOnly').value.trim();
+      const ru = document.getElementById('editThemeRuOnly').value.trim();
+      
+      if (!gr || !ru) {
+        document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
+      }
+      
+      document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
+      // Проверяем дубликаты
+      const exists = allThemes.some(t => 
+        t.gr.toLowerCase() === gr.toLowerCase() && 
+        (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
+      );
+      
+      if (exists) {
+        document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Такая тема уже существует</div>';
+        return;
+      }
+      
+      try {
+        // Обновляем тему во всех словах
+        let updatedCount = 0;
+        if (themeEditingTarget) {
+          // Редактирование темы
+          for (const word of allData.words) {
+            if (word.themeGr === themeEditingTarget.gr) {
+              word.themeGr = gr;
+              word.themeRu = ru;
+              updatedCount++;
+            }
+          }
+          // Обновляем в GAS
+          const result = await callGAS('editTheme', { 
+            oldGr: themeEditingTarget.gr, 
+            newGr: gr, 
+            newRu: ru 
+          });
+          if (result.error) {
+            throw new Error(result.error);
+          }
+        } else {
+          // Добавление темы - просто добавляем в список
+          allThemes.push({ gr: gr, ru: ru });
+        }
+        
+        document.getElementById('themeEditMessage').innerHTML = 
+          `<div class="success">✅ Тема успешно ${themeEditingTarget ? 'изменена' : 'добавлена'}!<br>
+          <small>${updatedCount > 0 ? `Обновлено слов: ${updatedCount}` : ''}</small></div>`;
+        
+        await refreshCache();
+        setTimeout(() => {
+          closeModal('themeEditModal');
+          if (document.getElementById('themeSection').classList.contains('active')) {
+            showAllThemes();
+          }
+        }, 1500);
+        
+      } catch (error) {
+        document.getElementById('themeEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ПРИ РЕДАКТИРОВАНИИ ==========
+    
+    function filterThemeDatalist() {
+      const input = document.getElementById('editThemeGr');
+      const datalist = document.getElementById('themeDatalist');
+      const query = input.value.toLowerCase().trim();
+      
+      if (!query) {
+        // Показываем все темы
+        const filtered = allThemes;
+        if (filtered.length === 0) {
+          datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+        } else {
+          datalist.innerHTML = filtered.map(t => `
+            <div class="datalist-item" onclick="selectThemeFromDatalist('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+              <strong>${t.gr}</strong> — ${t.ru}
+            </div>
+          `).join('');
+        }
+        datalist.classList.add('active');
+        return;
+      }
+      
+      const filtered = allThemes.filter(t => 
+        t.gr.toLowerCase().includes(query) || 
+        t.ru.toLowerCase().includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет совпадений</div>';
+      } else {
+        datalist.innerHTML = filtered.map(t => `
+          <div class="datalist-item" onclick="selectThemeFromDatalist('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <strong>${t.gr}</strong> — ${t.ru}
+          </div>
+        `).join('');
+      }
+      
+      datalist.classList.add('active');
+    }
+    
+    function selectThemeFromDatalist(gr, ru) {
+      document.getElementById('editThemeGr').value = gr;
+      document.getElementById('editThemeRu').value = ru;
+      document.getElementById('themeDatalist').classList.remove('active');
+      checkDuplicate();
+    }
+    
+    // Закрытие datalist при клике вне
+    document.addEventListener('click', function(e) {
+      const datalist = document.getElementById('themeDatalist');
+      if (!e.target.closest('#editThemeGr') && !e.target.closest('.theme-datalist')) {
+        datalist.classList.remove('active');
+      }
+    });
     
     // ========== ПРОВЕРКА ДУБЛИКАТОВ ==========
     function hideAllWarnings() {
@@ -2047,7 +2389,7 @@
       const actionsHtml = isEditor ? `
         <div class="actions">
           <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">✏️ Редактировать</button>
-          <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id})">🗑️ Удалить</button>
+          <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">🗑️ Удалить</button>
         </div>
       ` : '';
       
@@ -2055,10 +2397,18 @@
         <div class="result-item" data-id="${item.id}">
           <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
           <div class="word-row">
-            <span class="word-gr">🇬🇷 ${item.wordGr}</span>
-            <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
-            <span class="word-ru">🇷🇺 ${item.wordRu}</span>
-            <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+            <div class="word-cell word-cell-left">
+              <span class="word-gr">🇬🇷 ${item.wordGr}</span>
+            </div>
+            <div class="word-cell word-cell-center">
+              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+            </div>
+            <div class="word-cell word-cell-center">
+              <span class="word-ru">🇷🇺 ${item.wordRu}</span>
+            </div>
+            <div class="word-cell word-cell-right">
+              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+            </div>
           </div>
           ${actionsHtml}
         </div>
@@ -2154,18 +2504,52 @@
     }
     
     async function confirmDelete() {
-      if (deleteTargetId === null) return;
+      if (!deleteTarget) return;
       
       try {
-        const result = await callGAS('deleteWord', { id: deleteTargetId });
-        if (result.success) {
+        if (deleteType === 'theme') {
+          // Удаление темы - обновляем все слова с этой темой
+          const themeGr = deleteTarget.gr;
+          const themeRu = deleteTarget.ru;
+          
+          // Проверяем, есть ли слова с этой темой
+          const wordsWithTheme = allData.words.filter(w => w.themeGr === themeGr);
+          if (wordsWithTheme.length > 0) {
+            document.getElementById('deleteMessage').innerHTML = 
+              `<div class="error">❌ Нельзя удалить тему, она используется в ${wordsWithTheme.length} словах</div>`;
+            return;
+          }
+          
+          const result = await callGAS('deleteTheme', { gr: themeGr });
+          if (result.error) {
+            throw new Error(result.error);
+          }
+          
           closeModal('deleteModal');
           await refreshCache();
-          showToast('✅ Слово удалено');
+          showToast('✅ Тема удалена');
+          if (document.getElementById('themeSection').classList.contains('active')) {
+            showAllThemes();
+          }
           performSearch();
-        } else {
-          document.getElementById('deleteMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+          deleteTarget = null;
+          deleteType = 'word';
+          return;
         }
+        
+        // Удаление слова
+        const result = await callGAS('deleteWord', { id: deleteTarget });
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        closeModal('deleteModal');
+        await refreshCache();
+        showToast('✅ Слово удалено');
+        performSearch();
+        deleteTarget = null;
+        deleteType = 'word';
+        
       } catch (error) {
         document.getElementById('deleteMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
       }
@@ -2222,7 +2606,7 @@
     }
     
     window.onclick = function(event) {
-      const modals = ['loginModal', 'editModal', 'deleteModal', 'adminModal', 'logoutModal'];
+      const modals = ['loginModal', 'editModal', 'themeEditModal', 'deleteModal', 'adminModal', 'logoutModal'];
       modals.forEach(id => {
         const modal = document.getElementById(id);
         if (event.target === modal) {
