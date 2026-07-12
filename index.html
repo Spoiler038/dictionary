@@ -1192,76 +1192,90 @@
   
   /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
   .result-item .word-row {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-  }
-
-  .result-item .word-row .word-cell {
-    display: inline-flex !important;
-    align-items: center;
-    padding: 4px 0;
+    display: block;
     width: 100%;
-    flex-wrap: nowrap !important;
   }
-
-  /* Греческий вариант - слева */
+  
+  .result-item .word-row .word-cell {
+    display: block;
+    width: 100%;
+    padding: 4px 0;
+  }
+  
   .result-item .word-row .word-cell-left {
-    display: inline-flex !important;
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
-
-  /* Русский вариант - слева */
+  
   .result-item .word-row .word-cell-center {
-    display: inline-flex !important;
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
-
+  
   .result-item .word-row .word-cell-right {
-    display: inline-flex !important;
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
-
+  
   .result-item .word-row .word-gr {
     font-size: 20px;
-    display: inline-block !important;
+    font-weight: 600;
+    color: #2c3e50;
+    word-break: break-word;
     white-space: nowrap;
-    flex-shrink: 1;
-    min-width: 0;
-    max-width: calc(100% - 40px);
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0;
   }
-
+  
   .result-item .word-row .word-ru {
     font-size: 20px;
-    display: inline-block !important;
+    font-weight: 600;
+    color: #2c3e50;
+    word-break: break-word;
     white-space: nowrap;
-    flex-shrink: 1;
-    min-width: 0;
-    max-width: calc(100% - 40px);
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0;
   }
-
+  
   .result-item .word-row .copy-btn {
     font-size: 18px;
-    padding: 4px 6px;
+    padding: 4px 8px;
     opacity: 0.7;
-    flex-shrink: 0 !important;
-    display: inline-block !important;
-    width: auto !important;
-    min-width: 30px;
-    max-width: 36px;
+    flex-shrink: 0;
     background: none;
     border: none;
     cursor: pointer;
     transition: all 0.3s;
     color: #95a5a6;
+    line-height: 1;
+    min-width: 32px;
+  }
+  
+  .result-item .word-row .copy-btn:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+    transform: scale(1.1);
+  }
+  
+  .result-item .word-row .copy-btn:active {
+    transform: scale(0.9);
+  }
+  
+  .result-item .word-row .copy-btn.copied {
+    color: #27ae60;
   }
   /* ===== КОНЕЦ БЛОКА РЕЗУЛЬТАТОВ ===== */
   
