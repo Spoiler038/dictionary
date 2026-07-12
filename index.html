@@ -1096,130 +1096,130 @@
     }
     
     /* Мобильная версия */
-  @media (max-width: 767px) {
+ @media (max-width: 767px) {
   #app {
     padding: 15px;
   }
-  
+
   h1 {
     font-size: 20px;
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .header-buttons {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .search-row {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .search-input-wrapper {
     width: 100%;
     min-width: unset;
   }
-  
+
   .search-input-wrapper input {
     width: 100%;
     font-size: 18px;
     padding: 14px 50px 14px 16px;
   }
-  
+
   .search-input-wrapper .clear-btn {
     right: 12px;
     font-size: 22px;
   }
-  
+
   .search-row .search-btn {
     width: 100%;
     padding: 14px;
     font-size: 18px;
   }
-  
+
   .controls-row {
     flex-direction: column;
     width: 100%;
     gap: 8px;
   }
-  
+
   .controls-row .theme-toggle-btn {
     width: 100%;
     justify-content: center;
     padding: 10px 16px;
     font-size: 16px;
   }
-  
+
   .controls-row .add-theme-btn {
     width: 100%;
     justify-content: center;
     padding: 10px 16px;
     font-size: 16px;
   }
-  
+
   .controls-row .mode-selector {
     width: 100%;
     min-width: unset;
   }
-  
+
   .controls-row .mode-selector button {
     max-width: unset;
     font-size: 16px;
     padding: 10px 12px;
   }
-  
+
   .theme-row {
     width: 100%;
   }
-  
+
   .theme-input-wrapper {
     width: 100%;
   }
-  
+
   .theme-input-wrapper input {
     width: 100%;
     font-size: 18px;
     padding: 14px 50px 14px 16px;
   }
-  
+
   .theme-input-wrapper .theme-clear-input-btn {
     right: 12px;
     font-size: 22px;
   }
-  
+
   /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
   .result-item .word-row {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 6px;
+    gap: 8px;
   }
-  
+
   .result-item .word-row .word-cell {
     display: flex;
     align-items: center;
     padding: 4px 0;
     width: 100%;
-    flex-wrap: nowrap;
+    gap: 8px;
   }
-  
+
+  /* Греческий вариант - слева */
   .result-item .word-row .word-cell-left {
     justify-content: flex-start;
-    gap: 8px;
   }
-  
+
+  /* Русский вариант - слева */
   .result-item .word-row .word-cell-center {
     justify-content: flex-start;
-    gap: 8px;
   }
-  
+
+  /* Убираем лишнюю ячейку */
   .result-item .word-row .word-cell-right {
-    justify-content: flex-start;
-    gap: 8px;
+    display: none;
   }
-  
+
   .result-item .word-row .word-gr {
     font-size: 18px;
     font-weight: 600;
@@ -1229,8 +1229,9 @@
     text-overflow: ellipsis;
     flex-shrink: 1;
     min-width: 0;
+    max-width: calc(100% - 40px);
   }
-  
+
   .result-item .word-row .word-ru {
     font-size: 18px;
     font-weight: 600;
@@ -1240,8 +1241,9 @@
     text-overflow: ellipsis;
     flex-shrink: 1;
     min-width: 0;
+    max-width: calc(100% - 40px);
   }
-  
+
   .result-item .word-row .copy-btn {
     font-size: 16px;
     padding: 4px 8px;
@@ -1254,41 +1256,42 @@
     color: #95a5a6;
     line-height: 1;
     min-width: 32px;
+    display: inline-block;
   }
-  
+
   .result-item .word-row .copy-btn:hover {
     background: #ecf0f1;
     color: #2c3e50;
     transform: scale(1.1);
   }
-  
+
   .result-item .word-row .copy-btn:active {
     transform: scale(0.9);
   }
-  
+
   .result-item .word-row .copy-btn.copied {
     color: #27ae60;
   }
   /* ===== КОНЕЦ БЛОКА РЕЗУЛЬТАТОВ ===== */
-  
+
   .result-item .actions {
     flex-direction: column;
   }
-  
+
   .result-item .actions button {
     width: 100%;
     padding: 10px;
   }
-  
+
   .modal-content {
     padding: 20px;
     margin: 10px;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .scroll-top-btn {
     bottom: 15px;
     right: 15px;
@@ -1620,10 +1623,18 @@
     
     // ========== ЗАГРУЗКА ДАННЫХ ==========
     async function loadData() {
-      if (isLoading) return;
-      isLoading = true;
-      
-      try {
+  if (isLoading) return;
+  isLoading = true;
+  
+  // Показываем индикатор загрузки
+  document.getElementById('resultsContainer').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <br>Загрузка данных...
+    </div>
+  `;
+  
+  try {
         const meta = await callGAS('getAll');
         if (meta.error) {
           throw new Error(meta.error);
@@ -1786,23 +1797,22 @@
     });
     
     function showInitialMessage() {
-      const container = document.getElementById('resultsContainer');
-      if (allData && allData.total > 0) {
-        container.innerHTML = `
-          <div class="no-results">
-            📚 Готов к работе<br>
-            <small>Введите слово для поиска или выберите тему</small>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `
-          <div class="no-results">
-            📚 Словарь пуст<br>
-            <small>Добавьте слова через режим редактора</small>
-          </div>
-        `;
-      }
-    }
+  const container = document.getElementById('resultsContainer');
+  if (allData && allData.total > 0) {
+    container.innerHTML = `
+      <div class="no-results">
+        📚 Введите слово для поиска или выберите тему
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <div class="no-results">
+        📚 Словарь пуст<br>
+        <small>Добавьте слова через режим редактора</small>
+      </div>
+    `;
+  }
+}
     
     // ========== ОБНОВЛЕНИЕ КЕША ==========
     async function refreshCache() {
@@ -2516,34 +2526,30 @@
     }
     
     function createResultItem(item) {
-      const actionsHtml = isEditor ? `
-        <div class="actions">
-          <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">✏️ Редактировать</button>
-          <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">🗑️ Удалить</button>
+  const actionsHtml = isEditor ? `
+    <div class="actions">
+      <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">✏️ Редактировать</button>
+      <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">🗑️ Удалить</button>
+    </div>
+  ` : '';
+  
+  return `
+    <div class="result-item" data-id="${item.id}">
+      <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
+      <div class="word-row">
+        <div class="word-cell word-cell-left">
+          <span class="word-gr">🇬🇷 ${item.wordGr}</span>
+          <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
         </div>
-      ` : '';
-      
-      return `
-        <div class="result-item" data-id="${item.id}">
-          <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
-          <div class="word-row">
-            <div class="word-cell word-cell-left">
-              <span class="word-gr">🇬🇷 ${item.wordGr}</span>
-            </div>
-            <div class="word-cell word-cell-center">
-              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
-            </div>
-            <div class="word-cell word-cell-center">
-              <span class="word-ru">🇷🇺 ${item.wordRu}</span>
-            </div>
-            <div class="word-cell word-cell-right">
-              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
-            </div>
-          </div>
-          ${actionsHtml}
+        <div class="word-cell word-cell-center">
+          <span class="word-ru">🇷🇺 ${item.wordRu}</span>
+          <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
         </div>
-      `;
-    }
+      </div>
+      ${actionsHtml}
+    </div>
+  `;
+}
     
     function escapeHTML(str) {
       return str.replace(/['"\\]/g, '\\$&');
