@@ -1093,23 +1093,57 @@ html, body {
     }
     
     /* Десктопная версия */
-    @media (min-width: 768px) {
-      #app {
-        padding: 30px;
-      }
-      
-      .results-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      
-      .result-item {
-        margin-bottom: 0;
-        flex-direction: column;
-        width: 100%;
-      }
-    }
+@media (min-width: 768px) {
+  #app {
+    padding: 30px;
+  }
+  
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .result-item {
+    margin-bottom: 0;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Греческий - слева */
+  .result-item .word-row .word-cell-left {
+    text-align: left;
+    width: 45%;
+  }
+
+  /* Русский - по центру */
+  .result-item .word-row .word-cell-center {
+    text-align: center;
+    width: 10%;
+  }
+
+  /* Кнопка копирования для русского - справа */
+  .result-item .word-row .word-cell-right {
+    text-align: right;
+    width: 45%;
+  }
+
+  .result-item .word-row .word-gr {
+    font-size: 22px;
+  }
+
+  .result-item .word-row .word-ru {
+    font-size: 22px;
+  }
+
+  .result-item .word-row .copy-btn {
+    opacity: 0.5;
+  }
+
+  .result-item:hover .copy-btn {
+    opacity: 1;
+  }
+}
     
     /* Мобильная версия */
  @media (max-width: 767px) {
