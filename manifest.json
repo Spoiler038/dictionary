@@ -3,6 +3,7 @@
   "short_name": "Словарь",
   "description": "Словарь греческого языка с русским переводом",
   "start_url": "https://spoiler038.github.io/dictionary/",
+  "scope": "https://spoiler038.github.io/dictionary/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#3498db",
