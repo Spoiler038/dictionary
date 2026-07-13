@@ -1093,6 +1093,7 @@ html, body {
     }
     
     /* Десктопная версия */
+@med/* Десктопная версия */
 @media (min-width: 768px) {
   #app {
     padding: 30px;
@@ -1112,11 +1113,10 @@ html, body {
 
   .result-item .word-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .result-item .word-row .word-cell {
@@ -1125,17 +1125,18 @@ html, body {
     gap: 8px;
   }
 
-  /* Греческий - слева */
+  /* Греческий - слева (левая половина) */
   .result-item .word-row .word-cell-left {
     justify-content: flex-start;
-    flex: 1;
-    max-width: 45%;
+    flex: 0 1 50%;
+    min-width: 0;
   }
 
-  /* Русский - по центру */
+  /* Русский - слева (правая половина) */
   .result-item .word-row .word-cell-center {
-    justify-content: center;
-    flex: 0 1 auto;
+    justify-content: flex-start;
+    flex: 0 1 50%;
+    min-width: 0;
   }
 
   /* Убираем правую ячейку */
@@ -1149,6 +1150,8 @@ html, body {
     color: #2c3e50;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    flex-shrink: 1;
+    min-width: 0;
   }
 
   .result-item .word-row .word-ru {
@@ -1157,6 +1160,8 @@ html, body {
     color: #2c3e50;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    flex-shrink: 1;
+    min-width: 0;
   }
 
   .result-item .word-row .copy-btn {
