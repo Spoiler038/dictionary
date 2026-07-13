@@ -1111,50 +1111,84 @@ html, body {
   }
 
   .result-item .word-row {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-.result-item .word-row .word-cell {
-  display: table-cell;
-  vertical-align: middle;
-  padding: 4px 8px;
-}
-
-  
-  /* Греческий - слева */
-  .result-item .word-row .word-cell-left {
-    text-align: left;
-    width: 25%;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
   }
 
-  /* Русский - по центру */
+  .result-item .word-row .word-cell {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 4px 8px;
+  }
+
+  /* Греческий - слева (50% ширины) */
+  .result-item .word-row .word-cell-left {
+    text-align: left;
+    width: 50%;
+  }
+
+  /* Русский - по центру (50% ширины) */
   .result-item .word-row .word-cell-center {
     text-align: center;
     width: 50%;
   }
 
-  /* Кнопка копирования для русского - справа */
+  /* Убираем правую ячейку */
   .result-item .word-row .word-cell-right {
-    text-align: right;
-    width: 25%;
+    display: none;
   }
 
   .result-item .word-row .word-gr {
     font-size: 22px;
+    font-weight: 600;
+    color: #2c3e50;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: inline;
   }
 
   .result-item .word-row .word-ru {
     font-size: 22px;
+    font-weight: 600;
+    color: #2c3e50;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: inline;
   }
 
   .result-item .word-row .copy-btn {
     opacity: 0.5;
+    display: inline-block;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: all 0.3s;
+    color: #95a5a6;
+    line-height: 1;
+    vertical-align: middle;
+    flex-shrink: 0;
   }
 
   .result-item:hover .copy-btn {
     opacity: 1;
+  }
+
+  .result-item .word-row .copy-btn:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+    transform: scale(1.1);
+  }
+
+  .result-item .word-row .copy-btn:active {
+    transform: scale(0.9);
+  }
+
+  .result-item .word-row .copy-btn.copied {
+    color: #27ae60;
   }
 }
     
