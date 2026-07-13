@@ -1125,18 +1125,19 @@ html, body {
     gap: 8px;
   }
 
-  /* Греческий - слева (левая половина) */
+  /* Греческий - по левому краю левой половины */
   .result-item .word-row .word-cell-left {
     justify-content: flex-start;
     flex: 0 1 50%;
     min-width: 0;
   }
 
-  /* Русский - слева (правая половина) */
+  /* Русский - по левому краю правой половины */
   .result-item .word-row .word-cell-center {
     justify-content: flex-start;
     flex: 0 1 50%;
     min-width: 0;
+    margin-right: auto; /* Прижимаем к левому краю своей ячейки */
   }
 
   /* Убираем правую ячейку */
