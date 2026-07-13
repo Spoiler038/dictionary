@@ -1111,27 +1111,31 @@ html, body {
   }
 
   .result-item .word-row {
-    display: table;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    table-layout: fixed;
+    gap: 20px;
+    flex-wrap: wrap;
   }
 
   .result-item .word-row .word-cell {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  /* Греческий - слева (50% ширины) */
+  /* Греческий - слева */
   .result-item .word-row .word-cell-left {
-    text-align: left;
-    width: 50%;
+    justify-content: flex-start;
+    flex: 1;
+    max-width: 45%;
   }
 
-  /* Русский - по центру (50% ширины) */
+  /* Русский - по центру */
   .result-item .word-row .word-cell-center {
-    text-align: center;
-    width: 50%;
+    justify-content: center;
+    flex: 0 1 auto;
   }
 
   /* Убираем правую ячейку */
@@ -1145,7 +1149,6 @@ html, body {
     color: #2c3e50;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    display: inline;
   }
 
   .result-item .word-row .word-ru {
@@ -1154,12 +1157,13 @@ html, body {
     color: #2c3e50;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    display: inline;
   }
 
   .result-item .word-row .copy-btn {
     opacity: 0.5;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     font-size: 16px;
@@ -1169,7 +1173,6 @@ html, body {
     transition: all 0.3s;
     color: #95a5a6;
     line-height: 1;
-    vertical-align: middle;
     flex-shrink: 0;
   }
 
