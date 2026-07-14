@@ -22,12 +22,10 @@
       box-sizing: border-box;
     }
 
-    /* ===== SAFE AREA ДЛЯ IPHONE С ЧЕЛКОЙ ===== */
-html, body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  /* Fallback для старых браузеров */
-  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
-}
+    html, body {
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+    }
     
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
@@ -514,6 +512,17 @@ html, body {
       cursor: pointer;
       font-size: 12px;
       transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .theme-dropdown .theme-item .theme-actions button svg {
+      width: 16px;
+      height: 16px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
     }
     
     .theme-dropdown .theme-item .theme-actions .theme-edit-btn {
@@ -648,6 +657,18 @@ html, body {
       cursor: pointer;
       font-size: 13px;
       transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    
+    .result-item .actions button svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
     }
     
     .result-item .actions button:hover {
@@ -772,54 +793,51 @@ html, body {
     }
     
     .toast {
-  position: fixed;
-  top: calc(20px + env(safe-area-inset-top));
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: rgba(0,0,0,0.8);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  z-index: 2000;
-  opacity: 0;
-  transition: all 0.3s ease;
-  pointer-events: none;
-  white-space: nowrap;
-  backdrop-filter: blur(4px);
-}
+      position: fixed;
+      top: calc(20px + env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
     
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
     
-   .scroll-top-btn {
-  position: fixed;
-  bottom: calc(20px + env(safe-area-inset-bottom));
-  right: calc(20px + env(safe-area-inset-right));
-  /* Fallback */
-  bottom: calc(20px + constant(safe-area-inset-bottom));
-  right: calc(20px + constant(safe-area-inset-right));
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #3498db;
-  color: white;
-  border: none;
-  font-size: 28px;
-  font-weight: 1000; /* Жирное начертание */
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Тень для жирности */
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-  transition: all 0.3s;
-  display: none;
-  z-index: 999;
-  opacity: 0;
-  transform: scale(0);
-}
-    
-           
+    .scroll-top-btn {
+      position: fixed;
+      bottom: calc(20px + env(safe-area-inset-bottom));
+      right: calc(20px + env(safe-area-inset-right));
+      bottom: calc(20px + constant(safe-area-inset-bottom));
+      right: calc(20px + constant(safe-area-inset-right));
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #3498db;
+      color: white;
+      border: none;
+      font-size: 28px;
+      font-weight: 1000;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+      transition: all 0.3s;
+      display: none;
+      z-index: 999;
+      opacity: 0;
+      transform: scale(0);
+    }
     
     .scroll-top-btn.visible {
       display: block;
@@ -870,19 +888,19 @@ html, body {
     }
     
     .modal-content {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  animation: slideUp 0.3s ease;
-  margin-top: env(safe-area-inset-top);
-  margin-bottom: env(safe-area-inset-bottom);
-}
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.3s ease;
+      margin-top: env(safe-area-inset-top);
+      margin-bottom: env(safe-area-inset-bottom);
+    }
     
     @keyframes slideUp {
       from { transform: translateY(30px); opacity: 0; }
@@ -1098,324 +1116,404 @@ html, body {
     }
     
     /* Десктопная версия */
-@media (min-width: 768px) {
-  #app {
-    padding: 30px;
-  }
-  
-  .results-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .result-item {
-    margin-bottom: 0;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .result-item .word-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .result-item .word-row .word-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* Греческий - по левому краю левой половины */
-  .result-item .word-row .word-cell-left {
-    justify-content: flex-start;
-    flex: 0 0 50%;
-    min-width: 0;
-  }
-
-  /* Русский - по левому краю правой половины */
-  .result-item .word-row .word-cell-center {
-    justify-content: flex-start;
-    flex: 0 0 50%;
-    min-width: 0;
-  }
-
-  /* Убираем правую ячейку */
-  .result-item .word-row .word-cell-right {
-    display: none;
-  }
-
-  .result-item .word-row .word-gr {
-    font-size: 22px;
-    font-weight: 600;
-    color: #2c3e50;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  .result-item .word-row .word-ru {
-    font-size: 22px;
-    font-weight: 600;
-    color: #2c3e50;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  .result-item .word-row .copy-btn {
-    opacity: 0.5;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 4px;
-    transition: all 0.3s;
-    color: #95a5a6;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .result-item:hover .copy-btn {
-    opacity: 1;
-  }
-
-  .result-item .word-row .copy-btn:hover {
-    background: #ecf0f1;
-    color: #2c3e50;
-    transform: scale(1.1);
-  }
-
-  .result-item .word-row .copy-btn:active {
-    transform: scale(0.9);
-  }
-
-  .result-item .word-row .copy-btn.copied {
-    color: #27ae60;
-  }
-}
+    @media (min-width: 768px) {
+      #app {
+        padding: 30px;
+      }
+      
+      .results-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .result-item {
+        margin-bottom: 0;
+        flex-direction: column;
+        width: 100%;
+      }
+    
+      .result-item .word-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+      }
+    
+      .result-item .word-row .word-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    
+      .result-item .word-row .word-cell-left {
+        justify-content: flex-start;
+        flex: 0 0 50%;
+        min-width: 0;
+      }
+    
+      .result-item .word-row .word-cell-center {
+        justify-content: flex-start;
+        flex: 0 0 50%;
+        min-width: 0;
+      }
+    
+      .result-item .word-row .word-cell-right {
+        display: none;
+      }
+    
+      .result-item .word-row .word-gr {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2c3e50;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        flex-shrink: 1;
+        min-width: 0;
+      }
+    
+      .result-item .word-row .word-ru {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2c3e50;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        flex-shrink: 1;
+        min-width: 0;
+      }
+    
+      .result-item .word-row .copy-btn {
+        opacity: 0.5;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 4px 6px;
+        border-radius: 4px;
+        transition: all 0.3s;
+        color: #95a5a6;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+    
+      .result-item:hover .copy-btn {
+        opacity: 1;
+      }
+    
+      .result-item .word-row .copy-btn:hover {
+        background: #ecf0f1;
+        color: #2c3e50;
+        transform: scale(1.1);
+      }
+    
+      .result-item .word-row .copy-btn:active {
+        transform: scale(0.9);
+      }
+    
+      .result-item .word-row .copy-btn.copied {
+        color: #27ae60;
+      }
+    }
     
     /* Мобильная версия */
- @media (max-width: 767px) {
-  #app {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 20px;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .header-buttons {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .search-row {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .search-input-wrapper {
-    width: 100%;
-    min-width: unset;
-  }
-
-  .search-input-wrapper input {
-    width: 100%;
-    font-size: 18px;
-    padding: 14px 50px 14px 16px;
-  }
-
-  .search-input-wrapper .clear-btn {
-    right: 12px;
-    font-size: 22px;
-  }
-
-  .search-row .search-btn {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-  }
-
-  .controls-row {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .controls-row .theme-toggle-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 10px 16px;
-    font-size: 16px;
-  }
-
-  .controls-row .add-theme-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 10px 16px;
-    font-size: 16px;
-  }
-
-  .controls-row .mode-selector {
-    width: 100%;
-    min-width: unset;
-  }
-
-  .controls-row .mode-selector button {
-    max-width: unset;
-    font-size: 16px;
-    padding: 10px 12px;
-  }
-
-  .theme-row {
-    width: 100%;
-  }
-
-  .theme-input-wrapper {
-    width: 100%;
-  }
-
-  .theme-input-wrapper input {
-    width: 100%;
-    font-size: 18px;
-    padding: 14px 50px 14px 16px;
-  }
-
-  .theme-input-wrapper .theme-clear-input-btn {
-    right: 12px;
-    font-size: 22px;
-  }
-
-  /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
-  .result-item .word-row {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .result-item .word-row .word-cell {
-    display: flex;
-    align-items: center;
-    padding: 4px 0;
-    width: 100%;
-    gap: 8px;
-  }
-
-  /* Греческий вариант - слева */
-  .result-item .word-row .word-cell-left {
-    justify-content: flex-start;
-  }
-
-  /* Русский вариант - слева */
-  .result-item .word-row .word-cell-center {
-    justify-content: flex-start;
-  }
-
-  /* Убираем лишнюю ячейку */
-  .result-item .word-row .word-cell-right {
-    display: none;
-  }
-
-  .result-item .word-row .word-gr {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2c3e50;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-shrink: 1;
-    min-width: 0;
-    max-width: calc(100% - 40px);
-  }
-
-  .result-item .word-row .word-ru {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2c3e50;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-shrink: 1;
-    min-width: 0;
-    max-width: calc(100% - 40px);
-  }
-
-  .result-item .word-row .copy-btn {
-    font-size: 16px;
-    padding: 4px 8px;
-    opacity: 0.7;
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-    color: #95a5a6;
-    line-height: 1;
-    min-width: 32px;
-    display: inline-block;
-  }
-
-  .result-item .word-row .copy-btn:hover {
-    background: #ecf0f1;
-    color: #2c3e50;
-    transform: scale(1.1);
-  }
-
-  .result-item .word-row .copy-btn:active {
-    transform: scale(0.9);
-  }
-
-  .result-item .word-row .copy-btn.copied {
-    color: #27ae60;
-  }
-  /* ===== КОНЕЦ БЛОКА РЕЗУЛЬТАТОВ ===== */
-
-  .result-item .actions {
-    flex-direction: column;
-  }
-
-  .result-item .actions button {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .modal-content {
-    padding: 20px;
-    margin: 10px;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .scroll-top-btn {
-    bottom: 15px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-  }
-}
+    @media (max-width: 767px) {
+      #app {
+        padding: 15px;
+      }
+    
+      h1 {
+        font-size: 20px;
+        flex-direction: column;
+        gap: 8px;
+      }
+    
+      .header-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    
+      .search-row {
+        flex-direction: column;
+        width: 100%;
+      }
+    
+      .search-input-wrapper {
+        width: 100%;
+        min-width: unset;
+      }
+    
+      .search-input-wrapper input {
+        width: 100%;
+        font-size: 18px;
+        padding: 14px 50px 14px 16px;
+      }
+    
+      .search-input-wrapper .clear-btn {
+        right: 12px;
+        font-size: 22px;
+      }
+    
+      .search-row .search-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 18px;
+      }
+    
+      .controls-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+    
+      .controls-row .theme-toggle-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 16px;
+      }
+    
+      .controls-row .add-theme-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 16px;
+      }
+    
+      .controls-row .mode-selector {
+        width: 100%;
+        min-width: unset;
+      }
+    
+      .controls-row .mode-selector button {
+        max-width: unset;
+        font-size: 16px;
+        padding: 10px 12px;
+      }
+    
+      .theme-row {
+        width: 100%;
+      }
+    
+      .theme-input-wrapper {
+        width: 100%;
+      }
+    
+      .theme-input-wrapper input {
+        width: 100%;
+        font-size: 18px;
+        padding: 14px 50px 14px 16px;
+      }
+    
+      .theme-input-wrapper .theme-clear-input-btn {
+        right: 12px;
+        font-size: 22px;
+      }
+    
+      .result-item .word-row {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+    
+      .result-item .word-row .word-cell {
+        display: flex;
+        align-items: center;
+        padding: 4px 0;
+        width: 100%;
+        gap: 8px;
+      }
+    
+      .result-item .word-row .word-cell-left {
+        justify-content: flex-start;
+      }
+    
+      .result-item .word-row .word-cell-center {
+        justify-content: flex-start;
+      }
+    
+      .result-item .word-row .word-cell-right {
+        display: none;
+      }
+    
+      .result-item .word-row .word-gr {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
+        min-width: 0;
+        max-width: calc(100% - 40px);
+      }
+    
+      .result-item .word-row .word-ru {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
+        min-width: 0;
+        max-width: calc(100% - 40px);
+      }
+    
+      .result-item .word-row .copy-btn {
+        font-size: 16px;
+        padding: 4px 8px;
+        opacity: 0.7;
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #95a5a6;
+        line-height: 1;
+        min-width: 32px;
+        display: inline-block;
+      }
+    
+      .result-item .word-row .copy-btn:hover {
+        background: #ecf0f1;
+        color: #2c3e50;
+        transform: scale(1.1);
+      }
+    
+      .result-item .word-row .copy-btn:active {
+        transform: scale(0.9);
+      }
+    
+      .result-item .word-row .copy-btn.copied {
+        color: #27ae60;
+      }
+    
+      .result-item .actions {
+        flex-direction: column;
+      }
+    
+      .result-item .actions button {
+        width: 100%;
+        padding: 10px;
+      }
+    
+      .modal-content {
+        padding: 20px;
+        margin: 10px;
+      }
+    
+      .form-actions {
+        flex-direction: column;
+      }
+    
+      .scroll-top-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
+    
+    /* Стили для SVG иконок */
+    .flag-icon {
+      width: 22px;
+      height: 16px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+    }
+    
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #555;
+      stroke-width: 2;
+      fill: none;
+      transition: stroke 0.2s;
+    }
+    
+    .icon-btn:hover {
+      background: #f0f0f0;
+    }
+    
+    .icon-btn:hover svg {
+      stroke: #2c3e50;
+    }
+    
+    .icon-btn.icon-edit:hover svg {
+      stroke: #f39c12;
+    }
+    
+    .icon-btn.icon-delete:hover svg {
+      stroke: #e74c3c;
+    }
   </style>
 </head>
 <body>
+  <!-- SVG иконки и флаги -->
+  <svg style="display:none;">
+    <defs>
+      <!-- Флаг Греции -->
+      <symbol id="flag-gr" viewBox="0 0 24 16">
+        <rect width="24" height="16" fill="#0d5eaf"/>
+        <rect y="0" width="24" height="2" fill="white"/>
+        <rect y="4" width="24" height="2" fill="white"/>
+        <rect y="8" width="24" height="2" fill="white"/>
+        <rect y="12" width="24" height="2" fill="white"/>
+        <rect x="0" y="0" width="8" height="6" fill="white"/>
+        <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+        <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+      </symbol>
+      
+      <!-- Флаг России -->
+      <symbol id="flag-ru" viewBox="0 0 24 16">
+        <rect width="24" height="16" fill="white"/>
+        <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+        <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+      </symbol>
+      
+      <!-- Иконка "Редактировать" -->
+      <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </symbol>
+      
+      <!-- Иконка "Удалить" -->
+      <symbol id="icon-delete" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <line x1="10" y1="11" x2="10" y2="17"/>
+        <line x1="14" y1="11" x2="14" y2="17"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <div id="app">
     <h1 id="headerTitle" onclick="handleTitleClick()">
       📖 Словарь
-      <span class="version-badge" id="versionBadge">Обновляется...</span>
+      <span class="version-badge" id="versionBadge">v1.0.0</span>
       <div class="header-buttons" id="headerButtons">
         <!-- Кнопки будут динамически обновляться -->
       </div>
@@ -1507,15 +1605,11 @@ html, body {
         <label>Тема (греческий)</label>
         <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
         <div class="theme-datalist" id="themeDatalist"></div>
-        <!-- Убираем проверку на дубликат темы -->
-        <!-- <div class="duplicate-warning" id="duplicateThemeGr">⚠️ Такая тема уже существует</div> -->
       </div>
       
       <div class="form-group">
         <label>Тема (русский)</label>
         <input type="text" id="editThemeRu" placeholder="например: Работа" oninput="checkDuplicate()">
-        <!-- Убираем проверку на дубликат темы -->
-        <!-- <div class="duplicate-warning" id="duplicateThemeRu">⚠️ Такая тема уже существует</div> -->
       </div>
       
       <div class="form-group">
@@ -1736,18 +1830,17 @@ html, body {
     
     // ========== ЗАГРУЗКА ДАННЫХ ==========
     async function loadData() {
-  if (isLoading) return;
-  isLoading = true;
-  
-  // Показываем индикатор загрузки
-  document.getElementById('resultsContainer').innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      <br>Загрузка данных...
-    </div>
-  `;
-  
-  try {
+      if (isLoading) return;
+      isLoading = true;
+      
+      document.getElementById('resultsContainer').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <br>Загрузка данных...
+        </div>
+      `;
+      
+      try {
         const meta = await callGAS('getAll');
         if (meta.error) {
           throw new Error(meta.error);
@@ -1910,22 +2003,22 @@ html, body {
     });
     
     function showInitialMessage() {
-  const container = document.getElementById('resultsContainer');
-  if (allData && allData.total > 0) {
-    container.innerHTML = `
-      <div class="no-results">
-        📚 Введите слово для поиска или выберите тему
-      </div>
-    `;
-  } else {
-    container.innerHTML = `
-      <div class="no-results">
-        📚 Словарь пуст<br>
-        <small>Добавьте слова через режим редактора</small>
-      </div>
-    `;
-  }
-}
+      const container = document.getElementById('resultsContainer');
+      if (allData && allData.total > 0) {
+        container.innerHTML = `
+          <div class="no-results">
+            📚 Введите слово для поиска или выберите тему
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="no-results">
+            📚 Словарь пуст<br>
+            <small>Добавьте слова через режим редактора</small>
+          </div>
+        `;
+      }
+    }
     
     // ========== ОБНОВЛЕНИЕ КЕША ==========
     async function refreshCache() {
@@ -1968,8 +2061,12 @@ html, body {
             <span class="theme-gr">${t.gr}</span>
             <span class="theme-ru">${t.ru}</span>
             <div class="theme-actions ${isEditorMode ? 'visible' : ''}">
-              <button class="theme-edit-btn" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">✏️</button>
-              <button class="theme-delete-btn" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">🗑️</button>
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-edit"/></svg>
+              </button>
+              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-delete"/></svg>
+              </button>
             </div>
           </div>
         `).join('');
@@ -2005,8 +2102,12 @@ html, body {
             <span class="theme-gr">${t.gr}</span>
             <span class="theme-ru">${t.ru}</span>
             <div class="theme-actions ${isEditorMode ? 'visible' : ''}">
-              <button class="theme-edit-btn" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">✏️</button>
-              <button class="theme-delete-btn" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">🗑️</button>
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-edit"/></svg>
+              </button>
+              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-delete"/></svg>
+              </button>
             </div>
           </div>
         `).join('');
@@ -2026,36 +2127,19 @@ html, body {
       performSearch();
     }
     
-   function clearThemeInput() {
-  // Очищаем поле ввода темы
-  document.getElementById('themeInput').value = '';
-  document.getElementById('themeClearInputBtn').classList.remove('visible');
-  
-  // Сбрасываем выбранную тему
-  selectedTheme = '';
-  
-  // Закрываем выпадающий список
-  document.getElementById('themeDropdown').classList.remove('active');
-  themeDropdownVisible = false;
-  
-  // НЕ закрываем панель темы
-  // document.getElementById('themeToggleBtn').classList.remove('active-theme');
-  // document.getElementById('themeSection').classList.remove('active');
-  
-  // Очищаем поле поиска и результаты
-  document.getElementById('searchInput').value = '';
-  document.getElementById('clearBtn').classList.remove('visible');
-  isShowingAll = false;
-  
-  // Показываем начальное сообщение
-  showInitialMessage();
-  
-  // Показываем все темы в выпадающем списке (чтобы пользователь мог сразу выбрать)
-  showAllThemes();
-  
-  // Фокус на поле ввода темы
-  document.getElementById('themeInput').focus();
-}
+    function clearThemeInput() {
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      selectedTheme = '';
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      isShowingAll = false;
+      showInitialMessage();
+      showAllThemes();
+      document.getElementById('themeInput').focus();
+    }
     
     document.addEventListener('click', function(e) {
       const dropdown = document.getElementById('themeDropdown');
@@ -2074,21 +2158,20 @@ html, body {
     }
     
     function updateHeaderButtons() {
-  const container = document.getElementById('headerButtons');
-  if (isEditor) {
-    container.innerHTML = `
-      <span class="editor-badge">✏️ РЕДАКТОР</span>
-      <button onclick="openAdminModal()">🔑 Пароль</button>
-      <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
-      <button class="active-btn" onclick="openAddModal()">➕ Добавить</button>
-      <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
-      
-    `;
-  } else {
-    container.innerHTML = ``;
-  }
-  updateAddThemeButton();
-}
+      const container = document.getElementById('headerButtons');
+      if (isEditor) {
+        container.innerHTML = `
+          <span class="editor-badge">✏️ РЕДАКТОР</span>
+          <button onclick="openAdminModal()">🔑 Пароль</button>
+          <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
+          <button class="active-btn" onclick="openAddModal()">➕ Добавить</button>
+          <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
+        `;
+      } else {
+        container.innerHTML = ``;
+      }
+      updateAddThemeButton();
+    }
     
     function updateAddThemeButton() {
       const btn = document.getElementById('addThemeBtn');
@@ -2133,51 +2216,36 @@ html, body {
     
     // ========== ОЧИСТКА ПОЛЯ ПОИСКА ==========
     function clearSearch() {
-  // Очищаем поле поиска
-  document.getElementById('searchInput').value = '';
-  document.getElementById('clearBtn').classList.remove('visible');
-  
-  // Сбрасываем выбранную тему
-  selectedTheme = '';
-  document.getElementById('themeInput').value = '';
-  document.getElementById('themeClearInputBtn').classList.remove('visible');
-  
-  // Закрываем выпадающий список тем
-  document.getElementById('themeDropdown').classList.remove('active');
-  themeDropdownVisible = false;
-  
-  // Снимаем активность с кнопки темы
-  document.getElementById('themeToggleBtn').classList.remove('active-theme');
-  document.getElementById('themeSection').classList.remove('active');
-  
-  // Сбрасываем флаг показа всех слов
-  isShowingAll = false;
-  
-  // Показываем начальное сообщение
-  showInitialMessage();
-  
-  // Фокус на поле поиска
-  document.getElementById('searchInput').focus();
-}
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      selectedTheme = '';
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      document.getElementById('themeToggleBtn').classList.remove('active-theme');
+      document.getElementById('themeSection').classList.remove('active');
+      isShowingAll = false;
+      showInitialMessage();
+      document.getElementById('searchInput').focus();
+    }
     
     document.addEventListener('DOMContentLoaded', function() {
-  const input = document.getElementById('searchInput');
-  const clearBtn = document.getElementById('clearBtn');
-  input.addEventListener('input', function() {
-    if (this.value.length > 0) {
-      clearBtn.classList.add('visible');
-    } else {
-      clearBtn.classList.remove('visible');
-      // Если поле пустое и нет выбранной темы - показываем начальное сообщение
-      if (!selectedTheme) {
-        showInitialMessage();
-      } else {
-        // Если есть выбранная тема - показываем слова по теме
-        performSearch();
-      }
-    }
-  });
-});
+      const input = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearBtn');
+      input.addEventListener('input', function() {
+        if (this.value.length > 0) {
+          clearBtn.classList.add('visible');
+        } else {
+          clearBtn.classList.remove('visible');
+          if (!selectedTheme) {
+            showInitialMessage();
+          } else {
+            performSearch();
+          }
+        }
+      });
+    });
     
     // ========== МОДАЛЬНЫЕ ОКНА ==========
     
@@ -2314,7 +2382,6 @@ html, body {
         return;
       }
       
-      // Проверка дубликата темы
       const exists = allThemes.some(t => 
         t.gr.toLowerCase() === gr.toLowerCase() && 
         (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
@@ -2432,12 +2499,9 @@ html, body {
     }
     
     function checkDuplicate() {
-      const themeGr = document.getElementById('editThemeGr').value.trim();
-      const themeRu = document.getElementById('editThemeRu').value.trim();
       const wordGr = document.getElementById('editWordGr').value.trim();
       const wordRu = document.getElementById('editWordRu').value.trim();
       
-      // Проверка дубликатов слов (темы не проверяем)
       if (wordGr && allData) {
         const exists = allData.words.some(w => 
           w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
@@ -2453,8 +2517,6 @@ html, body {
         );
         document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
       }
-      
-      // Убираем проверку тем при добавлении слова
     }
     
     // ========== АВТОРИЗАЦИЯ ==========
@@ -2487,11 +2549,23 @@ html, body {
     }
     
     function logout() {
+      // Синхронизируем данные с сервером перед выходом
+      syncDataToServer();
+      
       isEditor = false;
       localStorage.removeItem('dictionary_editor');
       closeModal('logoutModal');
       updateEditorUI();
       performSearch();
+    }
+    
+    async function syncDataToServer() {
+      try {
+        await callGAS('updateVersion');
+        showToast('✅ Данные синхронизированы');
+      } catch (error) {
+        console.error('Ошибка синхронизации:', error);
+      }
     }
     
     // ========== ПОИСК ==========
@@ -2644,30 +2718,34 @@ html, body {
     }
     
     function createResultItem(item) {
-  const actionsHtml = isEditor ? `
-    <div class="actions">
-      <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">✏️ Редактировать</button>
-      <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">🗑️ Удалить</button>
-    </div>
-  ` : '';
-  
-  return `
-    <div class="result-item" data-id="${item.id}">
-      <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
-      <div class="word-row">
-        <div class="word-cell word-cell-left">
-          <span class="word-gr">🇬🇷 ${item.wordGr}</span>
-          <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+      const actionsHtml = isEditor ? `
+        <div class="actions">
+          <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">
+            <svg><use href="#icon-edit"/></svg>
+          </button>
+          <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
+            <svg><use href="#icon-delete"/></svg>
+          </button>
         </div>
-        <div class="word-cell word-cell-center">
-          <span class="word-ru">🇷🇺 ${item.wordRu}</span>
-          <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+      ` : '';
+      
+      return `
+        <div class="result-item" data-id="${item.id}">
+          <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
+          <div class="word-row">
+            <div class="word-cell word-cell-left">
+              <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
+              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+            </div>
+            <div class="word-cell word-cell-center">
+              <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
+              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+            </div>
+          </div>
+          ${actionsHtml}
         </div>
-      </div>
-      ${actionsHtml}
-    </div>
-  `;
-}
+      `;
+    }
     
     function escapeHTML(str) {
       return str.replace(/['"\\]/g, '\\$&');
@@ -2744,9 +2822,8 @@ html, body {
         
         if (result.success) {
           document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
-          // Обновляем кеш локально без перезагрузки с сервера
+          
           if (editingId === null) {
-            // Добавление нового слова
             const newWord = {
               id: allData.words.length + 1,
               themeGr: themeGr,
@@ -2756,12 +2833,10 @@ html, body {
             };
             allData.words.push(newWord);
             allData.total = allData.words.length;
-            // Добавляем тему в список, если её нет
             if (!allThemes.some(t => t.gr === themeGr)) {
               allThemes.push({ gr: themeGr, ru: themeRu });
             }
           } else {
-            // Редактирование слова
             const index = allData.words.findIndex(w => w.id === editingId);
             if (index !== -1) {
               allData.words[index].themeGr = themeGr;
@@ -2770,7 +2845,7 @@ html, body {
               allData.words[index].wordRu = wordRu;
             }
           }
-          // Сохраняем в localStorage
+          
           try {
             localStorage.setItem('dictionary_data', JSON.stringify(allData));
           } catch (e) {}
@@ -2806,7 +2881,6 @@ html, body {
           }
           
           closeModal('deleteModal');
-          // Удаляем тему из локального кеша
           allThemes = allThemes.filter(t => t.gr !== themeGr);
           try {
             localStorage.setItem('dictionary_data', JSON.stringify(allData));
@@ -2828,7 +2902,6 @@ html, body {
         }
         
         closeModal('deleteModal');
-        // Удаляем слово из локального кеша
         allData.words = allData.words.filter(w => w.id !== deleteTarget);
         allData.total = allData.words.length;
         try {
