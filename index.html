@@ -462,6 +462,7 @@ html, body {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      gap: 10px;
     }
     
     .theme-dropdown .theme-item:hover {
@@ -482,20 +483,24 @@ html, body {
       color: #2c3e50;
       overflow: hidden;
       text-overflow: ellipsis;
+      flex-shrink: 0;
+      min-width: 40%;
     }
     
     .theme-dropdown .theme-item .theme-ru {
       color: #7f8c8d;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-left: 10px;
+      flex-shrink: 1;
+      min-width: 40%;
+      text-align: left;
     }
     
     .theme-dropdown .theme-item .theme-actions {
       display: none;
       gap: 6px;
       flex-shrink: 0;
-      margin-left: 10px;
+      margin-left: auto;
     }
     
     .theme-dropdown .theme-item .theme-actions.visible {
@@ -1502,13 +1507,15 @@ html, body {
         <label>Тема (греческий)</label>
         <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
         <div class="theme-datalist" id="themeDatalist"></div>
-        <div class="duplicate-warning" id="duplicateThemeGr">⚠️ Такая тема уже существует</div>
+        <!-- Убираем проверку на дубликат темы -->
+        <!-- <div class="duplicate-warning" id="duplicateThemeGr">⚠️ Такая тема уже существует</div> -->
       </div>
       
       <div class="form-group">
         <label>Тема (русский)</label>
         <input type="text" id="editThemeRu" placeholder="например: Работа" oninput="checkDuplicate()">
-        <div class="duplicate-warning" id="duplicateThemeRu">⚠️ Такая тема уже существует</div>
+        <!-- Убираем проверку на дубликат темы -->
+        <!-- <div class="duplicate-warning" id="duplicateThemeRu">⚠️ Такая тема уже существует</div> -->
       </div>
       
       <div class="form-group">
@@ -1541,11 +1548,13 @@ html, body {
       <div class="form-group">
         <label>Тема (греческий)</label>
         <input type="text" id="editThemeGrOnly" placeholder="π.χ. Εργασία">
+        <div class="duplicate-warning" id="duplicateThemeGrOnly">⚠️ Такая тема уже существует</div>
       </div>
       
       <div class="form-group">
         <label>Тема (русский)</label>
         <input type="text" id="editThemeRuOnly" placeholder="например: Работа">
+        <div class="duplicate-warning" id="duplicateThemeRuOnly">⚠️ Такая тема уже существует</div>
       </div>
       
       <div class="form-actions">
@@ -2276,6 +2285,8 @@ html, body {
       document.getElementById('editThemeGrOnly').value = '';
       document.getElementById('editThemeRuOnly').value = '';
       document.getElementById('themeEditMessage').innerHTML = '';
+      document.getElementById('duplicateThemeGrOnly').classList.remove('visible');
+      document.getElementById('duplicateThemeRuOnly').classList.remove('visible');
       openModal('themeEditModal');
       document.getElementById('saveThemeBtn').onclick = saveTheme;
     }
@@ -2288,6 +2299,8 @@ html, body {
       document.getElementById('editThemeGrOnly').value = gr;
       document.getElementById('editThemeRuOnly').value = ru;
       document.getElementById('themeEditMessage').innerHTML = '';
+      document.getElementById('duplicateThemeGrOnly').classList.remove('visible');
+      document.getElementById('duplicateThemeRuOnly').classList.remove('visible');
       openModal('themeEditModal');
       document.getElementById('saveThemeBtn').onclick = saveTheme;
     }
@@ -2301,8 +2314,7 @@ html, body {
         return;
       }
       
-      document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
-      
+      // Проверка дубликата темы
       const exists = allThemes.some(t => 
         t.gr.toLowerCase() === gr.toLowerCase() && 
         (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
@@ -2310,8 +2322,11 @@ html, body {
       
       if (exists) {
         document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Такая тема уже существует</div>';
+        document.getElementById('duplicateThemeGrOnly').classList.add('visible');
         return;
       }
+      
+      document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
       
       try {
         let updatedCount = 0;
@@ -2328,6 +2343,11 @@ html, body {
             newGr: gr, 
             newRu: ru 
           });
+          if (result.error) {
+            throw new Error(result.error);
+          }
+        } else {
+          const result = await callGAS('addTheme', { gr, ru });
           if (result.error) {
             throw new Error(result.error);
           }
@@ -2417,16 +2437,7 @@ html, body {
       const wordGr = document.getElementById('editWordGr').value.trim();
       const wordRu = document.getElementById('editWordRu').value.trim();
       
-      if (themeGr && allThemes) {
-        const exists = allThemes.some(t => t.gr.toLowerCase() === themeGr.toLowerCase());
-        document.getElementById('duplicateThemeGr').classList.toggle('visible', exists && editingId === null);
-      }
-      
-      if (themeRu && allThemes) {
-        const exists = allThemes.some(t => t.ru.toLowerCase() === themeRu.toLowerCase());
-        document.getElementById('duplicateThemeRu').classList.toggle('visible', exists && editingId === null);
-      }
-      
+      // Проверка дубликатов слов (темы не проверяем)
       if (wordGr && allData) {
         const exists = allData.words.some(w => 
           w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
@@ -2442,6 +2453,8 @@ html, body {
         );
         document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
       }
+      
+      // Убираем проверку тем при добавлении слова
     }
     
     // ========== АВТОРИЗАЦИЯ ==========
@@ -2731,7 +2744,37 @@ html, body {
         
         if (result.success) {
           document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
-          await refreshCache();
+          // Обновляем кеш локально без перезагрузки с сервера
+          if (editingId === null) {
+            // Добавление нового слова
+            const newWord = {
+              id: allData.words.length + 1,
+              themeGr: themeGr,
+              themeRu: themeRu,
+              wordGr: wordGr,
+              wordRu: wordRu
+            };
+            allData.words.push(newWord);
+            allData.total = allData.words.length;
+            // Добавляем тему в список, если её нет
+            if (!allThemes.some(t => t.gr === themeGr)) {
+              allThemes.push({ gr: themeGr, ru: themeRu });
+            }
+          } else {
+            // Редактирование слова
+            const index = allData.words.findIndex(w => w.id === editingId);
+            if (index !== -1) {
+              allData.words[index].themeGr = themeGr;
+              allData.words[index].themeRu = themeRu;
+              allData.words[index].wordGr = wordGr;
+              allData.words[index].wordRu = wordRu;
+            }
+          }
+          // Сохраняем в localStorage
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
           setTimeout(() => {
             closeModal('editModal');
             performSearch();
@@ -2763,7 +2806,12 @@ html, body {
           }
           
           closeModal('deleteModal');
-          await refreshCache();
+          // Удаляем тему из локального кеша
+          allThemes = allThemes.filter(t => t.gr !== themeGr);
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
           showToast('✅ Тема удалена');
           if (document.getElementById('themeSection').classList.contains('active')) {
             showAllThemes();
@@ -2780,7 +2828,13 @@ html, body {
         }
         
         closeModal('deleteModal');
-        await refreshCache();
+        // Удаляем слово из локального кеша
+        allData.words = allData.words.filter(w => w.id !== deleteTarget);
+        allData.total = allData.words.length;
+        try {
+          localStorage.setItem('dictionary_data', JSON.stringify(allData));
+        } catch (e) {}
+        
         showToast('✅ Слово удалено');
         performSearch();
         deleteTarget = null;
