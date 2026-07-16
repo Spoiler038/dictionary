@@ -457,8 +457,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       gap: 10px;
-      flex-wrap: nowrap;
     }
     
     .theme-dropdown .theme-item:hover {
@@ -479,8 +481,8 @@
       color: #2c3e50;
       overflow: hidden;
       text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
+      flex-shrink: 0;
+      min-width: 40%;
     }
     
     .theme-dropdown .theme-item .theme-ru {
@@ -488,7 +490,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       flex-shrink: 1;
-      min-width: 0;
+      min-width: 40%;
       text-align: left;
     }
     
@@ -1311,47 +1313,35 @@
         font-size: 22px;
       }
     
-      /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
       .result-item .word-row {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
         width: 100%;
-        gap: 4px;
-        flex-wrap: nowrap;
+        gap: 8px;
       }
     
       .result-item .word-row .word-cell {
         display: flex;
         align-items: center;
         padding: 4px 0;
-        gap: 6px;
+        width: 100%;
+        gap: 8px;
       }
     
       .result-item .word-row .word-cell-left {
         justify-content: flex-start;
-        flex: 1;
-        min-width: 0;
       }
     
       .result-item .word-row .word-cell-center {
         justify-content: flex-start;
-        flex: 1;
-        min-width: 0;
       }
     
       .result-item .word-row .word-cell-right {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex-shrink: 0;
-        width: auto;
-        padding-left: 4px;
+        display: none;
       }
     
       .result-item .word-row .word-gr {
-        font-size: 17px;
+        font-size: 18px;
         font-weight: 600;
         color: #2c3e50;
         white-space: nowrap;
@@ -1359,11 +1349,11 @@
         text-overflow: ellipsis;
         flex-shrink: 1;
         min-width: 0;
-        max-width: calc(100% - 60px);
+        max-width: calc(100% - 40px);
       }
     
       .result-item .word-row .word-ru {
-        font-size: 17px;
+        font-size: 18px;
         font-weight: 600;
         color: #2c3e50;
         white-space: nowrap;
@@ -1371,21 +1361,22 @@
         text-overflow: ellipsis;
         flex-shrink: 1;
         min-width: 0;
-        max-width: calc(100% - 60px);
+        max-width: calc(100% - 40px);
       }
     
       .result-item .word-row .copy-btn {
-        font-size: 15px;
-        padding: 4px 6px;
+        font-size: 16px;
+        padding: 4px 8px;
+        opacity: 0.7;
         flex-shrink: 0;
-        min-width: 28px;
         background: none;
         border: none;
         cursor: pointer;
         transition: all 0.3s;
         color: #95a5a6;
         line-height: 1;
-        opacity: 0.7;
+        min-width: 32px;
+        display: inline-block;
       }
     
       .result-item .word-row .copy-btn:hover {
@@ -1402,64 +1393,13 @@
         color: #27ae60;
       }
     
-      .result-item .word-row .word-cell-right .icon-btn {
-        padding: 4px 6px;
-        min-width: 32px;
-        min-height: 32px;
-      }
-    
-      .result-item .word-row .word-cell-right .icon-btn svg {
-        width: 18px;
-        height: 18px;
-      }
-    
-      /* Скрываем старые кнопки внизу на телефоне */
       .result-item .actions {
-        display: none !important;
+        flex-direction: column;
       }
     
-      /* ===== ВЫПАДАЮЩИЙ СПИСОК ТЕМ НА ТЕЛЕФОНЕ ===== */
-      .theme-dropdown .theme-item {
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 12px 14px;
-        white-space: normal;
-      }
-    
-      .theme-dropdown .theme-item .theme-gr {
-        flex: 0 0 100%;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 15px;
-      }
-    
-      .theme-dropdown .theme-item .theme-ru {
-        flex: 0 0 100%;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 15px;
-        margin-left: 0;
-      }
-    
-      .theme-dropdown .theme-item .theme-actions {
-        display: flex !important;
-        flex: 0 0 100%;
-        justify-content: flex-end;
-        margin-left: 0;
-        padding-top: 6px;
-        border-top: 1px solid #f0f0f0;
-      }
-    
-      .theme-dropdown .theme-item .theme-actions button {
-        padding: 8px 14px;
-        font-size: 14px;
-        border-radius: 6px;
-        min-width: 44px;
-        min-height: 44px;
+      .result-item .actions button {
+        width: 100%;
+        padding: 10px;
       }
     
       .modal-content {
@@ -2778,70 +2718,17 @@
     }
     
     function createResultItem(item) {
-      const isMobile = window.innerWidth < 768;
+      const actionsHtml = isEditor ? `
+        <div class="actions">
+          <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">
+            <svg><use href="#icon-edit"/></svg>
+          </button>
+          <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
+            <svg><use href="#icon-delete"/></svg>
+          </button>
+        </div>
+      ` : '';
       
-      // На телефоне кнопки редактирования и удаления в строке со словом
-      let actionsHtml = '';
-      if (isEditor) {
-        if (isMobile) {
-          // Мобильная версия - кнопки в строке
-          actionsHtml = `
-            <div class="word-cell word-cell-right">
-              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">
-                <svg><use href="#icon-edit"/></svg>
-              </button>
-              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                <svg><use href="#icon-delete"/></svg>
-              </button>
-            </div>
-          `;
-        } else {
-          // Десктопная версия - кнопки внизу
-          actionsHtml = `
-            <div class="actions">
-              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">
-                <svg><use href="#icon-edit"/></svg> Редактировать
-              </button>
-              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                <svg><use href="#icon-delete"/></svg> Удалить
-              </button>
-            </div>
-          `;
-        }
-      }
-      
-      if (isMobile) {
-        // Мобильная версия - каждая строка отдельно с кнопкой
-        return `
-          <div class="result-item" data-id="${item.id}">
-            <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
-            <div class="word-row">
-              <div class="word-cell word-cell-left">
-                <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
-                <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
-              </div>
-              ${isEditor ? `<div class="word-cell word-cell-right">
-                <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">
-                  <svg><use href="#icon-edit"/></svg>
-                </button>
-              </div>` : ''}
-            </div>
-            <div class="word-row">
-              <div class="word-cell word-cell-center">
-                <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
-                <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
-              </div>
-              ${isEditor ? `<div class="word-cell word-cell-right">
-                <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                  <svg><use href="#icon-delete"/></svg>
-                </button>
-              </div>` : ''}
-            </div>
-          </div>
-        `;
-      }
-      
-      // Десктопная версия
       return `
         <div class="result-item" data-id="${item.id}">
           <div class="theme">📂 ${item.themeGr} / ${item.themeRu}</div>
