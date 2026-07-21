@@ -1999,7 +1999,7 @@
   <div id="app">
     <h1 id="headerTitle" onclick="handleTitleClick()">
       📖 Словарь
-      <span class="version-badge" id="versionBadge">v1.0.0</span>
+      <span class="version-badge" id="versionBadge">Загрузка...</span>
       <div class="header-buttons" id="headerButtons">
         <!-- Кнопки будут динамически обновляться -->
       </div>
@@ -2012,10 +2012,17 @@
           <input type="text" id="searchInput" placeholder="Введите слово для поиска..." autofocus>
           <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
         </div>
+        <button class="search-btn" id="searchBtn">🔍 Найти</button>
       </div>
       
-      <!-- Строка: кнопки языков слева + Найти справа -->
-      <div class="search-controls-row">
+      <!-- Строка: Темы (слева) + языки (справа) -->
+      <div class="controls-row">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+          📂 Темы
+        </button>
+        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+          ➕ Добавить тему
+        </button>
         <div class="mode-selector" id="modeSelector">
           <button id="modeGreek" data-mode="greek">
             <svg class="flag-icon" viewBox="0 0 24 16" style="width:20px;height:13px;display:inline-block;vertical-align:middle;margin-right:4px;">
@@ -2038,17 +2045,10 @@
             </svg>
           </button>
         </div>
-        <button class="search-btn" id="searchBtn">🔍 Найти</button>
       </div>
       
-      <!-- Строка: Темы + Добавить тему, Части речи + Добавить -->
+      <!-- Строка: Части речи -->
       <div class="controls-row">
-        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
-          📂 Темы
-        </button>
-        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
-          ➕ Добавить тему
-        </button>
         <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
           📚 Части речи
         </button>
@@ -3037,81 +3037,80 @@
     }
     
     async function saveTheme() {
-  const gr = document.getElementById('editThemeGrOnly').value.trim();
-  const ru = document.getElementById('editThemeRuOnly').value.trim();
-  
-  if (!gr || !ru) {
-    document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
-    return;
-  }
-  
-  const exists = allThemes.some(t => 
-    t.gr.toLowerCase() === gr.toLowerCase() && 
-    (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
-  );
-  
-  if (exists) {
-    document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Такая тема уже существует</div>';
-    document.getElementById('duplicateThemeGrOnly').classList.add('visible');
-    return;
-  }
-  
-  document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
-  
-  try {
-    let updatedCount = 0;
-    let result;
-    
-    if (themeEditingTarget) {
-      result = await callGAS('editTheme', { 
-        oldGr: themeEditingTarget.gr, 
-        newGr: gr, 
-        newRu: ru 
-      });
-    } else {
-      result = await callGAS('addTheme', { gr, ru });
-    }
-    
-    if (result.error) {
-      throw new Error(result.error);
-    }
-    
-    if (result.success) {
-      if (themeEditingTarget) {
-        const index = allThemes.findIndex(t => t.gr === themeEditingTarget.gr);
-        if (index !== -1) {
-          allThemes[index] = { gr, ru };
-        }
-        for (const word of allData.words) {
-          if (word.themeGr === themeEditingTarget.gr) {
-            word.themeGr = gr;
-            word.themeRu = ru;
-          }
-        }
-      } else {
-        allThemes.push({ gr, ru });
+      const gr = document.getElementById('editThemeGrOnly').value.trim();
+      const ru = document.getElementById('editThemeRuOnly').value.trim();
+      
+      if (!gr || !ru) {
+        document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
       }
       
+      const exists = allThemes.some(t => 
+        t.gr.toLowerCase() === gr.toLowerCase() && 
+        (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
+      );
+      
+      if (exists) {
+        document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Такая тема уже существует</div>';
+        document.getElementById('duplicateThemeGrOnly').classList.add('visible');
+        return;
+      }
+      
+      document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
       try {
-        localStorage.setItem('dictionary_data', JSON.stringify(allData));
-      } catch (e) {}
-      
-      document.getElementById('themeEditMessage').innerHTML = 
-        `<div class="success">✅ Тема успешно ${themeEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
-      
-      await refreshCache();
-      setTimeout(() => {
-        closeModal('themeEditModal');
-        if (document.getElementById('themeSection').classList.contains('active')) {
-          showAllThemes();
+        let result;
+        
+        if (themeEditingTarget) {
+          result = await callGAS('editTheme', { 
+            oldGr: themeEditingTarget.gr, 
+            newGr: gr, 
+            newRu: ru 
+          });
+        } else {
+          result = await callGAS('addTheme', { gr, ru });
         }
-      }, 1500);
+        
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        if (result.success) {
+          if (themeEditingTarget) {
+            const index = allThemes.findIndex(t => t.gr === themeEditingTarget.gr);
+            if (index !== -1) {
+              allThemes[index] = { gr, ru };
+            }
+            for (const word of allData.words) {
+              if (word.themeGr === themeEditingTarget.gr) {
+                word.themeGr = gr;
+                word.themeRu = ru;
+              }
+            }
+          } else {
+            allThemes.push({ gr, ru });
+          }
+          
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          document.getElementById('themeEditMessage').innerHTML = 
+            `<div class="success">✅ Тема успешно ${themeEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
+          
+          await refreshCache();
+          setTimeout(() => {
+            closeModal('themeEditModal');
+            if (document.getElementById('themeSection').classList.contains('active')) {
+              showAllThemes();
+            }
+          }, 1500);
+        }
+        
+      } catch (error) {
+        document.getElementById('themeEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
     }
-    
-  } catch (error) {
-    document.getElementById('themeEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
-  }
-}
     
     // ========== РАБОТА С ЧАСТЯМИ РЕЧИ ==========
     
@@ -3157,82 +3156,81 @@
       }
     }
     
-    async function saveTheme() {
-  const gr = document.getElementById('editThemeGrOnly').value.trim();
-  const ru = document.getElementById('editThemeRuOnly').value.trim();
-  
-  if (!gr || !ru) {
-    document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
-    return;
-  }
-  
-  const exists = allThemes.some(t => 
-    t.gr.toLowerCase() === gr.toLowerCase() && 
-    (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
-  );
-  
-  if (exists) {
-    document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Такая тема уже существует</div>';
-    document.getElementById('duplicateThemeGrOnly').classList.add('visible');
-    return;
-  }
-  
-  document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
-  
-  try {
-    let updatedCount = 0;
-    let result;
-    
-    if (themeEditingTarget) {
-      result = await callGAS('editTheme', { 
-        oldGr: themeEditingTarget.gr, 
-        newGr: gr, 
-        newRu: ru 
-      });
-    } else {
-      result = await callGAS('addTheme', { gr, ru });
-    }
-    
-    if (result.error) {
-      throw new Error(result.error);
-    }
-    
-    if (result.success) {
-      if (themeEditingTarget) {
-        const index = allThemes.findIndex(t => t.gr === themeEditingTarget.gr);
-        if (index !== -1) {
-          allThemes[index] = { gr, ru };
-        }
-        for (const word of allData.words) {
-          if (word.themeGr === themeEditingTarget.gr) {
-            word.themeGr = gr;
-            word.themeRu = ru;
-          }
-        }
-      } else {
-        allThemes.push({ gr, ru });
+    async function savePos() {
+      const gr = document.getElementById('editPosGrOnly').value.trim();
+      const ru = document.getElementById('editPosRuOnly').value.trim();
+      
+      if (!gr || !ru) {
+        document.getElementById('posEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
       }
       
+      const exists = allPos.some(p => 
+        p.gr.toLowerCase() === gr.toLowerCase() && 
+        (posEditingTarget === null || p.gr !== posEditingTarget.gr)
+      );
+      
+      if (exists) {
+        document.getElementById('posEditMessage').innerHTML = '<div class="error">❌ Такая часть речи уже существует</div>';
+        document.getElementById('duplicatePosGrOnly').classList.add('visible');
+        return;
+      }
+      
+      document.getElementById('posEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
       try {
-        localStorage.setItem('dictionary_data', JSON.stringify(allData));
-      } catch (e) {}
-      
-      document.getElementById('themeEditMessage').innerHTML = 
-        `<div class="success">✅ Тема успешно ${themeEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
-      
-      await refreshCache();
-      setTimeout(() => {
-        closeModal('themeEditModal');
-        if (document.getElementById('themeSection').classList.contains('active')) {
-          showAllThemes();
+        let result;
+        
+        if (posEditingTarget) {
+          result = await callGAS('editPos', { 
+            oldGr: posEditingTarget.gr, 
+            newGr: gr, 
+            newRu: ru 
+          });
+        } else {
+          result = await callGAS('addPos', { gr, ru });
         }
-      }, 1500);
+        
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        if (result.success) {
+          if (posEditingTarget) {
+            const index = allPos.findIndex(p => p.gr === posEditingTarget.gr);
+            if (index !== -1) {
+              allPos[index] = { gr, ru };
+            }
+            for (const word of allData.words) {
+              if (word.posGr === posEditingTarget.gr) {
+                word.posGr = gr;
+                word.posRu = ru;
+              }
+            }
+          } else {
+            allPos.push({ gr, ru });
+          }
+          
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          document.getElementById('posEditMessage').innerHTML = 
+            `<div class="success">✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
+          
+          await refreshCache();
+          setTimeout(() => {
+            closeModal('posEditModal');
+            if (document.getElementById('posSection').classList.contains('active')) {
+              showAllPos();
+            }
+          }, 1500);
+        }
+        
+      } catch (error) {
+        document.getElementById('posEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
     }
-    
-  } catch (error) {
-    document.getElementById('themeEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
-  }
-}
     
     // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ==========
     
@@ -3354,7 +3352,7 @@
       
       if (wordGr && allData) {
         const exists = allData.words.some(w => 
-          w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
+          w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
           (editingId === null || w.id !== editingId)
         );
         document.getElementById('duplicateWordGr').classList.toggle('visible', exists);
@@ -3362,7 +3360,7 @@
       
       if (wordRu && allData) {
         const exists = allData.words.some(w => 
-          w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
+          w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
           (editingId === null || w.id !== editingId)
         );
         document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
@@ -3500,28 +3498,28 @@
       
       if (themeLower) {
         results = results.filter(w => 
-          w.themeGr.toLowerCase().includes(themeLower)
+          w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
         );
       }
       
       if (posLower) {
         results = results.filter(w => 
-          w.posGr.toLowerCase().includes(posLower)
+          w.posGr && w.posGr.toLowerCase().includes(posLower)
         );
       }
       
       if (queryLower) {
         if (searchInGreek) {
           results = results.filter(w => 
-            w.wordGr.toLowerCase().includes(queryLower) || 
-            w.themeGr.toLowerCase().includes(queryLower) ||
-            w.posGr.toLowerCase().includes(queryLower)
+            (w.wordGr && w.wordGr.toLowerCase().includes(queryLower)) || 
+            (w.themeGr && w.themeGr.toLowerCase().includes(queryLower)) ||
+            (w.posGr && w.posGr.toLowerCase().includes(queryLower))
           );
         } else if (searchInRussian) {
           results = results.filter(w => 
-            w.wordRu.toLowerCase().includes(queryLower) || 
-            w.themeRu.toLowerCase().includes(queryLower) ||
-            w.posRu.toLowerCase().includes(queryLower)
+            (w.wordRu && w.wordRu.toLowerCase().includes(queryLower)) || 
+            (w.themeRu && w.themeRu.toLowerCase().includes(queryLower)) ||
+            (w.posRu && w.posRu.toLowerCase().includes(queryLower))
           );
         }
       }
