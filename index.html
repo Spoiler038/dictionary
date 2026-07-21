@@ -535,28 +535,28 @@
     }
     
     .theme-dropdown {
-      width: 100%;
-      max-height: 250px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: white;
-      border: 2px solid #f39c12;
-      border-radius: 8px;
-      margin-top: 5px;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      animation: slideDown 0.2s ease;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 100;
-    }
-    
-    .theme-dropdown.active {
-      display: block;
-    }
-    
-    .theme-dropdown .theme-item {
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  border: 2px solid #f39c12;
+  border-radius: 8px;
+  margin-top: 5px;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideDown 0.2s ease;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+}
+
+.theme-dropdown.active {
+  display: block;
+}
+
+.theme-dropdown .theme-item {
   padding: 12px 16px;
   cursor: pointer;
   transition: all 0.2s;
@@ -568,104 +568,101 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   white-space: nowrap;
-  -webkit-overflow-scrolling: touch; /* для плавного скролла на iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
-    .theme-dropdown .theme-item::-webkit-scrollbar {
-  height: 3px;
-
-      .theme-dropdown .theme-item::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
+/* Скрываем скроллбар для WebKit (Chrome, Safari) */
+.theme-dropdown .theme-item::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
 }
 
-      .theme-dropdown .theme-item .theme-gr,
-.theme-dropdown .theme-item .theme-ru {
-  flex-shrink: 0; /* вместо 1 */
+/* Скрываем скроллбар для Firefox */
+.theme-dropdown .theme-item {
+  scrollbar-width: none;
+}
+
+/* Скрываем скроллбар для IE/Edge */
+.theme-dropdown .theme-item {
+  -ms-overflow-style: none;
+}
+
+.theme-dropdown .theme-item:hover {
+  background: #fef9e7;
+  transform: translateX(4px);
+}
+
+.theme-dropdown .theme-item:active {
+  background: #fdebd0;
+}
+
+.theme-dropdown .theme-item:last-child {
+  border-bottom: none;
+}
+
+.theme-dropdown .theme-item .theme-gr {
+  font-weight: 600;
+  color: #2c3e50;
+  flex-shrink: 0;
   white-space: nowrap;
 }
-    
-    .theme-dropdown .theme-item:hover {
-      background: #fef9e7;
-      transform: translateX(4px);
-    }
-    
-    .theme-dropdown .theme-item:active {
-      background: #fdebd0;
-    }
-    
-    .theme-dropdown .theme-item:last-child {
-      border-bottom: none;
-    }
-    
-    .theme-dropdown .theme-item .theme-gr {
-      font-weight: 600;
-      color: #2c3e50;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
-      white-space: nowrap;
-    }
-    
-    .theme-dropdown .theme-item .theme-ru {
-      color: #7f8c8d;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
-      text-align: left;
-      white-space: nowrap;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions {
-      display: none;
-      gap: 6px;
-      flex-shrink: 0;
-      margin-left: auto;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions.visible {
-      display: flex;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions button svg {
-      width: 16px;
-      height: 16px;
-      stroke: white;
-      stroke-width: 2;
-      fill: none;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions .theme-edit-btn {
-      background: #f39c12;
-      color: white;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions .theme-edit-btn:hover {
-      background: #e67e22;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions .theme-delete-btn {
-      background: #e74c3c;
-      color: white;
-    }
-    
-    .theme-dropdown .theme-item .theme-actions .theme-delete-btn:hover {
-      background: #c0392b;
-    }
+
+.theme-dropdown .theme-item .theme-ru {
+  color: #7f8c8d;
+  flex-shrink: 0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.theme-dropdown .theme-item .theme-actions {
+  display: none;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.theme-dropdown .theme-item .theme-actions.visible {
+  display: flex;
+}
+
+.theme-dropdown .theme-item .theme-actions button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-dropdown .theme-item .theme-actions button svg {
+  width: 16px;
+  height: 16px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-edit-btn {
+  background: #f39c12;
+  color: white;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-edit-btn:hover {
+  background: #e67e22;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-delete-btn:hover {
+  background: #c0392b;
+}
     
     .results {
       margin-top: 20px;
