@@ -364,25 +364,33 @@
       display: flex;
     }
     
-    .theme-row {
+    .controls-row .add-pos-btn {
+      padding: 8px 16px;
+      background: #8e44ad;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
       display: none;
-      animation: slideDown 0.3s ease;
-      width: 100%;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
     }
     
-    .theme-row.active {
-      display: block;
+    .controls-row .add-pos-btn:hover {
+      background: #7d3c98;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
     }
     
-    /* Строка для частей речи */
-    .part-of-speech-row {
-      display: none;
-      animation: slideDown 0.3s ease;
-      width: 100%;
+    .controls-row .add-pos-btn:active {
+      transform: scale(0.95);
     }
     
-    .part-of-speech-row.active {
-      display: block;
+    .controls-row .add-pos-btn.visible {
+      display: flex;
     }
     
     .part-of-speech-toggle-btn {
@@ -398,8 +406,7 @@
       align-items: center;
       gap: 4px;
       white-space: nowrap;
-      width: 100%;
-      justify-content: center;
+      width: auto;
     }
     
     .part-of-speech-toggle-btn:hover {
@@ -416,171 +423,24 @@
       background: #27ae60;
     }
     
-    .part-of-speech-input-wrapper {
-      position: relative;
-      width: 100%;
-      margin-top: 5px;
-    }
-    
-    .part-of-speech-input-wrapper input {
-      width: 100%;
-      padding: 12px 45px 12px 16px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-      transition: all 0.3s;
-      background: #fafafa;
-    }
-    
-    .part-of-speech-input-wrapper input:focus {
-      border-color: #8e44ad;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 5px;
-      border-radius: 50%;
-      transition: all 0.3s;
+    .theme-row {
       display: none;
-      color: #95a5a6;
-      line-height: 1;
+      animation: slideDown 0.3s ease;
+      width: 100%;
     }
     
-    .part-of-speech-input-wrapper .pos-clear-input-btn:hover {
-      background: #f0f0f0;
-      transform: translateY(-50%) scale(1.1);
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn:active {
-      transform: translateY(-50%) scale(0.9);
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn.visible {
+    .theme-row.active {
       display: block;
     }
     
-    .part-of-speech-dropdown {
+    .part-of-speech-row {
+      display: none;
+      animation: slideDown 0.3s ease;
       width: 100%;
-      max-height: 250px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: white;
-      border: 2px solid #8e44ad;
-      border-radius: 8px;
-      margin-top: 5px;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      animation: slideDown 0.2s ease;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 100;
     }
     
-    .part-of-speech-dropdown.active {
+    .part-of-speech-row.active {
       display: block;
-    }
-    
-    .part-of-speech-dropdown .pos-item {
-      padding: 12px 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: nowrap;
-    }
-    
-    .part-of-speech-dropdown .pos-item:hover {
-      background: #f4ecf7;
-      transform: translateX(4px);
-    }
-    
-    .part-of-speech-dropdown .pos-item:active {
-      background: #e8daef;
-    }
-    
-    .part-of-speech-dropdown .pos-item:last-child {
-      border-bottom: none;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-gr {
-      font-weight: 600;
-      color: #2c3e50;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-ru {
-      color: #7f8c8d;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
-      text-align: left;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions {
-      display: none;
-      gap: 6px;
-      flex-shrink: 0;
-      margin-left: auto;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions.visible {
-      display: flex;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions button svg {
-      width: 16px;
-      height: 16px;
-      stroke: white;
-      stroke-width: 2;
-      fill: none;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn {
-      background: #f39c12;
-      color: white;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn:hover {
-      background: #e67e22;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn {
-      background: #e74c3c;
-      color: white;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn:hover {
-      background: #c0392b;
     }
     
     @keyframes slideDown {
@@ -751,6 +611,173 @@
     }
     
     .theme-dropdown .theme-item .theme-actions .theme-delete-btn:hover {
+      background: #c0392b;
+    }
+    
+    .part-of-speech-input-wrapper {
+      position: relative;
+      width: 100%;
+      margin-top: 5px;
+    }
+    
+    .part-of-speech-input-wrapper input {
+      width: 100%;
+      padding: 12px 45px 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    
+    .part-of-speech-input-wrapper input:focus {
+      border-color: #8e44ad;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+    }
+    
+    .part-of-speech-input-wrapper .pos-clear-input-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      display: none;
+      color: #95a5a6;
+      line-height: 1;
+    }
+    
+    .part-of-speech-input-wrapper .pos-clear-input-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .part-of-speech-input-wrapper .pos-clear-input-btn:active {
+      transform: translateY(-50%) scale(0.9);
+    }
+    
+    .part-of-speech-input-wrapper .pos-clear-input-btn.visible {
+      display: block;
+    }
+    
+    .part-of-speech-dropdown {
+      width: 100%;
+      max-height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: white;
+      border: 2px solid #8e44ad;
+      border-radius: 8px;
+      margin-top: 5px;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      animation: slideDown 0.2s ease;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 100;
+    }
+    
+    .part-of-speech-dropdown.active {
+      display: block;
+    }
+    
+    .part-of-speech-dropdown .pos-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+    
+    .part-of-speech-dropdown .pos-item:hover {
+      background: #f4ecf7;
+      transform: translateX(4px);
+    }
+    
+    .part-of-speech-dropdown .pos-item:active {
+      background: #e8daef;
+    }
+    
+    .part-of-speech-dropdown .pos-item:last-child {
+      border-bottom: none;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-gr {
+      font-weight: 600;
+      color: #2c3e50;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+      min-width: 0;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-ru {
+      color: #7f8c8d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+      min-width: 0;
+      text-align: left;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions {
+      display: none;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions.visible {
+      display: flex;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions button {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions button svg {
+      width: 16px;
+      height: 16px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn {
+      background: #f39c12;
+      color: white;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn:hover {
+      background: #e67e22;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn:hover {
       background: #c0392b;
     }
     
@@ -1326,7 +1353,6 @@
       border-bottom: none;
     }
     
-    /* Выпадающий список для частей речи при добавлении слова */
     .pos-datalist {
       position: absolute;
       top: 100%;
@@ -1464,7 +1490,6 @@
         color: #27ae60;
       }
       
-      /* Кнопки управления на ПК */
       .result-item .actions button {
         font-size: 16px;
         padding: 6px 14px;
@@ -1475,10 +1500,10 @@
         height: 18px;
       }
       
-      /* Кнопки в строке управления темами/частями речи */
       .controls-row .theme-toggle-btn,
       .controls-row .part-of-speech-toggle-btn,
-      .controls-row .add-theme-btn {
+      .controls-row .add-theme-btn,
+      .controls-row .add-pos-btn {
         font-size: 14px;
         padding: 8px 16px;
       }
@@ -1502,13 +1527,17 @@
       }
     
       .search-row {
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
         width: 100%;
+        gap: 8px;
+        align-items: center;
       }
     
       .search-input-wrapper {
-        width: 100%;
-        min-width: unset;
+        flex: 1;
+        min-width: 0;
+        width: auto;
       }
     
       .search-input-wrapper input {
@@ -1523,16 +1552,19 @@
       }
     
       .search-row .search-btn {
-        width: 100%;
-        padding: 14px;
+        width: auto;
+        padding: 14px 16px;
         font-size: 18px;
+        flex-shrink: 0;
       }
     
       .controls-row {
+        display: flex;
         flex-direction: row;
         width: 100%;
         gap: 6px;
         flex-wrap: wrap;
+        align-items: center;
       }
     
       .controls-row .theme-toggle-btn {
@@ -1540,7 +1572,7 @@
         justify-content: center;
         padding: 10px 12px;
         font-size: 14px;
-        min-width: 80px;
+        min-width: 60px;
       }
     
       .controls-row .add-theme-btn {
@@ -1548,25 +1580,40 @@
         justify-content: center;
         padding: 10px 12px;
         font-size: 14px;
-        min-width: 80px;
+        min-width: 60px;
+      }
+    
+      .controls-row .add-pos-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 12px;
+        font-size: 14px;
+        min-width: 60px;
       }
     
       .controls-row .part-of-speech-toggle-btn {
-        width: 100%;
+        flex: 1;
         justify-content: center;
-        padding: 10px 16px;
-        font-size: 16px;
+        padding: 10px 12px;
+        font-size: 14px;
+        min-width: 60px;
       }
     
       .controls-row .mode-selector {
-        width: 100%;
-        min-width: unset;
+        display: flex;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+        width: auto;
+        justify-content: flex-start;
       }
     
       .controls-row .mode-selector button {
         max-width: unset;
         font-size: 16px;
         padding: 10px 12px;
+        flex: 1;
+        min-width: 40px;
       }
     
       .theme-row {
@@ -1711,59 +1758,138 @@
         height: 18px;
       }
     
-      /* Скрываем старые кнопки внизу на телефоне */
       .result-item .actions {
         display: none !important;
       }
     
-      /* ===== ВЫПАДАЮЩИЙ СПИСОК ТЕМ НА ТЕЛЕФОНЕ ===== */
-      .theme-dropdown .theme-item,
-      .part-of-speech-dropdown .pos-item {
-        flex-wrap: wrap;
+      /* ===== ВЫПАДАЮЩИЙ СПИСОК ТЕМ И ЧАСТЕЙ РЕЧИ НА ТЕЛЕФОНЕ ===== */
+      .theme-dropdown .theme-item {
+        flex-wrap: nowrap;
         gap: 8px;
-        padding: 12px 14px;
+        padding: 10px 12px;
         white-space: normal;
         position: relative;
+        align-items: center;
       }
     
-      .theme-dropdown .theme-item .theme-gr,
-      .theme-dropdown .theme-item .theme-ru,
-      .part-of-speech-dropdown .pos-item .pos-gr,
-      .part-of-speech-dropdown .pos-item .pos-ru {
-        flex: 0 0 100%;
+      .theme-dropdown .theme-item .theme-gr {
+        flex: 0 1 auto;
         min-width: 0;
         white-space: nowrap;
         overflow: auto;
         text-overflow: clip;
-        font-size: 15px;
+        font-size: 14px;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        max-width: 60%;
       }
     
-      .theme-dropdown .theme-item .theme-gr::-webkit-scrollbar,
-      .theme-dropdown .theme-item .theme-ru::-webkit-scrollbar,
-      .part-of-speech-dropdown .pos-item .pos-gr::-webkit-scrollbar,
+      .theme-dropdown .theme-item .theme-gr::-webkit-scrollbar {
+        display: none;
+      }
+    
+      .theme-dropdown .theme-item .theme-ru {
+        flex: 0 1 auto;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: auto;
+        text-overflow: clip;
+        font-size: 14px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        max-width: 60%;
+      }
+    
+      .theme-dropdown .theme-item .theme-ru::-webkit-scrollbar {
+        display: none;
+      }
+    
+      .theme-dropdown .theme-item .theme-actions {
+        display: flex !important;
+        flex: 0 0 auto;
+        justify-content: flex-end;
+        margin-left: auto;
+        padding-top: 0;
+        border-top: none;
+        gap: 4px;
+      }
+    
+      .theme-dropdown .theme-item .theme-actions button {
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+        min-width: 32px;
+        min-height: 32px;
+      }
+    
+      .theme-dropdown .theme-item .theme-actions button svg {
+        width: 14px;
+        height: 14px;
+      }
+    
+      /* Части речи на телефоне */
+      .part-of-speech-dropdown .pos-item {
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding: 10px 12px;
+        white-space: normal;
+        position: relative;
+        align-items: center;
+      }
+    
+      .part-of-speech-dropdown .pos-item .pos-gr {
+        flex: 0 1 auto;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: auto;
+        text-overflow: clip;
+        font-size: 14px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        max-width: 60%;
+      }
+    
+      .part-of-speech-dropdown .pos-item .pos-gr::-webkit-scrollbar {
+        display: none;
+      }
+    
+      .part-of-speech-dropdown .pos-item .pos-ru {
+        flex: 0 1 auto;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: auto;
+        text-overflow: clip;
+        font-size: 14px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        max-width: 60%;
+      }
+    
       .part-of-speech-dropdown .pos-item .pos-ru::-webkit-scrollbar {
         display: none;
       }
     
-      .theme-dropdown .theme-item .theme-actions,
       .part-of-speech-dropdown .pos-item .pos-actions {
         display: flex !important;
-        flex: 0 0 100%;
+        flex: 0 0 auto;
         justify-content: flex-end;
-        margin-left: 0;
-        padding-top: 6px;
-        border-top: 1px solid #f0f0f0;
+        margin-left: auto;
+        padding-top: 0;
+        border-top: none;
+        gap: 4px;
       }
     
-      .theme-dropdown .theme-item .theme-actions button,
       .part-of-speech-dropdown .pos-item .pos-actions button {
-        padding: 8px 14px;
-        font-size: 14px;
-        border-radius: 6px;
-        min-width: 44px;
-        min-height: 44px;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+        min-width: 32px;
+        min-height: 32px;
+      }
+    
+      .part-of-speech-dropdown .pos-item .pos-actions button svg {
+        width: 14px;
+        height: 14px;
       }
     
       .modal-content {
@@ -1839,7 +1965,6 @@
   <!-- SVG иконки и флаги -->
   <svg style="display:none;">
     <defs>
-      <!-- Флаг Греции -->
       <symbol id="flag-gr" viewBox="0 0 24 16">
         <rect width="24" height="16" fill="#0d5eaf"/>
         <rect y="0" width="24" height="2" fill="white"/>
@@ -1851,20 +1976,17 @@
         <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
       </symbol>
       
-      <!-- Флаг России -->
       <symbol id="flag-ru" viewBox="0 0 24 16">
         <rect width="24" height="16" fill="white"/>
         <rect y="0" width="24" height="5.33" fill="#0039a6"/>
         <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
       </symbol>
       
-      <!-- Иконка "Редактировать" -->
       <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
       </symbol>
       
-      <!-- Иконка "Удалить" -->
       <symbol id="icon-delete" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="3 6 5 6 21 6"/>
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -1899,6 +2021,12 @@
         <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
           ➕ Добавить тему
         </button>
+        <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
+          📚 Части речи
+        </button>
+        <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
+          ➕ Добавить
+        </button>
         <div class="mode-selector" id="modeSelector">
           <button id="modeGreek" data-mode="greek">
             <svg class="flag-icon" viewBox="0 0 24 16" style="width:20px;height:13px;display:inline-block;vertical-align:middle;margin-right:4px;">
@@ -1929,13 +2057,6 @@
           <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput()">✕</button>
           <div class="theme-dropdown" id="themeDropdown"></div>
         </div>
-      </div>
-      
-      <!-- Части речи -->
-      <div class="controls-row" style="margin-top: 5px;">
-        <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
-          📚 Части речи
-        </button>
       </div>
       
       <div class="part-of-speech-row" id="posSection">
@@ -2016,19 +2137,9 @@
       </div>
       
       <div class="form-group" style="position: relative;">
-        <label>Тема (русский)</label>
-        <input type="text" id="editThemeRu" placeholder="например: Работа" oninput="checkDuplicate()">
-      </div>
-      
-      <div class="form-group" style="position: relative;">
         <label>Часть речи</label>
         <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
         <div class="pos-datalist" id="posDatalist"></div>
-      </div>
-      
-      <div class="form-group">
-        <label>Часть речи (русский)</label>
-        <input type="text" id="editPosRu" placeholder="например: Существительное" oninput="checkDuplicate()">
       </div>
       
       <div class="form-actions">
@@ -2180,7 +2291,7 @@
     let posDropdownVisible = false;
     let currentVersion = '';
     let deleteTarget = null;
-    let deleteType = 'word'; // 'word', 'theme', 'pos'
+    let deleteType = 'word';
     let isSearchingNow = false;
     let isLoading = false;
     let themeEditingTarget = null;
@@ -2426,7 +2537,7 @@
         updateHeaderButtons();
         updateEditorUI();
         setupEventListeners();
-        updateAddThemeButton();
+        updateAddButtons();
         
       } catch (error) {
         console.error('Ошибка инициализации:', error);
@@ -2449,7 +2560,7 @@
       if (allData && allData.total > 0) {
         container.innerHTML = `
           <div class="no-results">
-            📚 Введите слово для поиска или выберите тему/часть речи
+            📚 Введите слово для поиска или выберите тему
           </div>
         `;
       } else {
@@ -2502,14 +2613,14 @@
           <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
             <span class="theme-gr">${t.gr}</span>
             <span class="theme-ru">${t.ru}</span>
-            <div class="theme-actions ${isEditorMode ? 'visible' : ''}">
+            ${isEditorMode ? `<div class="theme-actions visible">
               <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-edit"/></svg>
               </button>
               <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-delete"/></svg>
               </button>
-            </div>
+            </div>` : ''}
           </div>
         `).join('');
       }
@@ -2543,14 +2654,14 @@
           <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
             <span class="theme-gr">${t.gr}</span>
             <span class="theme-ru">${t.ru}</span>
-            <div class="theme-actions ${isEditorMode ? 'visible' : ''}">
+            ${isEditorMode ? `<div class="theme-actions visible">
               <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-edit"/></svg>
               </button>
               <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-delete"/></svg>
               </button>
-            </div>
+            </div>` : ''}
           </div>
         `).join('');
       }
@@ -2608,14 +2719,14 @@
           <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
             <span class="pos-gr">${p.gr}</span>
             <span class="pos-ru">${p.ru}</span>
-            <div class="pos-actions ${isEditorMode ? 'visible' : ''}">
+            ${isEditorMode ? `<div class="pos-actions visible">
               <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-edit"/></svg>
               </button>
               <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-delete"/></svg>
               </button>
-            </div>
+            </div>` : ''}
           </div>
         `).join('');
       }
@@ -2649,14 +2760,14 @@
           <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
             <span class="pos-gr">${p.gr}</span>
             <span class="pos-ru">${p.ru}</span>
-            <div class="pos-actions ${isEditorMode ? 'visible' : ''}">
+            ${isEditorMode ? `<div class="pos-actions visible">
               <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-edit"/></svg>
               </button>
               <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
                 <svg><use href="#icon-delete"/></svg>
               </button>
-            </div>
+            </div>` : ''}
           </div>
         `).join('');
       }
@@ -2706,15 +2817,22 @@
       } else {
         container.innerHTML = ``;
       }
-      updateAddThemeButton();
+      updateAddButtons();
     }
     
-    function updateAddThemeButton() {
-      const btn = document.getElementById('addThemeBtn');
+    function updateAddButtons() {
+      const themeBtn = document.getElementById('addThemeBtn');
+      const posBtn = document.getElementById('addPosBtn');
       if (isEditor) {
-        btn.classList.add('visible');
+        themeBtn.classList.add('visible');
+        themeBtn.style.display = 'flex';
+        posBtn.style.display = 'flex';
+        posBtn.classList.add('visible');
       } else {
-        btn.classList.remove('visible');
+        themeBtn.classList.remove('visible');
+        themeBtn.style.display = 'none';
+        posBtn.style.display = 'none';
+        posBtn.classList.remove('visible');
       }
     }
     
@@ -2760,7 +2878,6 @@
     function clearSearch() {
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('visible');
-      // Не сбрасываем тему и часть речи
       showInitialMessage();
       document.getElementById('searchInput').focus();
     }
@@ -2795,9 +2912,7 @@
       document.getElementById('editWordGr').value = '';
       document.getElementById('editWordRu').value = '';
       document.getElementById('editThemeGr').value = '';
-      document.getElementById('editThemeRu').value = '';
       document.getElementById('editPosGr').value = '';
-      document.getElementById('editPosRu').value = '';
       document.getElementById('editMessage').innerHTML = '';
       document.getElementById('themeDatalist').classList.remove('active');
       document.getElementById('posDatalist').classList.remove('active');
@@ -2807,7 +2922,7 @@
       document.getElementById('saveBtn').onclick = saveWord;
     }
     
-    function openEditModal(id, wordGr, wordRu, themeGr, themeRu, posGr, posRu) {
+    function openEditModal(id, wordGr, wordRu, themeGr, posGr) {
       if (!isEditor) {
         openLoginModal();
         return;
@@ -2817,9 +2932,7 @@
       document.getElementById('editWordGr').value = wordGr;
       document.getElementById('editWordRu').value = wordRu;
       document.getElementById('editThemeGr').value = themeGr;
-      document.getElementById('editThemeRu').value = themeRu;
       document.getElementById('editPosGr').value = posGr || '';
-      document.getElementById('editPosRu').value = posRu || '';
       document.getElementById('editMessage').innerHTML = '';
       document.getElementById('themeDatalist').classList.remove('active');
       document.getElementById('posDatalist').classList.remove('active');
@@ -2838,7 +2951,7 @@
       openModal('deleteModal');
     }
     
-    // ========== РАБОТА С ТЕМАМИ (модалки) ==========
+    // ========== РАБОТА С ТЕМАМИ ==========
     
     function openAddThemeModal() {
       if (!isEditor) {
@@ -2910,7 +3023,6 @@
           for (const word of allData.words) {
             if (word.themeGr === themeEditingTarget.gr) {
               word.themeGr = gr;
-              word.themeRu = ru;
               updatedCount++;
             }
           }
@@ -2946,7 +3058,7 @@
       }
     }
     
-    // ========== РАБОТА С ЧАСТЯМИ РЕЧИ (модалки) ==========
+    // ========== РАБОТА С ЧАСТЯМИ РЕЧИ ==========
     
     function openAddPosModal() {
       if (!isEditor) {
@@ -3054,7 +3166,7 @@
       }
     }
     
-    // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ПРИ РЕДАКТИРОВАНИИ ==========
+    // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ==========
     
     function filterThemeDatalist() {
       const input = document.getElementById('editThemeGr');
@@ -3096,7 +3208,7 @@
     
     function selectThemeFromDatalist(gr, ru) {
       document.getElementById('editThemeGr').value = gr;
-      document.getElementById('editThemeRu').value = ru;
+      document.getElementById('editPosGr').value = '';
       document.getElementById('themeDatalist').classList.remove('active');
       checkDuplicate();
     }
@@ -3108,7 +3220,7 @@
       }
     });
     
-    // ========== ВЫПАДАЮЩИЙ СПИСОК ЧАСТЕЙ РЕЧИ ПРИ РЕДАКТИРОВАНИИ ==========
+    // ========== ВЫПАДАЮЩИЙ СПИСОК ЧАСТЕЙ РЕЧИ ==========
     
     function filterPosDatalist() {
       const input = document.getElementById('editPosGr');
@@ -3150,7 +3262,6 @@
     
     function selectPosFromDatalist(gr, ru) {
       document.getElementById('editPosGr').value = gr;
-      document.getElementById('editPosRu').value = ru;
       document.getElementById('posDatalist').classList.remove('active');
       checkDuplicate();
     }
@@ -3315,15 +3426,13 @@
       
       if (themeLower) {
         results = results.filter(w => 
-          w.themeGr.toLowerCase().includes(themeLower) || 
-          w.themeRu.toLowerCase().includes(themeLower)
+          w.themeGr.toLowerCase().includes(themeLower)
         );
       }
       
       if (posLower) {
         results = results.filter(w => 
-          w.posGr.toLowerCase().includes(posLower) || 
-          w.posRu.toLowerCase().includes(posLower)
+          w.posGr.toLowerCase().includes(posLower)
         );
       }
       
@@ -3411,7 +3520,7 @@
         if (isMobile) {
           actionsHtml = `
             <div class="word-cell word-cell-right">
-              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.posGr || '')}', '${escapeHTML(item.posRu || '')}')">
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
                 <svg><use href="#icon-edit"/></svg>
               </button>
               <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
@@ -3422,7 +3531,7 @@
         } else {
           actionsHtml = `
             <div class="actions">
-              <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.posGr || '')}', '${escapeHTML(item.posRu || '')}')">
+              <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
                 <svg><use href="#icon-edit"/></svg> Редактировать
               </button>
               <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
@@ -3436,14 +3545,14 @@
       if (isMobile) {
         return `
           <div class="result-item" data-id="${item.id}">
-            <div class="theme">📂 ${item.themeGr} / ${item.themeRu} ${item.posGr ? '| ' + item.posGr : ''}</div>
+            <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
             <div class="word-row">
               <div class="word-cell word-cell-left">
                 <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
                 <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
               </div>
               ${isEditor ? `<div class="word-cell word-cell-right">
-                <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.posGr || '')}', '${escapeHTML(item.posRu || '')}')">
+                <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
                   <svg><use href="#icon-edit"/></svg>
                 </button>
               </div>` : ''}
@@ -3465,7 +3574,7 @@
       
       return `
         <div class="result-item" data-id="${item.id}">
-          <div class="theme">📂 ${item.themeGr} / ${item.themeRu} ${item.posGr ? '| ' + item.posGr : ''}</div>
+          <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
           <div class="word-row">
             <div class="word-cell word-cell-left">
               <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
@@ -3537,11 +3646,9 @@
       const wordGr = document.getElementById('editWordGr').value.trim();
       const wordRu = document.getElementById('editWordRu').value.trim();
       const themeGr = document.getElementById('editThemeGr').value.trim();
-      const themeRu = document.getElementById('editThemeRu').value.trim();
       const posGr = document.getElementById('editPosGr').value.trim();
-      const posRu = document.getElementById('editPosRu').value.trim();
       
-      if (!wordGr || !wordRu || !themeGr || !themeRu) {
+      if (!wordGr || !wordRu || !themeGr) {
         document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово и тема должны быть заполнены</div>';
         return;
       }
@@ -3551,8 +3658,8 @@
       try {
         const action = editingId === null ? 'addWord' : 'editWord';
         const params = editingId === null 
-          ? { wordGr, wordRu, themeGr, themeRu, posGr, posRu }
-          : { id: editingId, wordGr, wordRu, themeGr, themeRu, posGr, posRu };
+          ? { wordGr, wordRu, themeGr, posGr }
+          : { id: editingId, wordGr, wordRu, themeGr, posGr };
         
         const result = await callGAS(action, params);
         
@@ -3565,17 +3672,17 @@
               wordGr: wordGr,
               wordRu: wordRu,
               themeGr: themeGr,
-              themeRu: themeRu,
+              themeRu: themeGr,
               posGr: posGr,
-              posRu: posRu
+              posRu: posGr
             };
             allData.words.push(newWord);
             allData.total = allData.words.length;
             if (!allThemes.some(t => t.gr === themeGr)) {
-              allThemes.push({ gr: themeGr, ru: themeRu });
+              allThemes.push({ gr: themeGr, ru: themeGr });
             }
             if (posGr && !allPos.some(p => p.gr === posGr)) {
-              allPos.push({ gr: posGr, ru: posRu });
+              allPos.push({ gr: posGr, ru: posGr });
             }
           } else {
             const index = allData.words.findIndex(w => w.id === editingId);
@@ -3583,9 +3690,9 @@
               allData.words[index].wordGr = wordGr;
               allData.words[index].wordRu = wordRu;
               allData.words[index].themeGr = themeGr;
-              allData.words[index].themeRu = themeRu;
+              allData.words[index].themeRu = themeGr;
               allData.words[index].posGr = posGr;
-              allData.words[index].posRu = posRu;
+              allData.words[index].posRu = posGr;
             }
           }
           
