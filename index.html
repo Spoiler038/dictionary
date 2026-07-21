@@ -2980,15 +2980,16 @@ h1:active {
     }
     
     function clearThemeInput(event) {
-      event.stopPropagation();
-      document.getElementById('themeInput').value = '';
-      document.getElementById('themeClearInputBtn').classList.remove('visible');
-      selectedTheme = '';
-      // Не закрываем выпадающий список, остаёмся на фильтре
-      showAllThemes();
-      document.getElementById('themeInput').focus();
-      performSearch();
-    }
+  event.stopPropagation();
+  document.getElementById('themeInput').value = '';
+  document.getElementById('themeClearInputBtn').classList.remove('visible');
+  selectedTheme = '';
+  // Показываем все темы, НЕ закрывая список
+  showAllThemes();
+  document.getElementById('themeInput').focus();
+  // Выполняем поиск с пустой темой
+  performSearch();
+}
     
     // ========== УПРАВЛЕНИЕ ЧАСТЯМИ РЕЧИ ==========
     function togglePosSection() {
@@ -3100,15 +3101,16 @@ h1:active {
     }
     
     function clearPosInput(event) {
-      event.stopPropagation();
-      document.getElementById('posInput').value = '';
-      document.getElementById('posClearInputBtn').classList.remove('visible');
-      selectedPos = '';
-      // Не закрываем выпадающий список, остаёмся на фильтре
-      showAllPos();
-      document.getElementById('posInput').focus();
-      performSearch();
-    }
+  event.stopPropagation();
+  document.getElementById('posInput').value = '';
+  document.getElementById('posClearInputBtn').classList.remove('visible');
+  selectedPos = '';
+  // Показываем все части речи, НЕ закрывая список
+  showAllPos();
+  document.getElementById('posInput').focus();
+  // Выполняем поиск с пустой частью речи
+  performSearch();
+}
     
     // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
     
