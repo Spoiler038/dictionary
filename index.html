@@ -355,6 +355,22 @@
       padding: 0;
     }
     
+    /* Контролы для телефона */
+    .mobile-controls {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    /* Контролы для ПК */
+    .desktop-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    
     .controls-row {
       display: flex;
       gap: 10px;
@@ -585,6 +601,7 @@
       display: none;
       color: #95a5a6;
       line-height: 1;
+      z-index: 5;
     }
     
     .theme-input-wrapper .theme-clear-input-btn:hover {
@@ -752,6 +769,7 @@
       display: none;
       color: #95a5a6;
       line-height: 1;
+      z-index: 5;
     }
     
     .part-of-speech-input-wrapper .pos-clear-input-btn:hover {
@@ -1337,6 +1355,7 @@
       display: flex;
       gap: 12px;
       margin-top: 24px;
+      flex-wrap: wrap;
     }
     
     .form-actions button {
@@ -1348,6 +1367,7 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
+      min-width: 80px;
     }
     
     .form-actions button:hover {
@@ -1621,6 +1641,14 @@
       .search-btn .btn-text {
         display: inline;
       }
+      
+      .desktop-controls {
+        display: flex;
+      }
+      
+      .mobile-controls {
+        display: none !important;
+      }
     }
     
     /* Мобильная версия */
@@ -1687,6 +1715,45 @@
       .search-btn.loading.searching .btn-text {
         display: none;
       }
+      
+      .desktop-controls {
+        display: none !important;
+      }
+      
+      .mobile-controls {
+        display: flex;
+      }
+      
+      .mobile-controls .mode-selector {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .mobile-controls .mode-selector button {
+        flex: 1;
+        max-width: unset;
+        font-size: 14px;
+        padding: 8px 12px;
+        min-width: 40px;
+        border: 2px solid #ddd;
+        background: white;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        color: #333;
+      }
+      
+      .mobile-controls .mode-selector button.active {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+      }
     
       .controls-row {
         display: flex;
@@ -1727,23 +1794,6 @@
         padding: 10px 12px;
         font-size: 14px;
         min-width: 60px;
-      }
-    
-      .controls-row .mode-selector {
-        display: flex;
-        gap: 6px;
-        flex: 1;
-        min-width: 0;
-        width: 100%;
-        justify-content: center;
-      }
-    
-      .controls-row .mode-selector button {
-        max-width: unset;
-        font-size: 14px;
-        padding: 8px 12px;
-        flex: 1;
-        min-width: 40px;
       }
     
       .theme-row {
@@ -1878,141 +1928,20 @@
         display: none !important;
       }
     
-      .theme-dropdown .theme-item {
-        flex-wrap: nowrap;
-        gap: 8px;
-        padding: 10px 12px;
-        white-space: normal;
-        position: relative;
-        align-items: center;
+      /* Модальные окна на телефоне — кнопки в одну строку */
+      .modal .form-actions {
+        flex-direction: row !important;
+        flex-wrap: wrap;
       }
-    
-      .theme-dropdown .theme-item .theme-gr {
-        flex: 0 1 auto;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: auto;
-        text-overflow: clip;
-        font-size: 14px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        max-width: 60%;
-      }
-    
-      .theme-dropdown .theme-item .theme-gr::-webkit-scrollbar {
-        display: none;
-      }
-    
-      .theme-dropdown .theme-item .theme-ru {
-        flex: 0 1 auto;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: auto;
-        text-overflow: clip;
-        font-size: 14px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        max-width: 60%;
-      }
-    
-      .theme-dropdown .theme-item .theme-ru::-webkit-scrollbar {
-        display: none;
-      }
-    
-      .theme-dropdown .theme-item .theme-actions {
-        display: flex !important;
-        flex: 0 0 auto;
-        justify-content: flex-end;
-        margin-left: auto;
-        padding-top: 0;
-        border-top: none;
-        gap: 4px;
-      }
-    
-      .theme-dropdown .theme-item .theme-actions button {
-        padding: 6px 10px;
-        font-size: 12px;
-        border-radius: 4px;
-        min-width: 32px;
-        min-height: 32px;
-      }
-    
-      .theme-dropdown .theme-item .theme-actions button svg {
-        width: 14px;
-        height: 14px;
-      }
-    
-      .part-of-speech-dropdown .pos-item {
-        flex-wrap: nowrap;
-        gap: 8px;
-        padding: 10px 12px;
-        white-space: normal;
-        position: relative;
-        align-items: center;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-gr {
-        flex: 0 1 auto;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: auto;
-        text-overflow: clip;
-        font-size: 14px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        max-width: 60%;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-gr::-webkit-scrollbar {
-        display: none;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-ru {
-        flex: 0 1 auto;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: auto;
-        text-overflow: clip;
-        font-size: 14px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        max-width: 60%;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-ru::-webkit-scrollbar {
-        display: none;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-actions {
-        display: flex !important;
-        flex: 0 0 auto;
-        justify-content: flex-end;
-        margin-left: auto;
-        padding-top: 0;
-        border-top: none;
-        gap: 4px;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-actions button {
-        padding: 6px 10px;
-        font-size: 12px;
-        border-radius: 4px;
-        min-width: 32px;
-        min-height: 32px;
-      }
-    
-      .part-of-speech-dropdown .pos-item .pos-actions button svg {
-        width: 14px;
-        height: 14px;
+      
+      .modal .form-actions button {
+        min-width: 80px;
+        flex: 1;
       }
     
       .modal-content {
         padding: 20px;
         margin: 10px;
-      }
-    
-      .form-actions {
-        flex-direction: column;
       }
     
       .scroll-top-btn {
@@ -2140,16 +2069,56 @@
         </button>
       </div>
       
-      <!-- Строка: Темы + Добавить тему + языки -->
-      <div class="controls-row">
-        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
-          📂 Темы
-        </button>
-        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
-          ➕ Добавить тему
-        </button>
-        <div class="mode-selector" id="modeSelector">
-          <button id="modeGreek" data-mode="greek">
+      <!-- Контролы для ПК -->
+      <div class="desktop-controls">
+        <!-- Темы + языки -->
+        <div class="controls-row">
+          <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+            📂 Темы
+          </button>
+          <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+            ➕ Добавить тему
+          </button>
+          <div class="mode-selector" id="modeSelector">
+            <button id="modeGreek" data-mode="greek">
+              <svg class="flag-icon" viewBox="0 0 24 16">
+                <rect width="24" height="16" fill="#0d5eaf"/>
+                <rect y="0" width="24" height="2" fill="white"/>
+                <rect y="4" width="24" height="2" fill="white"/>
+                <rect y="8" width="24" height="2" fill="white"/>
+                <rect y="12" width="24" height="2" fill="white"/>
+                <rect x="0" y="0" width="8" height="6" fill="white"/>
+                <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+                <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+              </svg>
+            </button>
+            <button id="modeAuto" class="active" data-mode="auto">🤖</button>
+            <button id="modeRussian" data-mode="russian">
+              <svg class="flag-icon" viewBox="0 0 24 16">
+                <rect width="24" height="16" fill="white"/>
+                <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+                <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Части речи -->
+        <div class="controls-row">
+          <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
+            📚 Части речи
+          </button>
+          <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
+            ➕ Добавить
+          </button>
+        </div>
+      </div>
+      
+      <!-- Контролы для телефона -->
+      <div class="mobile-controls">
+        <!-- Языки -->
+        <div class="mode-selector" id="modeSelectorMobile">
+          <button id="modeGreekMobile" data-mode="greek">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="#0d5eaf"/>
               <rect y="0" width="24" height="2" fill="white"/>
@@ -2161,8 +2130,8 @@
               <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
             </svg>
           </button>
-          <button id="modeAuto" class="active" data-mode="auto">🤖</button>
-          <button id="modeRussian" data-mode="russian">
+          <button id="modeAutoMobile" class="active" data-mode="auto">🤖</button>
+          <button id="modeRussianMobile" data-mode="russian">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="white"/>
               <rect y="0" width="24" height="5.33" fill="#0039a6"/>
@@ -2170,22 +2139,32 @@
             </svg>
           </button>
         </div>
-      </div>
-      
-      <!-- Строка: Части речи + Добавить -->
-      <div class="controls-row">
-        <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
-          📚 Части речи
-        </button>
-        <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
-          ➕ Добавить
-        </button>
+        
+        <!-- Темы -->
+        <div class="controls-row">
+          <button class="theme-toggle-btn" id="themeToggleBtnMobile" onclick="toggleThemeSection()">
+            📂 Темы
+          </button>
+          <button class="add-theme-btn" id="addThemeBtnMobile" onclick="openAddThemeModal()">
+            ➕ Добавить тему
+          </button>
+        </div>
+        
+        <!-- Части речи -->
+        <div class="controls-row">
+          <button class="part-of-speech-toggle-btn" id="posToggleBtnMobile" onclick="togglePosSection()">
+            📚 Части речи
+          </button>
+          <button class="add-pos-btn" id="addPosBtnMobile" onclick="openAddPosModal()">
+            ➕ Добавить
+          </button>
+        </div>
       </div>
       
       <div class="theme-row" id="themeSection">
         <div class="theme-input-wrapper">
           <input type="text" id="themeInput" placeholder="Введите тему для поиска..." oninput="filterThemes()" onfocus="filterThemes()">
-          <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput()">✕</button>
+          <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput(event)">✕</button>
           <div class="theme-dropdown" id="themeDropdown"></div>
         </div>
       </div>
@@ -2193,7 +2172,7 @@
       <div class="part-of-speech-row" id="posSection">
         <div class="part-of-speech-input-wrapper">
           <input type="text" id="posInput" placeholder="Введите часть речи..." oninput="filterPos()" onfocus="filterPos()">
-          <button class="pos-clear-input-btn" id="posClearInputBtn" onclick="clearPosInput()">✕</button>
+          <button class="pos-clear-input-btn" id="posClearInputBtn" onclick="clearPosInput(event)">✕</button>
           <div class="part-of-speech-dropdown" id="posDropdown"></div>
         </div>
       </div>
@@ -2745,18 +2724,22 @@
       const section = document.getElementById('themeSection');
       const input = document.getElementById('themeInput');
       const btn = document.getElementById('themeToggleBtn');
+      const btnMobile = document.getElementById('themeToggleBtnMobile');
       
       const posSection = document.getElementById('posSection');
       const posBtn = document.getElementById('posToggleBtn');
+      const posBtnMobile = document.getElementById('posToggleBtnMobile');
       if (posSection.classList.contains('active')) {
         posSection.classList.remove('active');
         posBtn.classList.remove('active-pos');
+        posBtnMobile.classList.remove('active-pos');
         document.getElementById('posDropdown').classList.remove('active');
         posDropdownVisible = false;
       }
       
       section.classList.toggle('active');
       btn.classList.toggle('active-theme');
+      if (btnMobile) btnMobile.classList.toggle('active-theme');
       
       if (section.classList.contains('active')) {
         input.focus();
@@ -2845,12 +2828,12 @@
       performSearch();
     }
     
-    function clearThemeInput() {
+    function clearThemeInput(event) {
+      event.stopPropagation();
       document.getElementById('themeInput').value = '';
       document.getElementById('themeClearInputBtn').classList.remove('visible');
       selectedTheme = '';
-      document.getElementById('themeDropdown').classList.remove('active');
-      themeDropdownVisible = false;
+      // Не закрываем выпадающий список, остаёмся на фильтре
       showAllThemes();
       document.getElementById('themeInput').focus();
       performSearch();
@@ -2861,18 +2844,22 @@
       const section = document.getElementById('posSection');
       const input = document.getElementById('posInput');
       const btn = document.getElementById('posToggleBtn');
+      const btnMobile = document.getElementById('posToggleBtnMobile');
       
       const themeSection = document.getElementById('themeSection');
       const themeBtn = document.getElementById('themeToggleBtn');
+      const themeBtnMobile = document.getElementById('themeToggleBtnMobile');
       if (themeSection.classList.contains('active')) {
         themeSection.classList.remove('active');
         themeBtn.classList.remove('active-theme');
+        if (themeBtnMobile) themeBtnMobile.classList.remove('active-theme');
         document.getElementById('themeDropdown').classList.remove('active');
         themeDropdownVisible = false;
       }
       
       section.classList.toggle('active');
       btn.classList.toggle('active-pos');
+      if (btnMobile) btnMobile.classList.toggle('active-pos');
       
       if (section.classList.contains('active')) {
         input.focus();
@@ -2961,12 +2948,12 @@
       performSearch();
     }
     
-    function clearPosInput() {
+    function clearPosInput(event) {
+      event.stopPropagation();
       document.getElementById('posInput').value = '';
       document.getElementById('posClearInputBtn').classList.remove('visible');
       selectedPos = '';
-      document.getElementById('posDropdown').classList.remove('active');
-      posDropdownVisible = false;
+      // Не закрываем выпадающий список, остаёмся на фильтре
       showAllPos();
       document.getElementById('posInput').focus();
       performSearch();
@@ -2999,16 +2986,17 @@
     function updateAddButtons() {
       const themeBtn = document.getElementById('addThemeBtn');
       const posBtn = document.getElementById('addPosBtn');
+      const themeBtnMobile = document.getElementById('addThemeBtnMobile');
+      const posBtnMobile = document.getElementById('addPosBtnMobile');
+      
       if (isEditor) {
-        themeBtn.classList.add('visible');
-        themeBtn.style.display = 'flex';
-        posBtn.style.display = 'flex';
-        posBtn.classList.add('visible');
+        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
+          if (el) { el.classList.add('visible'); el.style.display = 'flex'; }
+        });
       } else {
-        themeBtn.classList.remove('visible');
-        themeBtn.style.display = 'none';
-        posBtn.style.display = 'none';
-        posBtn.classList.remove('visible');
+        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
+          if (el) { el.classList.remove('visible'); el.style.display = 'none'; }
+        });
       }
     }
     
@@ -3366,7 +3354,7 @@
           } catch (e) {}
           
           document.getElementById('posEditMessage').innerHTML = 
-            `<div class>✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
+            `<div class="success">✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
           
           await refreshCache();
           setTimeout(() => {
@@ -3567,11 +3555,25 @@
     // ========== ПОИСК ==========
     
     function setupEventListeners() {
+      // ПК версия
       document.querySelectorAll('#modeSelector button').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
           currentMode = this.dataset.mode;
+        });
+      });
+      
+      // Мобильная версия
+      document.querySelectorAll('#modeSelectorMobile button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#modeSelectorMobile button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentMode = this.dataset.mode;
+          // Синхронизируем с ПК версией
+          document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
+          const pcBtn = document.querySelector(`#modeSelector button[data-mode="${this.dataset.mode}"]`);
+          if (pcBtn) pcBtn.classList.add('active');
         });
       });
       
@@ -4081,10 +4083,12 @@
       
       const isThemeClick = event.target.closest('.theme-input-wrapper') || 
                            event.target.closest('#themeToggleBtn') || 
+                           event.target.closest('#themeToggleBtnMobile') ||
                            event.target.closest('.theme-actions');
       
       const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
                          event.target.closest('#posToggleBtn') || 
+                         event.target.closest('#posToggleBtnMobile') ||
                          event.target.closest('.pos-actions');
       
       if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
