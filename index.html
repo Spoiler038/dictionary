@@ -4274,7 +4274,8 @@ h1:active {
       const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
                          event.target.closest('#posToggleBtn') || 
                          event.target.closest('#posToggleBtnMobile') ||
-                         event.target.closest('.pos-actions');
+                         event.target.closest('.pos-actions') ||
+                         event.target.closest('.pos-clear-input-btn');
       
       if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
         dropdown.classList.remove('active');
