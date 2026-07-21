@@ -173,7 +173,6 @@
       margin-bottom: 20px;
     }
     
-    /* Строка поиска */
     .search-row {
       display: flex;
       gap: 10px;
@@ -219,6 +218,7 @@
       display: none;
       color: #95a5a6;
       line-height: 1;
+      z-index: 5;
     }
     
     .search-input-wrapper .clear-btn:hover {
@@ -234,7 +234,8 @@
       display: block;
     }
     
-    .search-row .search-btn {
+    /* Анимированная кнопка поиска */
+    .search-btn {
       padding: 12px 24px;
       background: #3498db;
       color: white;
@@ -242,21 +243,119 @@
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.3s;
-      white-space: nowrap;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      min-width: 100px;
+      height: 48px;
+      flex-shrink: 0;
     }
     
-    .search-row .search-btn:hover {
+    .search-btn:hover {
       background: #2980b9;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
     }
     
-    .search-row .search-btn:active {
+    .search-btn:active {
       transform: scale(0.95);
     }
     
-    /* Строка управления: Темы + языки */
+    .search-btn .btn-text {
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .search-btn .btn-icon {
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+    
+    .search-btn .btn-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: white;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: all 0.4s ease;
+    }
+    
+    .search-btn .btn-icon .close-svg {
+      position: absolute;
+      opacity: 0;
+      transform: rotate(90deg) scale(0.5);
+    }
+    
+    .search-btn.searching {
+      background: #e74c3c;
+      min-width: 48px;
+      padding: 0 12px;
+      border-radius: 50%;
+    }
+    
+    .search-btn.searching:hover {
+      background: #c0392b;
+    }
+    
+    .search-btn.searching .btn-text {
+      opacity: 0;
+      width: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .search-btn.searching .btn-icon .search-svg {
+      opacity: 0;
+      transform: rotate(-90deg) scale(0.5);
+    }
+    
+    .search-btn.searching .btn-icon .close-svg {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .search-btn.loading .btn-icon .search-svg {
+      animation: spin 1s linear infinite;
+      opacity: 1 !important;
+      transform: rotate(0deg) !important;
+    }
+    
+    .search-btn.loading .btn-icon .close-svg {
+      opacity: 0 !important;
+      transform: rotate(90deg) scale(0.5) !important;
+    }
+    
+    .search-btn.loading.searching {
+      background: #3498db;
+      min-width: 100px;
+      padding: 0 20px;
+      border-radius: 8px;
+    }
+    
+    .search-btn.loading.searching .btn-text {
+      opacity: 1;
+      width: auto;
+      margin: 0 0 0 8px;
+      padding: 0;
+    }
+    
     .controls-row {
       display: flex;
       gap: 10px;
@@ -1514,6 +1613,15 @@
         font-size: 14px;
         padding: 8px 16px;
       }
+      
+      .controls-row .mode-selector button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+      
+      .search-btn .btn-text {
+        display: inline;
+      }
     }
     
     /* Мобильная версия */
@@ -1533,17 +1641,19 @@
         justify-content: center;
       }
     
-      /* Поиск на всю ширину */
+      /* Поиск: поле + кнопка справа */
       .search-row {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         width: 100%;
         gap: 8px;
+        align-items: center;
       }
     
       .search-input-wrapper {
-        width: 100%;
-        min-width: unset;
+        flex: 1;
+        min-width: 0;
+        width: auto;
       }
     
       .search-input-wrapper input {
@@ -1557,73 +1667,28 @@
         font-size: 22px;
       }
     
-      .search-row .search-btn {
+      /* Кнопка поиска без текста */
+      .search-btn {
+        min-width: 48px;
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      
+      .search-btn .btn-text {
         display: none;
       }
-    
-      /* Языки слева + Найти справа */
-      .search-controls-row {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        gap: 8px;
-        align-items: center;
+      
+      .search-btn.loading.searching {
+        min-width: 48px;
+        padding: 0;
+        border-radius: 50%;
       }
       
-      .search-controls-row .mode-selector {
-        display: flex;
-        gap: 6px;
-        flex: 1;
-        min-width: 0;
-        justify-content: flex-start;
-      }
-      
-      .search-controls-row .mode-selector button {
-        max-width: unset;
-        font-size: 16px;
-        padding: 10px 12px;
-        flex: 1;
-        min-width: 40px;
-        border: 2px solid #ddd;
-        background: white;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        color: #333;
-      }
-      
-      .search-controls-row .mode-selector button.active {
-        background: #3498db;
-        color: white;
-        border-color: #3498db;
-      }
-      
-      .search-controls-row .mode-selector button:hover {
-        background: #e8f4fd;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      }
-      
-      .search-controls-row .mode-selector button:active {
-        transform: scale(0.95);
-      }
-      
-      .search-controls-row .search-btn {
-        width: auto;
-        padding: 10px 16px;
-        font-size: 18px;
-        flex-shrink: 0;
-        background: #3498db;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-        white-space: nowrap;
+      .search-btn.loading.searching .btn-text {
+        display: none;
       }
     
       .controls-row {
@@ -1665,6 +1730,23 @@
         padding: 10px 12px;
         font-size: 14px;
         min-width: 60px;
+      }
+    
+      .controls-row .mode-selector {
+        display: flex;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        justify-content: center;
+      }
+    
+      .controls-row .mode-selector button {
+        max-width: unset;
+        font-size: 14px;
+        padding: 8px 12px;
+        flex: 1;
+        min-width: 40px;
       }
     
       .theme-row {
@@ -1779,30 +1861,27 @@
         color: #27ae60;
       }
     
-      /* Скрываем старые кнопки внизу на телефоне */
+      /* Кнопки редактирования на телефоне — ПОД русским словом */
       .result-item .actions {
-        display: none !important;
+        display: flex !important;
+        gap: 8px;
+        margin-top: 10px;
+        justify-content: flex-end;
       }
     
-      /* Кнопки редактора на телефоне — справа от слова */
+      .result-item .actions button {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
+    
+      .result-item .actions button svg {
+        width: 16px;
+        height: 16px;
+      }
+    
+      /* Скрываем старые кнопки справа от слова */
       .result-item .word-cell-right {
-        display: flex !important;
-        align-items: center;
-        justify-content: flex-end;
-        flex-shrink: 0;
-        width: auto;
-        padding-left: 4px;
-      }
-      
-      .result-item .word-cell-right .icon-btn {
-        padding: 4px 6px;
-        min-width: 32px;
-        min-height: 32px;
-      }
-      
-      .result-item .word-cell-right .icon-btn svg {
-        width: 18px;
-        height: 18px;
+        display: none !important;
       }
     
       /* ===== ВЫПАДАЮЩИЙ СПИСОК ТЕМ И ЧАСТЕЙ РЕЧИ НА ТЕЛЕФОНЕ ===== */
@@ -1959,7 +2038,7 @@
       height: 16px;
       display: inline-block;
       vertical-align: middle;
-      margin-right: 6px;
+      margin-right: 4px;
       border-radius: 2px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
@@ -2049,16 +2128,28 @@
     </h1>
     
     <div class="search-section">
-      <!-- Строка поиска (на всю ширину) -->
+      <!-- Строка поиска: поле + анимированная кнопка -->
       <div class="search-row">
         <div class="search-input-wrapper">
           <input type="text" id="searchInput" placeholder="Введите слово для поиска..." autofocus>
           <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
         </div>
-        <button class="search-btn" id="searchBtnDesktop">🔍 Найти</button>
+        <button class="search-btn" id="searchBtn">
+          <span class="btn-icon">
+            <svg class="search-svg" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="16.5" y1="16.5" x2="21" y2="21"/>
+            </svg>
+            <svg class="close-svg" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </span>
+          <span class="btn-text">Найти</span>
+        </button>
       </div>
       
-      <!-- Строка: Темы + Добавить тему + языки (для ПК) -->
+      <!-- Строка: Темы + Добавить тему + языки -->
       <div class="controls-row">
         <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
           📂 Темы
@@ -2068,7 +2159,7 @@
         </button>
         <div class="mode-selector" id="modeSelector">
           <button id="modeGreek" data-mode="greek">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
+            <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="#0d5eaf"/>
               <rect y="0" width="24" height="2" fill="white"/>
               <rect y="4" width="24" height="2" fill="white"/>
@@ -2081,7 +2172,7 @@
           </button>
           <button id="modeAuto" class="active" data-mode="auto">🤖</button>
           <button id="modeRussian" data-mode="russian">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
+            <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="white"/>
               <rect y="0" width="24" height="5.33" fill="#0039a6"/>
               <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
@@ -2098,33 +2189,6 @@
         <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
           ➕ Добавить
         </button>
-      </div>
-      
-      <!-- Телефон: языки + Найти -->
-      <div class="search-controls-row" id="mobileSearchControls" style="display:none;">
-        <div class="mode-selector" id="modeSelectorMobile">
-          <button id="modeGreekMobile" data-mode="greek">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
-              <rect width="24" height="16" fill="#0d5eaf"/>
-              <rect y="0" width="24" height="2" fill="white"/>
-              <rect y="4" width="24" height="2" fill="white"/>
-              <rect y="8" width="24" height="2" fill="white"/>
-              <rect y="12" width="24" height="2" fill="white"/>
-              <rect x="0" y="0" width="8" height="6" fill="white"/>
-              <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
-              <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
-            </svg>
-          </button>
-          <button id="modeAutoMobile" class="active" data-mode="auto">🤖</button>
-          <button id="modeRussianMobile" data-mode="russian">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
-              <rect width="24" height="16" fill="white"/>
-              <rect y="0" width="24" height="5.33" fill="#0039a6"/>
-              <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
-            </svg>
-          </button>
-        </div>
-        <button class="search-btn" id="searchBtnMobile">🔍 Найти</button>
       </div>
       
       <div class="theme-row" id="themeSection">
@@ -2373,22 +2437,29 @@
     let themeEditingTarget = null;
     let posEditingTarget = null;
     let isShowingAll = false;
+    let isSearching = false;
+    let searchTimeout = null;
     
-    // ========== УПРАВЛЕНИЕ ОТОБРАЖЕНИЕМ НА ПК/ТЕЛЕФОН ==========
-    function updateMobileVisibility() {
-      const isMobile = window.innerWidth < 768;
-      const desktopSearchBtn = document.getElementById('searchBtnDesktop');
-      const mobileControls = document.getElementById('mobileSearchControls');
-      const desktopModeSelector = document.getElementById('modeSelector');
-      
-      if (isMobile) {
-        desktopSearchBtn.style.display = 'none';
-        mobileControls.style.display = 'flex';
-        desktopModeSelector.style.display = 'none';
-      } else {
-        desktopSearchBtn.style.display = 'flex';
-        mobileControls.style.display = 'none';
-        desktopModeSelector.style.display = 'flex';
+    // ========== КНОПКА ПОИСКА ==========
+    const searchBtn = document.getElementById('searchBtn');
+    
+    function toggleSearchButton(state) {
+      if (state === 'searching') {
+        isSearching = true;
+        searchBtn.classList.add('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Поиск...';
+      } else if (state === 'cancel') {
+        isSearching = false;
+        searchBtn.classList.remove('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        clearTimeout(searchTimeout);
+      } else if (state === 'done') {
+        isSearching = false;
+        searchBtn.classList.remove('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Готово!';
+        setTimeout(() => {
+          searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        }, 1500);
       }
     }
     
@@ -2619,10 +2690,6 @@
         isEditor = true;
       }
       
-      // Показываем правильные кнопки для ПК/телефона
-      updateMobileVisibility();
-      window.addEventListener('resize', updateMobileVisibility);
-      
       try {
         const needUpdate = await checkVersion();
         
@@ -2688,7 +2755,6 @@
       const input = document.getElementById('themeInput');
       const btn = document.getElementById('themeToggleBtn');
       
-      // Если открыта секция частей речи — закрываем её
       const posSection = document.getElementById('posSection');
       const posBtn = document.getElementById('posToggleBtn');
       if (posSection.classList.contains('active')) {
@@ -2805,7 +2871,6 @@
       const input = document.getElementById('posInput');
       const btn = document.getElementById('posToggleBtn');
       
-      // Если открыта секция тем — закрываем её
       const themeSection = document.getElementById('themeSection');
       const themeBtn = document.getElementById('themeToggleBtn');
       if (themeSection.classList.contains('active')) {
@@ -3512,19 +3577,9 @@
     // ========== ПОИСК ==========
     
     function setupEventListeners() {
-      // ПК версия
       document.querySelectorAll('#modeSelector button').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          currentMode = this.dataset.mode;
-        });
-      });
-      
-      // Мобильная версия
-      document.querySelectorAll('#modeSelectorMobile button').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('#modeSelectorMobile button').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
           currentMode = this.dataset.mode;
         });
@@ -3536,8 +3591,30 @@
         }
       });
       
-      document.getElementById('searchBtnDesktop').addEventListener('click', performSearch);
-      document.getElementById('searchBtnMobile').addEventListener('click', performSearch);
+      // Обработчик для анимированной кнопки поиска
+      document.getElementById('searchBtn').addEventListener('click', function() {
+        if (isSearching) {
+          // Отмена поиска (крестик)
+          toggleSearchButton('cancel');
+          // Очищаем поле поиска
+          document.getElementById('searchInput').value = '';
+          document.getElementById('clearBtn').classList.remove('visible');
+          showInitialMessage();
+          return;
+        }
+        
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) {
+          // Проверяем, есть ли выбранная тема или часть речи
+          if (!selectedTheme && !selectedPos) {
+            showToast('Введите слово для поиска', true);
+            return;
+          }
+        }
+        
+        toggleSearchButton('searching');
+        performSearch();
+      });
     }
     
     function performSearch() {
@@ -3555,6 +3632,7 @@
       
       if (!query && !theme && !pos) {
         showInitialMessage();
+        toggleSearchButton('cancel');
         return;
       }
       
@@ -3573,15 +3651,18 @@
           const results = searchInCache(query, currentMode, theme, pos);
           handleResults(results);
           isSearchingNow = false;
-        }, 100);
+          toggleSearchButton('done');
+        }, 300);
       } else {
         loadData().then(() => {
           const results = searchInCache(query, currentMode, theme, pos);
           handleResults(results);
           isSearchingNow = false;
+          toggleSearchButton('done');
         }).catch(error => {
           handleError(error);
           isSearchingNow = false;
+          toggleSearchButton('cancel');
         });
       }
     }
@@ -3641,6 +3722,7 @@
     function handleResults(data) {
       if (data.error) {
         document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ ${data.error}</div>`;
+        toggleSearchButton('cancel');
         return;
       }
       
@@ -3655,6 +3737,7 @@
             <small>Поиск в ${modeText} языке${filters}</small>
           </div>
         `;
+        toggleSearchButton('done');
         return;
       }
       
@@ -3694,43 +3777,28 @@
       const isMobile = window.innerWidth < 768;
       
       let actionsHtml = '';
-      let editorActionsHtml = '';
       if (isEditor) {
-        if (isMobile) {
-          editorActionsHtml = `
-            <div class="word-cell word-cell-right">
-              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
-                <svg><use href="#icon-edit"/></svg>
-              </button>
-              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                <svg><use href="#icon-delete"/></svg>
-              </button>
-            </div>
-          `;
-        } else {
-          actionsHtml = `
-            <div class="actions">
-              <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
-                <svg><use href="#icon-edit"/></svg> Редактировать
-              </button>
-              <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                <svg><use href="#icon-delete"/></svg> Удалить
-              </button>
-            </div>
-          `;
-        }
+        actionsHtml = `
+          <div class="actions">
+            <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
+              <svg><use href="#icon-edit"/></svg> Редактировать
+            </button>
+            <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
+              <svg><use href="#icon-delete"/></svg> Удалить
+            </button>
+          </div>
+        `;
       }
       
       if (isMobile) {
         return `
           <div class="result-item" data-id="${item.id}">
-            <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
+            <div class="theme">📂 ${item.themeGr} / ${item.themeRu} ${item.posGr ? '| ' + item.posGr : ''}</div>
             <div class="word-row">
               <div class="word-cell word-cell-left">
                 <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
                 <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
               </div>
-              ${isEditor ? editorActionsHtml : ''}
             </div>
             <div class="word-row">
               <div class="word-cell word-cell-center">
@@ -3745,7 +3813,7 @@
       
       return `
         <div class="result-item" data-id="${item.id}">
-          <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
+          <div class="theme">📂 ${item.themeGr} / ${item.themeRu} ${item.posGr ? '| ' + item.posGr : ''}</div>
           <div class="word-row">
             <div class="word-cell word-cell-left">
               <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
@@ -4019,9 +4087,7 @@
       }
     }
     
-    // Исправленный обработчик клика вне списков
     document.addEventListener('click', function(event) {
-      // Проверяем клик по выпадающему списку тем
       const dropdown = document.getElementById('themeDropdown');
       const posDropdown = document.getElementById('posDropdown');
       
@@ -4033,13 +4099,11 @@
                          event.target.closest('#posToggleBtn') || 
                          event.target.closest('.pos-actions');
       
-      // Закрываем список тем, если клик был вне его
       if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
         dropdown.classList.remove('active');
         themeDropdownVisible = false;
       }
       
-      // Закрываем список частей речи, если клик был вне его
       if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
         posDropdown.classList.remove('active');
         posDropdownVisible = false;
