@@ -355,22 +355,6 @@
       padding: 0;
     }
     
-    /* Контролы для телефона */
-    .mobile-controls {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-    }
-    
-    /* Контролы для ПК */
-    .desktop-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-    }
-    
     .controls-row {
       display: flex;
       gap: 10px;
@@ -405,6 +389,35 @@
     
     .controls-row .theme-toggle-btn.active-theme {
       background: #27ae60;
+    }
+    
+    .controls-row .add-theme-btn {
+      padding: 8px 16px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: none;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    
+    .controls-row .add-theme-btn:hover {
+      background: #229954;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+    }
+    
+    .controls-row .add-theme-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .controls-row .add-theme-btn.visible {
+      display: flex;
     }
     
     .controls-row .mode-selector {
@@ -451,94 +464,6 @@
       background: #2980b9;
     }
     
-    .controls-row .add-theme-btn {
-      padding: 8px 16px;
-      background: #27ae60;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
-      display: none;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
-    
-    .controls-row .add-theme-btn:hover {
-      background: #229954;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
-    }
-    
-    .controls-row .add-theme-btn:active {
-      transform: scale(0.95);
-    }
-    
-    .controls-row .add-theme-btn.visible {
-      display: flex;
-    }
-    
-    .controls-row .add-pos-btn {
-      padding: 8px 16px;
-      background: #8e44ad;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
-      display: none;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
-    
-    .controls-row .add-pos-btn:hover {
-      background: #7d3c98;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
-    }
-    
-    .controls-row .add-pos-btn:active {
-      transform: scale(0.95);
-    }
-    
-    .controls-row .add-pos-btn.visible {
-      display: flex;
-    }
-    
-    .part-of-speech-toggle-btn {
-      padding: 8px 20px;
-      background: #8e44ad;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-      width: auto;
-    }
-    
-    .part-of-speech-toggle-btn:hover {
-      background: #7d3c98;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
-    }
-    
-    .part-of-speech-toggle-btn:active {
-      transform: scale(0.95);
-    }
-    
-    .part-of-speech-toggle-btn.active-pos {
-      background: #27ae60;
-    }
-    
     .theme-row {
       display: none;
       animation: slideDown 0.3s ease;
@@ -546,16 +471,6 @@
     }
     
     .theme-row.active {
-      display: block;
-    }
-    
-    .part-of-speech-row {
-      display: none;
-      animation: slideDown 0.3s ease;
-      width: 100%;
-    }
-    
-    .part-of-speech-row.active {
       display: block;
     }
     
@@ -649,6 +564,7 @@
       align-items: center;
       gap: 10px;
       flex-wrap: nowrap;
+      overflow: hidden;
     }
     
     .theme-dropdown .theme-item:hover {
@@ -671,6 +587,7 @@
       text-overflow: ellipsis;
       flex-shrink: 1;
       min-width: 0;
+      white-space: nowrap;
     }
     
     .theme-dropdown .theme-item .theme-ru {
@@ -680,6 +597,7 @@
       flex-shrink: 1;
       min-width: 0;
       text-align: left;
+      white-space: nowrap;
     }
     
     .theme-dropdown .theme-item .theme-actions {
@@ -728,174 +646,6 @@
     }
     
     .theme-dropdown .theme-item .theme-actions .theme-delete-btn:hover {
-      background: #c0392b;
-    }
-    
-    .part-of-speech-input-wrapper {
-      position: relative;
-      width: 100%;
-      margin-top: 5px;
-    }
-    
-    .part-of-speech-input-wrapper input {
-      width: 100%;
-      padding: 12px 45px 12px 16px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-      transition: all 0.3s;
-      background: #fafafa;
-    }
-    
-    .part-of-speech-input-wrapper input:focus {
-      border-color: #8e44ad;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 5px;
-      border-radius: 50%;
-      transition: all 0.3s;
-      display: none;
-      color: #95a5a6;
-      line-height: 1;
-      z-index: 5;
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn:hover {
-      background: #f0f0f0;
-      transform: translateY(-50%) scale(1.1);
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn:active {
-      transform: translateY(-50%) scale(0.9);
-    }
-    
-    .part-of-speech-input-wrapper .pos-clear-input-btn.visible {
-      display: block;
-    }
-    
-    .part-of-speech-dropdown {
-      width: 100%;
-      max-height: 250px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: white;
-      border: 2px solid #8e44ad;
-      border-radius: 8px;
-      margin-top: 5px;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      animation: slideDown 0.2s ease;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 100;
-    }
-    
-    .part-of-speech-dropdown.active {
-      display: block;
-    }
-    
-    .part-of-speech-dropdown .pos-item {
-      padding: 12px 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: nowrap;
-    }
-    
-    .part-of-speech-dropdown .pos-item:hover {
-      background: #f4ecf7;
-      transform: translateX(4px);
-    }
-    
-    .part-of-speech-dropdown .pos-item:active {
-      background: #e8daef;
-    }
-    
-    .part-of-speech-dropdown .pos-item:last-child {
-      border-bottom: none;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-gr {
-      font-weight: 600;
-      color: #2c3e50;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-ru {
-      color: #7f8c8d;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 1;
-      min-width: 0;
-      text-align: left;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions {
-      display: none;
-      gap: 6px;
-      flex-shrink: 0;
-      margin-left: auto;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions.visible {
-      display: flex;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions button svg {
-      width: 16px;
-      height: 16px;
-      stroke: white;
-      stroke-width: 2;
-      fill: none;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn {
-      background: #f39c12;
-      color: white;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn:hover {
-      background: #e67e22;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn {
-      background: #e74c3c;
-      color: white;
-    }
-    
-    .part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn:hover {
       background: #c0392b;
     }
     
@@ -1465,6 +1215,9 @@
       cursor: pointer;
       transition: background 0.2s;
       border-bottom: 1px solid #f0f0f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .theme-datalist .datalist-item:hover {
@@ -1499,6 +1252,9 @@
       cursor: pointer;
       transition: background 0.2s;
       border-bottom: 1px solid #f0f0f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .pos-datalist .datalist-item:hover {
@@ -1621,9 +1377,7 @@
       }
       
       .controls-row .theme-toggle-btn,
-      .controls-row .part-of-speech-toggle-btn,
-      .controls-row .add-theme-btn,
-      .controls-row .add-pos-btn {
+      .controls-row .add-theme-btn {
         font-size: 14px;
         padding: 8px 16px;
       }
@@ -1635,14 +1389,6 @@
       
       .search-btn .btn-text {
         display: inline;
-      }
-      
-      .desktop-controls {
-        display: flex;
-      }
-      
-      .mobile-controls {
-        display: none !important;
       }
     }
     
@@ -1710,48 +1456,8 @@
       .search-btn.loading.searching .btn-text {
         display: none;
       }
-      
-      .desktop-controls {
-        display: none !important;
-      }
-      
-      .mobile-controls {
-        display: flex;
-      }
-      
-      .mobile-controls .mode-selector {
-        display: flex;
-        gap: 6px;
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .mobile-controls .mode-selector button {
-        flex: 1;
-        max-width: unset;
-        font-size: 14px;
-        padding: 8px 12px;
-        min-width: 40px;
-        border: 2px solid #ddd;
-        background: white;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        color: #333;
-      }
-      
-      .mobile-controls .mode-selector button.active {
-        background: #3498db;
-        color: white;
-        border-color: #3498db;
-      }
     
       .controls-row {
-        display: flex;
         flex-direction: row;
         width: 100%;
         gap: 6px;
@@ -1775,20 +1481,16 @@
         min-width: 60px;
       }
     
-      .controls-row .add-pos-btn {
-        flex: 1;
-        justify-content: center;
-        padding: 10px 12px;
-        font-size: 14px;
-        min-width: 60px;
+      .controls-row .mode-selector {
+        width: 100%;
+        min-width: unset;
       }
     
-      .controls-row .part-of-speech-toggle-btn {
-        flex: 1;
-        justify-content: center;
-        padding: 10px 12px;
+      .controls-row .mode-selector button {
+        max-width: unset;
         font-size: 14px;
-        min-width: 60px;
+        padding: 8px 12px;
+        flex: 1;
       }
     
       .theme-row {
@@ -1806,25 +1508,6 @@
       }
     
       .theme-input-wrapper .theme-clear-input-btn {
-        right: 12px;
-        font-size: 22px;
-      }
-    
-      .part-of-speech-row {
-        width: 100%;
-      }
-    
-      .part-of-speech-input-wrapper {
-        width: 100%;
-      }
-    
-      .part-of-speech-input-wrapper input {
-        width: 100%;
-        font-size: 18px;
-        padding: 14px 50px 14px 16px;
-      }
-    
-      .part-of-speech-input-wrapper .pos-clear-input-btn {
         right: 12px;
         font-size: 22px;
       }
@@ -1923,7 +1606,6 @@
         display: none !important;
       }
     
-      /* Модальные окна на телефоне — кнопки в одну строку */
       .modal .form-actions {
         flex-direction: row !important;
         flex-wrap: wrap;
@@ -2064,56 +1746,15 @@
         </button>
       </div>
       
-      <!-- Контролы для ПК -->
-      <div class="desktop-controls">
-        <!-- Темы + языки -->
-        <div class="controls-row">
-          <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
-            📂 Темы
-          </button>
-          <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
-            ➕ Добавить тему
-          </button>
-          <div class="mode-selector" id="modeSelector">
-            <button id="modeGreek" data-mode="greek">
-              <svg class="flag-icon" viewBox="0 0 24 16">
-                <rect width="24" height="16" fill="#0d5eaf"/>
-                <rect y="0" width="24" height="2" fill="white"/>
-                <rect y="4" width="24" height="2" fill="white"/>
-                <rect y="8" width="24" height="2" fill="white"/>
-                <rect y="12" width="24" height="2" fill="white"/>
-                <rect x="0" y="0" width="8" height="6" fill="white"/>
-                <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
-                <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
-              </svg>
-            </button>
-            <button id="modeAuto" class="active" data-mode="auto">🤖</button>
-            <button id="modeRussian" data-mode="russian">
-              <svg class="flag-icon" viewBox="0 0 24 16">
-                <rect width="24" height="16" fill="white"/>
-                <rect y="0" width="24" height="5.33" fill="#0039a6"/>
-                <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Части речи -->
-        <div class="controls-row">
-          <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
-            📚 Части речи
-          </button>
-          <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
-            ➕ Добавить
-          </button>
-        </div>
-      </div>
-      
-      <!-- Контролы для телефона -->
-      <div class="mobile-controls">
-        <!-- Языки -->
-        <div class="mode-selector" id="modeSelectorMobile">
-          <button id="modeGreekMobile" data-mode="greek">
+      <div class="controls-row">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+          📂 Темы
+        </button>
+        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+          ➕ Добавить тему
+        </button>
+        <div class="mode-selector" id="modeSelector">
+          <button id="modeGreek" data-mode="greek">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="#0d5eaf"/>
               <rect y="0" width="24" height="2" fill="white"/>
@@ -2125,8 +1766,8 @@
               <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
             </svg>
           </button>
-          <button id="modeAutoMobile" class="active" data-mode="auto">🤖</button>
-          <button id="modeRussianMobile" data-mode="russian">
+          <button id="modeAuto" class="active" data-mode="auto">🤖</button>
+          <button id="modeRussian" data-mode="russian">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="white"/>
               <rect y="0" width="24" height="5.33" fill="#0039a6"/>
@@ -2134,41 +1775,13 @@
             </svg>
           </button>
         </div>
-        
-        <!-- Темы -->
-        <div class="controls-row">
-          <button class="theme-toggle-btn" id="themeToggleBtnMobile" onclick="toggleThemeSection()">
-            📂 Темы
-          </button>
-          <button class="add-theme-btn" id="addThemeBtnMobile" onclick="openAddThemeModal()">
-            ➕ Добавить тему
-          </button>
-        </div>
-        
-        <!-- Части речи -->
-        <div class="controls-row">
-          <button class="part-of-speech-toggle-btn" id="posToggleBtnMobile" onclick="togglePosSection()">
-            📚 Части речи
-          </button>
-          <button class="add-pos-btn" id="addPosBtnMobile" onclick="openAddPosModal()">
-            ➕ Добавить
-          </button>
-        </div>
       </div>
       
       <div class="theme-row" id="themeSection">
         <div class="theme-input-wrapper">
           <input type="text" id="themeInput" placeholder="Введите тему для поиска..." oninput="filterThemes()" onfocus="filterThemes()">
-          <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput(event)">✕</button>
+          <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput()">✕</button>
           <div class="theme-dropdown" id="themeDropdown"></div>
-        </div>
-      </div>
-      
-      <div class="part-of-speech-row" id="posSection">
-        <div class="part-of-speech-input-wrapper">
-          <input type="text" id="posInput" placeholder="Введите часть речи..." oninput="filterPos()" onfocus="filterPos()">
-          <button class="pos-clear-input-btn" id="posClearInputBtn" onclick="clearPosInput(event)">✕</button>
-          <div class="part-of-speech-dropdown" id="posDropdown"></div>
         </div>
       </div>
     </div>
@@ -2224,6 +1837,28 @@
       <div id="editMessage" class="modal-message"></div>
       
       <div class="form-group" style="position: relative;">
+        <label>Тема (греческий)</label>
+        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
+        <div class="theme-datalist" id="themeDatalist"></div>
+      </div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Тема (русский)</label>
+        <input type="text" id="editThemeRu" placeholder="например: Работа" oninput="checkDuplicate()">
+      </div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Часть речи (греческий)</label>
+        <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
+        <div class="pos-datalist" id="posDatalist"></div>
+      </div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Часть речи (русский)</label>
+        <input type="text" id="editPosRu" placeholder="например: Существительное" oninput="checkDuplicate()">
+      </div>
+      
+      <div class="form-group" style="position: relative;">
         <label>Слово (греческий)</label>
         <input type="text" id="editWordGr" placeholder="π.χ. Δουλειά" oninput="checkDuplicate()">
         <div class="duplicate-warning" id="duplicateWordGr">⚠️ Такое слово уже существует</div>
@@ -2233,18 +1868,6 @@
         <label>Слово (русский)</label>
         <input type="text" id="editWordRu" placeholder="например: Работа" oninput="checkDuplicate()">
         <div class="duplicate-warning" id="duplicateWordRu">⚠️ Такое слово уже существует</div>
-      </div>
-      
-      <div class="form-group" style="position: relative;">
-        <label>Тема</label>
-        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία (необязательно)" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
-        <div class="theme-datalist" id="themeDatalist"></div>
-      </div>
-      
-      <div class="form-group" style="position: relative;">
-        <label>Часть речи</label>
-        <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό (необязательно)" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
-        <div class="pos-datalist" id="posDatalist"></div>
       </div>
       
       <div class="form-actions">
@@ -2277,33 +1900,6 @@
       <div class="form-actions">
         <button class="btn-secondary" onclick="closeModal('themeEditModal')">Отмена</button>
         <button class="btn-primary" id="saveThemeBtn">💾 Сохранить</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Модальное окно для добавления/редактирования части речи -->
-  <div id="posEditModal" class="modal">
-    <div class="modal-content">
-      <button class="close" onclick="closeModal('posEditModal')">&times;</button>
-      <div class="modal-icon" id="posEditIcon">📚</div>
-      <h2 id="posEditTitle">Добавить часть речи</h2>
-      <div id="posEditMessage" class="modal-message"></div>
-      
-      <div class="form-group">
-        <label>Часть речи (греческий)</label>
-        <input type="text" id="editPosGrOnly" placeholder="π.χ. Ουσιαστικό">
-        <div class="duplicate-warning" id="duplicatePosGrOnly">⚠️ Такая часть речи уже существует</div>
-      </div>
-      
-      <div class="form-group">
-        <label>Часть речи (русский)</label>
-        <input type="text" id="editPosRuOnly" placeholder="например: Существительное">
-        <div class="duplicate-warning" id="duplicatePosRuOnly">⚠️ Такая часть речи уже существует</div>
-      </div>
-      
-      <div class="form-actions">
-        <button class="btn-secondary" onclick="closeModal('posEditModal')">Отмена</button>
-        <button class="btn-primary" id="savePosBtn">💾 Сохранить</button>
       </div>
     </div>
   </div>
@@ -2726,22 +2322,9 @@
       const section = document.getElementById('themeSection');
       const input = document.getElementById('themeInput');
       const btn = document.getElementById('themeToggleBtn');
-      const btnMobile = document.getElementById('themeToggleBtnMobile');
-      
-      const posSection = document.getElementById('posSection');
-      const posBtn = document.getElementById('posToggleBtn');
-      const posBtnMobile = document.getElementById('posToggleBtnMobile');
-      if (posSection.classList.contains('active')) {
-        posSection.classList.remove('active');
-        posBtn.classList.remove('active-pos');
-        posBtnMobile.classList.remove('active-pos');
-        document.getElementById('posDropdown').classList.remove('active');
-        posDropdownVisible = false;
-      }
       
       section.classList.toggle('active');
       btn.classList.toggle('active-theme');
-      if (btnMobile) btnMobile.classList.toggle('active-theme');
       
       if (section.classList.contains('active')) {
         input.focus();
@@ -2830,133 +2413,18 @@
       performSearch();
     }
     
-    function clearThemeInput(event) {
-      event.stopPropagation();
+    function clearThemeInput() {
       document.getElementById('themeInput').value = '';
       document.getElementById('themeClearInputBtn').classList.remove('visible');
       selectedTheme = '';
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      isShowingAll = false;
+      showInitialMessage();
       showAllThemes();
       document.getElementById('themeInput').focus();
-      performSearch();
-    }
-    
-    // ========== УПРАВЛЕНИЕ ЧАСТЯМИ РЕЧИ ==========
-    function togglePosSection() {
-      const section = document.getElementById('posSection');
-      const input = document.getElementById('posInput');
-      const btn = document.getElementById('posToggleBtn');
-      const btnMobile = document.getElementById('posToggleBtnMobile');
-      
-      const themeSection = document.getElementById('themeSection');
-      const themeBtn = document.getElementById('themeToggleBtn');
-      const themeBtnMobile = document.getElementById('themeToggleBtnMobile');
-      if (themeSection.classList.contains('active')) {
-        themeSection.classList.remove('active');
-        themeBtn.classList.remove('active-theme');
-        if (themeBtnMobile) themeBtnMobile.classList.remove('active-theme');
-        document.getElementById('themeDropdown').classList.remove('active');
-        themeDropdownVisible = false;
-      }
-      
-      section.classList.toggle('active');
-      btn.classList.toggle('active-pos');
-      if (btnMobile) btnMobile.classList.toggle('active-pos');
-      
-      if (section.classList.contains('active')) {
-        input.focus();
-        showAllPos();
-      } else {
-        document.getElementById('posDropdown').classList.remove('active');
-        posDropdownVisible = false;
-      }
-    }
-    
-    function showAllPos() {
-      const dropdown = document.getElementById('posDropdown');
-      const isEditorMode = isEditor;
-      
-      if (allPos.length === 0) {
-        dropdown.innerHTML = '<div class="pos-item" style="color: #95a5a6; cursor: default;">Нет частей речи</div>';
-      } else {
-        dropdown.innerHTML = allPos.map(p => `
-          <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
-            <span class="pos-gr">${p.gr}</span>
-            <span class="pos-ru">${p.ru}</span>
-            ${isEditorMode ? `<div class="pos-actions visible">
-              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
-                <svg><use href="#icon-edit"/></svg>
-              </button>
-              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
-                <svg><use href="#icon-delete"/></svg>
-              </button>
-            </div>` : ''}
-          </div>
-        `).join('');
-      }
-      
-      dropdown.classList.add('active');
-      posDropdownVisible = true;
-    }
-    
-    function filterPos() {
-      const input = document.getElementById('posInput');
-      const dropdown = document.getElementById('posDropdown');
-      const clearBtn = document.getElementById('posClearInputBtn');
-      const query = input.value.toLowerCase().trim();
-      const isEditorMode = isEditor;
-      
-      if (input.value.length > 0) {
-        clearBtn.classList.add('visible');
-      } else {
-        clearBtn.classList.remove('visible');
-      }
-      
-      const filtered = allPos.filter(p => 
-        p.gr.toLowerCase().includes(query) || 
-        p.ru.toLowerCase().includes(query)
-      );
-      
-      if (filtered.length === 0) {
-        dropdown.innerHTML = '<div class="pos-item" style="color: #95a5a6; cursor: default;">Нет частей речи</div>';
-      } else {
-        dropdown.innerHTML = filtered.map(p => `
-          <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
-            <span class="pos-gr">${p.gr}</span>
-            <span class="pos-ru">${p.ru}</span>
-            ${isEditorMode ? `<div class="pos-actions visible">
-              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
-                <svg><use href="#icon-edit"/></svg>
-              </button>
-              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
-                <svg><use href="#icon-delete"/></svg>
-              </button>
-            </div>` : ''}
-          </div>
-        `).join('');
-      }
-      
-      dropdown.classList.add('active');
-      posDropdownVisible = true;
-    }
-    
-    function selectPos(gr, ru) {
-      document.getElementById('posInput').value = gr;
-      document.getElementById('posClearInputBtn').classList.add('visible');
-      selectedPos = gr;
-      document.getElementById('posDropdown').classList.remove('active');
-      posDropdownVisible = false;
-      isShowingAll = false;
-      performSearch();
-    }
-    
-    function clearPosInput(event) {
-      event.stopPropagation();
-      document.getElementById('posInput').value = '';
-      document.getElementById('posClearInputBtn').classList.remove('visible');
-      selectedPos = '';
-      showAllPos();
-      document.getElementById('posInput').focus();
-      performSearch();
     }
     
     // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
@@ -2985,18 +2453,11 @@
     
     function updateAddButtons() {
       const themeBtn = document.getElementById('addThemeBtn');
-      const posBtn = document.getElementById('addPosBtn');
-      const themeBtnMobile = document.getElementById('addThemeBtnMobile');
-      const posBtnMobile = document.getElementById('addPosBtnMobile');
       
       if (isEditor) {
-        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
-          if (el) { el.classList.add('visible'); el.style.display = 'flex'; }
-        });
+        if (themeBtn) { themeBtn.classList.add('visible'); themeBtn.style.display = 'flex'; }
       } else {
-        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
-          if (el) { el.classList.remove('visible'); el.style.display = 'none'; }
-        });
+        if (themeBtn) { themeBtn.classList.remove('visible'); themeBtn.style.display = 'none'; }
       }
     }
     
@@ -3008,9 +2469,6 @@
       if (document.getElementById('themeDropdown').classList.contains('active')) {
         showAllThemes();
       }
-      if (document.getElementById('posDropdown').classList.contains('active')) {
-        showAllPos();
-      }
     }
     
     // ========== ПОКАЗ ВСЕХ СЛОВ ==========
@@ -3019,11 +2477,8 @@
       
       isShowingAll = true;
       selectedTheme = '';
-      selectedPos = '';
       document.getElementById('themeInput').value = '';
       document.getElementById('themeClearInputBtn').classList.remove('visible');
-      document.getElementById('posInput').value = '';
-      document.getElementById('posClearInputBtn').classList.remove('visible');
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('visible');
       
@@ -3087,10 +2542,12 @@
       }
       document.getElementById('modalTitle').textContent = '➕ Добавить слово';
       document.getElementById('editIcon').textContent = '➕';
+      document.getElementById('editThemeGr').value = '';
+      document.getElementById('editThemeRu').value = '';
+      document.getElementById('editPosGr').value = '';
+      document.getElementById('editPosRu').value = '';
       document.getElementById('editWordGr').value = '';
       document.getElementById('editWordRu').value = '';
-      document.getElementById('editThemeGr').value = '';
-      document.getElementById('editPosGr').value = '';
       document.getElementById('editMessage').innerHTML = '';
       document.getElementById('themeDatalist').classList.remove('active');
       document.getElementById('posDatalist').classList.remove('active');
@@ -3100,17 +2557,19 @@
       document.getElementById('saveBtn').onclick = saveWord;
     }
     
-    function openEditModal(id, wordGr, wordRu, themeGr, posGr) {
+    function openEditModal(id, themeGr, themeRu, posGr, posRu, wordGr, wordRu) {
       if (!isEditor) {
         openLoginModal();
         return;
       }
       document.getElementById('modalTitle').textContent = '✏️ Редактировать слово';
       document.getElementById('editIcon').textContent = '✏️';
+      document.getElementById('editThemeGr').value = themeGr;
+      document.getElementById('editThemeRu').value = themeRu;
+      document.getElementById('editPosGr').value = posGr || '';
+      document.getElementById('editPosRu').value = posRu || '';
       document.getElementById('editWordGr').value = wordGr;
       document.getElementById('editWordRu').value = wordRu;
-      document.getElementById('editThemeGr').value = themeGr;
-      document.getElementById('editPosGr').value = posGr || '';
       document.getElementById('editMessage').innerHTML = '';
       document.getElementById('themeDatalist').classList.remove('active');
       document.getElementById('posDatalist').classList.remove('active');
@@ -3249,126 +2708,6 @@
       }
     }
     
-    // ========== РАБОТА С ЧАСТЯМИ РЕЧИ ==========
-    
-    function openAddPosModal() {
-      if (!isEditor) {
-        openLoginModal();
-        return;
-      }
-      posEditingTarget = null;
-      document.getElementById('posEditTitle').textContent = '➕ Добавить часть речи';
-      document.getElementById('posEditIcon').textContent = '📚';
-      document.getElementById('editPosGrOnly').value = '';
-      document.getElementById('editPosRuOnly').value = '';
-      document.getElementById('posEditMessage').innerHTML = '';
-      document.getElementById('duplicatePosGrOnly').classList.remove('visible');
-      document.getElementById('duplicatePosRuOnly').classList.remove('visible');
-      openModal('posEditModal');
-      document.getElementById('savePosBtn').onclick = savePos;
-    }
-    
-    function openEditPosModal(gr, ru) {
-      if (!isEditor) return;
-      posEditingTarget = { gr: gr, ru: ru };
-      document.getElementById('posEditTitle').textContent = '✏️ Редактировать часть речи';
-      document.getElementById('posEditIcon').textContent = '📚';
-      document.getElementById('editPosGrOnly').value = gr;
-      document.getElementById('editPosRuOnly').value = ru;
-      document.getElementById('posEditMessage').innerHTML = '';
-      document.getElementById('duplicatePosGrOnly').classList.remove('visible');
-      document.getElementById('duplicatePosRuOnly').classList.remove('visible');
-      openModal('posEditModal');
-      document.getElementById('savePosBtn').onclick = savePos;
-    }
-    
-    function openDeletePosModal(gr, ru) {
-      if (!isEditor) return;
-      const posToDelete = allPos.find(p => p.gr === gr && p.ru === ru);
-      if (posToDelete) {
-        deleteTarget = posToDelete;
-        deleteType = 'pos';
-        document.getElementById('deleteMessage').innerHTML = '';
-        openModal('deleteModal');
-      }
-    }
-    
-    async function savePos() {
-      const gr = document.getElementById('editPosGrOnly').value.trim();
-      const ru = document.getElementById('editPosRuOnly').value.trim();
-      
-      if (!gr || !ru) {
-        document.getElementById('posEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
-        return;
-      }
-      
-      const exists = allPos.some(p => 
-        p.gr.toLowerCase() === gr.toLowerCase() && 
-        (posEditingTarget === null || p.gr !== posEditingTarget.gr)
-      );
-      
-      if (exists) {
-        document.getElementById('posEditMessage').innerHTML = '<div class="error">❌ Такая часть речи уже существует</div>';
-        document.getElementById('duplicatePosGrOnly').classList.add('visible');
-        return;
-      }
-      
-      document.getElementById('posEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
-      
-      try {
-        let result;
-        
-        if (posEditingTarget) {
-          result = await callGAS('editPos', { 
-            oldGr: posEditingTarget.gr, 
-            newGr: gr, 
-            newRu: ru 
-          });
-        } else {
-          result = await callGAS('addPos', { gr, ru });
-        }
-        
-        if (result.error) {
-          throw new Error(result.error);
-        }
-        
-        if (result.success) {
-          if (posEditingTarget) {
-            const index = allPos.findIndex(p => p.gr === posEditingTarget.gr);
-            if (index !== -1) {
-              allPos[index] = { gr, ru };
-            }
-            for (const word of allData.words) {
-              if (word.posGr === posEditingTarget.gr) {
-                word.posGr = gr;
-                word.posRu = ru;
-              }
-            }
-          } else {
-            allPos.push({ gr, ru });
-          }
-          
-          try {
-            localStorage.setItem('dictionary_data', JSON.stringify(allData));
-          } catch (e) {}
-          
-          document.getElementById('posEditMessage').innerHTML = 
-            `<div class="success">✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
-          
-          await refreshCache();
-          setTimeout(() => {
-            closeModal('posEditModal');
-            if (document.getElementById('posSection').classList.contains('active')) {
-              showAllPos();
-            }
-          }, 1500);
-        }
-        
-      } catch (error) {
-        document.getElementById('posEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
-      }
-    }
-    
     // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ==========
     
     function filterThemeDatalist() {
@@ -3411,6 +2750,7 @@
     
     function selectThemeFromDatalist(gr, ru) {
       document.getElementById('editThemeGr').value = gr;
+      document.getElementById('editThemeRu').value = ru;
       document.getElementById('themeDatalist').classList.remove('active');
       checkDuplicate();
     }
@@ -3464,6 +2804,7 @@
     
     function selectPosFromDatalist(gr, ru) {
       document.getElementById('editPosGr').value = gr;
+      document.getElementById('editPosRu').value = ru;
       document.getElementById('posDatalist').classList.remove('active');
       checkDuplicate();
     }
@@ -3553,25 +2894,12 @@
     // ========== ПОИСК ==========
     
     function setupEventListeners() {
-      // ПК версия
+      // ПК и мобильная версия
       document.querySelectorAll('#modeSelector button').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
           currentMode = this.dataset.mode;
-        });
-      });
-      
-      // Мобильная версия
-      document.querySelectorAll('#modeSelectorMobile button').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('#modeSelectorMobile button').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          currentMode = this.dataset.mode;
-          // Синхронизируем с ПК версией
-          document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
-          const pcBtn = document.querySelector(`#modeSelector button[data-mode="${this.dataset.mode}"]`);
-          if (pcBtn) pcBtn.classList.add('active');
         });
       });
       
@@ -3598,9 +2926,8 @@
         
         const query = document.getElementById('searchInput').value.trim();
         const theme = selectedTheme;
-        const pos = selectedPos;
         
-        if (!query && !theme && !pos) {
+        if (!query && !theme) {
           showToast('Введите слово для поиска или выберите тему');
           return;
         }
@@ -3615,16 +2942,13 @@
     function performSearch() {
       document.getElementById('themeDropdown').classList.remove('active');
       themeDropdownVisible = false;
-      document.getElementById('posDropdown').classList.remove('active');
-      posDropdownVisible = false;
       
       if (isSearchingNow) return;
       
       const query = document.getElementById('searchInput').value.trim();
       const theme = selectedTheme;
-      const pos = selectedPos;
       
-      if (!query && !theme && !pos) {
+      if (!query && !theme) {
         showInitialMessage();
         if (searchBtn) {
           isSearching = false;
@@ -3646,7 +2970,7 @@
       
       if (allData && allData.words) {
         setTimeout(() => {
-          const results = searchInCache(query, currentMode, theme, pos);
+          const results = searchInCache(query, currentMode, theme);
           handleResults(results);
           isSearchingNow = false;
           if (searchBtn) {
@@ -3662,7 +2986,7 @@
         }, 300);
       } else {
         loadData().then(() => {
-          const results = searchInCache(query, currentMode, theme, pos);
+          const results = searchInCache(query, currentMode, theme);
           handleResults(results);
           isSearchingNow = false;
           if (searchBtn) {
@@ -3687,10 +3011,9 @@
       }
     }
     
-    function searchInCache(query, searchMode, theme, pos) {
+    function searchInCache(query, searchMode, theme) {
       const queryLower = query.toLowerCase().trim();
       const themeLower = theme ? theme.toLowerCase().trim() : '';
-      const posLower = pos ? pos.toLowerCase().trim() : '';
       
       let searchInGreek = searchMode === 'greek';
       let searchInRussian = searchMode === 'russian';
@@ -3706,12 +3029,6 @@
       if (themeLower) {
         results = results.filter(w => 
           w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
-        );
-      }
-      
-      if (posLower) {
-        results = results.filter(w => 
-          w.posGr && w.posGr.toLowerCase().includes(posLower)
         );
       }
       
@@ -3753,8 +3070,10 @@
       if (!data.results || data.results.length === 0) {
         const modeText = data.searchMode === 'greek' ? 'греческом' : 'русском';
         let filters = '';
-        if (selectedTheme) filters += ` Тема: ${selectedTheme}`;
-        if (selectedPos) filters += ` Часть речи: ${selectedPos}`;
+        if (selectedTheme) {
+          const themeRu = allThemes.find(t => t.gr === selectedTheme);
+          filters += ` Тема: ${themeRu ? themeRu.ru : selectedTheme}`;
+        }
         document.getElementById('resultsContainer').innerHTML = `
           <div class="no-results">
             🔍 Ничего не найдено<br>
@@ -3787,8 +3106,10 @@
       }
       
       let filters = '';
-      if (selectedTheme) filters += ` Тема: ${selectedTheme}`;
-      if (selectedPos) filters += ` Часть речи: ${selectedPos}`;
+      if (selectedTheme) {
+        const themeRu = allThemes.find(t => t.gr === selectedTheme);
+        filters += ` Тема: ${themeRu ? themeRu.ru : selectedTheme}`;
+      }
       
       const infoHtml = `
         <div class="result-info">
@@ -3819,7 +3140,7 @@
       if (isEditor) {
         actionsHtml = `
           <div class="actions">
-            <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
+            <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.themeGr)}', '${escapeHTML(item.themeRu)}', '${escapeHTML(item.posGr || '')}', '${escapeHTML(item.posRu || '')}', '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}')">
               <svg><use href="#icon-edit"/></svg> Редактировать
             </button>
             <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
@@ -3829,10 +3150,18 @@
         `;
       }
       
+      // Отображаем часть речи на русском, если она есть
+      let posDisplay = '';
+      if (item.posRu) {
+        posDisplay = ` | ${item.posRu}`;
+      } else if (item.posGr) {
+        posDisplay = ` | ${item.posGr}`;
+      }
+      
       if (isMobile) {
         return `
           <div class="result-item" data-id="${item.id}">
-            <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
+            <div class="theme">📂 ${item.themeRu || item.themeGr}${posDisplay}</div>
             <div class="word-row">
               <div class="word-cell word-cell-left">
                 <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
@@ -3852,7 +3181,7 @@
       
       return `
         <div class="result-item" data-id="${item.id}">
-          <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
+          <div class="theme">📂 ${item.themeRu || item.themeGr}${posDisplay}</div>
           <div class="word-row">
             <div class="word-cell word-cell-left">
               <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
@@ -3920,61 +3249,45 @@
     
     // ========== ОПЕРАЦИИ С ДАННЫМИ ==========
     
-    // ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ СЛОВА ==========
     async function saveWord() {
+      const themeGr = document.getElementById('editThemeGr').value.trim();
+      const themeRu = document.getElementById('editThemeRu').value.trim();
+      const posGr = document.getElementById('editPosGr').value.trim();
+      const posRu = document.getElementById('editPosRu').value.trim();
       const wordGr = document.getElementById('editWordGr').value.trim();
       const wordRu = document.getElementById('editWordRu').value.trim();
-      const themeGr = document.getElementById('editThemeGr').value.trim();
-      const posGr = document.getElementById('editPosGr').value.trim();
       
       if (!wordGr || !wordRu) {
         document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово должно быть заполнено</div>';
         return;
       }
       
-      // Если тема не указана, используем пустую строку
-      const finalThemeGr = themeGr || '';
-      const finalThemeRu = themeGr || '';
-      const finalPosGr = posGr || '';
-      const finalPosRu = posGr || '';
+      if (!themeGr || !themeRu) {
+        document.getElementById('editMessage').innerHTML = '<div class="error">❌ Тема должна быть заполнена</div>';
+        return;
+      }
       
       document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
       
       try {
         const action = editingId === null ? 'addWord' : 'editWord';
         const params = editingId === null 
-          ? { 
-              wordGr, 
-              wordRu, 
-              themeGr: finalThemeGr, 
-              themeRu: finalThemeRu,
-              posGr: finalPosGr,
-              posRu: finalPosRu
-            }
-          : { 
-              id: editingId, 
-              wordGr, 
-              wordRu, 
-              themeGr: finalThemeGr, 
-              themeRu: finalThemeRu,
-              posGr: finalPosGr,
-              posRu: finalPosRu
-            };
+          ? { themeGr, themeRu, posGr, posRu, wordGr, wordRu }
+          : { id: editingId, themeGr, themeRu, posGr, posRu, wordGr, wordRu };
         
         const result = await callGAS(action, params);
         
         if (result.success) {
           document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
           
-          // Обновляем локальные данные
           const newWord = {
             id: editingId || (allData.words.length + 1),
+            themeGr: themeGr,
+            themeRu: themeRu,
+            posGr: posGr || '',
+            posRu: posRu || '',
             wordGr: wordGr,
-            wordRu: wordRu,
-            themeGr: finalThemeGr,
-            themeRu: finalThemeRu,
-            posGr: finalPosGr,
-            posRu: finalPosRu
+            wordRu: wordRu
           };
           
           if (editingId === null) {
@@ -3987,14 +3300,12 @@
             }
           }
           
-          // Добавляем тему, если её нет
-          if (finalThemeGr && !allThemes.some(t => t.gr === finalThemeGr)) {
-            allThemes.push({ gr: finalThemeGr, ru: finalThemeRu });
+          if (!allThemes.some(t => t.gr === themeGr)) {
+            allThemes.push({ gr: themeGr, ru: themeRu });
           }
           
-          // Добавляем часть речи, если её нет
-          if (finalPosGr && !allPos.some(p => p.gr === finalPosGr)) {
-            allPos.push({ gr: finalPosGr, ru: finalPosRu });
+          if (posGr && !allPos.some(p => p.gr === posGr)) {
+            allPos.push({ gr: posGr, ru: posRu || posGr });
           }
           
           try {
@@ -4040,36 +3351,6 @@
           showToast('✅ Тема удалена');
           if (document.getElementById('themeSection').classList.contains('active')) {
             showAllThemes();
-          }
-          performSearch();
-          deleteTarget = null;
-          deleteType = 'word';
-          return;
-        }
-        
-        if (deleteType === 'pos') {
-          const posGr = deleteTarget.gr;
-          const wordsWithPos = allData.words.filter(w => w.posGr === posGr);
-          if (wordsWithPos.length > 0) {
-            document.getElementById('deleteMessage').innerHTML = 
-              `<div class="error">❌ Нельзя удалить часть речи, она используется в ${wordsWithPos.length} словах</div>`;
-            return;
-          }
-          
-          const result = await callGAS('deletePos', { gr: posGr });
-          if (result.error) {
-            throw new Error(result.error);
-          }
-          
-          closeModal('deleteModal');
-          allPos = allPos.filter(p => p.gr !== posGr);
-          try {
-            localStorage.setItem('dictionary_data', JSON.stringify(allData));
-          } catch (e) {}
-          
-          showToast('✅ Часть речи удалена');
-          if (document.getElementById('posSection').classList.contains('active')) {
-            showAllPos();
           }
           performSearch();
           deleteTarget = null;
@@ -4151,26 +3432,14 @@
     
     document.addEventListener('click', function(event) {
       const dropdown = document.getElementById('themeDropdown');
-      const posDropdown = document.getElementById('posDropdown');
       
       const isThemeClick = event.target.closest('.theme-input-wrapper') || 
-                           event.target.closest('#themeToggleBtn') || 
-                           event.target.closest('#themeToggleBtnMobile') ||
+                           event.target.closest('#themeToggleBtn') ||
                            event.target.closest('.theme-actions');
-      
-      const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
-                         event.target.closest('#posToggleBtn') || 
-                         event.target.closest('#posToggleBtnMobile') ||
-                         event.target.closest('.pos-actions');
       
       if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
         dropdown.classList.remove('active');
         themeDropdownVisible = false;
-      }
-      
-      if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
-        posDropdown.classList.remove('active');
-        posDropdownVisible = false;
       }
     });
     
