@@ -218,7 +218,6 @@
       display: none;
       color: #95a5a6;
       line-height: 1;
-      z-index: 5;
     }
     
     .search-input-wrapper .clear-btn:hover {
@@ -1641,7 +1640,6 @@
         justify-content: center;
       }
     
-      /* Поиск: поле + кнопка справа */
       .search-row {
         display: flex;
         flex-direction: row;
@@ -1667,7 +1665,6 @@
         font-size: 22px;
       }
     
-      /* Кнопка поиска без текста */
       .search-btn {
         min-width: 48px;
         width: 48px;
@@ -1787,7 +1784,6 @@
         font-size: 22px;
       }
     
-      /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
       .result-item .word-row {
         display: flex;
         flex-direction: column;
@@ -1861,7 +1857,6 @@
         color: #27ae60;
       }
     
-      /* Кнопки редактирования на телефоне — ПОД русским словом */
       .result-item .actions {
         display: flex !important;
         gap: 8px;
@@ -1879,12 +1874,10 @@
         height: 16px;
       }
     
-      /* Скрываем старые кнопки справа от слова */
       .result-item .word-cell-right {
         display: none !important;
       }
     
-      /* ===== ВЫПАДАЮЩИЙ СПИСОК ТЕМ И ЧАСТЕЙ РЕЧИ НА ТЕЛЕФОНЕ ===== */
       .theme-dropdown .theme-item {
         flex-wrap: nowrap;
         gap: 8px;
@@ -1949,7 +1942,6 @@
         height: 14px;
       }
     
-      /* Части речи на телефоне */
       .part-of-speech-dropdown .pos-item {
         flex-wrap: nowrap;
         gap: 8px;
@@ -2032,7 +2024,6 @@
       }
     }
     
-    /* Стили для SVG иконок */
     .flag-icon {
       width: 22px;
       height: 16px;
@@ -2272,13 +2263,13 @@
       
       <div class="form-group" style="position: relative;">
         <label>Тема</label>
-        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
+        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία (необязательно)" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
         <div class="theme-datalist" id="themeDatalist"></div>
       </div>
       
       <div class="form-group" style="position: relative;">
         <label>Часть речи</label>
-        <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
+        <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό (необязательно)" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
         <div class="pos-datalist" id="posDatalist"></div>
       </div>
       
@@ -3063,8 +3054,7 @@
     function clearSearch() {
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('visible');
-      // Не сбрасываем тему и часть речи
-      performSearch();
+      // При нажатии на крестик поле очищается, но поиск не выполняется автоматически
       document.getElementById('searchInput').focus();
     }
     
@@ -3376,7 +3366,7 @@
           } catch (e) {}
           
           document.getElementById('posEditMessage').innerHTML = 
-            `<div class="success">✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
+            `<div class>✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
           
           await refreshCache();
           setTimeout(() => {
@@ -3605,7 +3595,6 @@
         
         const query = document.getElementById('searchInput').value.trim();
         if (!query) {
-          // Проверяем, есть ли выбранная тема или часть речи
           if (!selectedTheme && !selectedPos) {
             showToast('Введите слово для поиска', true);
             return;
@@ -3618,7 +3607,6 @@
     }
     
     function performSearch() {
-      // Закрываем все списки
       document.getElementById('themeDropdown').classList.remove('active');
       themeDropdownVisible = false;
       document.getElementById('posDropdown').classList.remove('active');
@@ -3793,7 +3781,7 @@
       if (isMobile) {
         return `
           <div class="result-item" data-id="${item.id}">
-            <div class="theme">📂 ${item.themeGr} / ${item.themeRu} ${item.posGr ? '| ' + item.posGr : ''}</div>
+            <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
             <div class="word-row">
               <div class="word-cell word-cell-left">
                 <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
@@ -3813,7 +3801,7 @@
       
       return `
         <div class="result-item" data-id="${item.id}">
-          <div class="theme">📂 ${item.themeGr} / ${item.themeRu} ${item.posGr ? '| ' + item.posGr : ''}</div>
+          <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
           <div class="word-row">
             <div class="word-cell word-cell-left">
               <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
@@ -3887,8 +3875,8 @@
       const themeGr = document.getElementById('editThemeGr').value.trim();
       const posGr = document.getElementById('editPosGr').value.trim();
       
-      if (!wordGr || !wordRu || !themeGr) {
-        document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово и тема должны быть заполнены</div>';
+      if (!wordGr || !wordRu) {
+        document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово должно быть заполнено</div>';
         return;
       }
       
@@ -3910,14 +3898,14 @@
               id: allData.words.length + 1,
               wordGr: wordGr,
               wordRu: wordRu,
-              themeGr: themeGr,
-              themeRu: themeGr,
-              posGr: posGr,
-              posRu: posGr
+              themeGr: themeGr || '',
+              themeRu: themeGr || '',
+              posGr: posGr || '',
+              posRu: posGr || ''
             };
             allData.words.push(newWord);
             allData.total = allData.words.length;
-            if (!allThemes.some(t => t.gr === themeGr)) {
+            if (themeGr && !allThemes.some(t => t.gr === themeGr)) {
               allThemes.push({ gr: themeGr, ru: themeGr });
             }
             if (posGr && !allPos.some(p => p.gr === posGr)) {
@@ -3928,10 +3916,10 @@
             if (index !== -1) {
               allData.words[index].wordGr = wordGr;
               allData.words[index].wordRu = wordRu;
-              allData.words[index].themeGr = themeGr;
-              allData.words[index].themeRu = themeGr;
-              allData.words[index].posGr = posGr;
-              allData.words[index].posRu = posGr;
+              allData.words[index].themeGr = themeGr || '';
+              allData.words[index].themeRu = themeGr || '';
+              allData.words[index].posGr = posGr || '';
+              allData.words[index].posRu = posGr || '';
             }
           }
           
