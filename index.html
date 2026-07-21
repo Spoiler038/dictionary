@@ -813,27 +813,31 @@
     }
     
     .result-item .word-row {
-      display: table;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       width: 100%;
-      table-layout: fixed;
     }
     
     .result-item .word-row .word-cell {
-      display: table-cell;
-      vertical-align: middle;
-      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      padding: 4px 0;
+      width: 100%;
     }
     
     .result-item .word-row .word-cell-left {
-      text-align: left;
+      justify-content: flex-start;
+      gap: 8px;
     }
     
     .result-item .word-row .word-cell-center {
-      text-align: center;
+      justify-content: flex-start;
+      gap: 8px;
     }
     
     .result-item .word-row .word-cell-right {
-      text-align: right;
+      display: none;
     }
     
     .result-item .word-row .word-gr {
@@ -841,6 +845,7 @@
       font-weight: 600;
       color: #2c3e50;
       word-break: break-word;
+      flex: 1;
     }
     
     .result-item .word-row .word-ru {
@@ -848,6 +853,7 @@
       font-weight: 600;
       color: #2c3e50;
       word-break: break-word;
+      flex: 1;
     }
     
     .result-item .word-row .copy-btn {
@@ -861,6 +867,7 @@
       color: #95a5a6;
       opacity: 0.5;
       line-height: 1;
+      flex-shrink: 0;
     }
     
     .result-item:hover .copy-btn {
@@ -1407,6 +1414,7 @@
     
       .result-item .word-row {
         display: flex;
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
         width: 100%;
@@ -1417,18 +1425,15 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        width: 50%;
       }
     
       .result-item .word-row .word-cell-left {
         justify-content: flex-start;
-        flex: 0 0 50%;
-        min-width: 0;
       }
     
       .result-item .word-row .word-cell-center {
         justify-content: flex-start;
-        flex: 0 0 50%;
-        min-width: 0;
       }
     
       .result-item .word-row .word-cell-right {
@@ -1507,6 +1512,10 @@
         font-size: 14px;
         padding: 8px 16px;
       }
+      
+      .controls-row .mode-selector {
+        justify-content: flex-end;
+      }
     }
     
     /* Мобильная версия */
@@ -1526,18 +1535,17 @@
         justify-content: center;
       }
     
+      /* Поиск на всю ширину */
       .search-row {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         width: 100%;
         gap: 8px;
-        align-items: center;
       }
     
       .search-input-wrapper {
-        flex: 1;
-        min-width: 0;
-        width: auto;
+        width: 100%;
+        min-width: unset;
       }
     
       .search-input-wrapper input {
@@ -1551,11 +1559,43 @@
         font-size: 22px;
       }
     
-      .search-row .search-btn {
+      /* Языки слева + Найти справа на одной строке */
+      .search-controls-row {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        gap: 8px;
+        align-items: center;
+      }
+      
+      .search-controls-row .mode-selector {
+        display: flex;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+        justify-content: flex-start;
+      }
+      
+      .search-controls-row .mode-selector button {
+        max-width: unset;
+        font-size: 16px;
+        padding: 10px 12px;
+        flex: 1;
+        min-width: 40px;
+      }
+      
+      .search-controls-row .search-btn {
         width: auto;
-        padding: 14px 16px;
+        padding: 10px 16px;
         font-size: 18px;
         flex-shrink: 0;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
       }
     
       .controls-row {
@@ -1599,21 +1639,9 @@
         min-width: 60px;
       }
     
-      .controls-row .mode-selector {
-        display: flex;
-        gap: 6px;
-        flex: 1;
-        min-width: 0;
-        width: auto;
-        justify-content: flex-start;
-      }
-    
-      .controls-row .mode-selector button {
-        max-width: unset;
-        font-size: 16px;
-        padding: 10px 12px;
-        flex: 1;
-        min-width: 40px;
+      /* Скрываем старую кнопку поиска в строке поиска */
+      .search-row .search-btn {
+        display: none;
       }
     
       .theme-row {
@@ -1657,79 +1685,60 @@
       /* ===== ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ НА ТЕЛЕФОНЕ ===== */
       .result-item .word-row {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
         width: 100%;
-        gap: 4px;
-        flex-wrap: nowrap;
+        gap: 6px;
       }
     
       .result-item .word-row .word-cell {
         display: flex;
         align-items: center;
         padding: 4px 0;
-        gap: 6px;
+        width: 100%;
+        gap: 8px;
       }
     
       .result-item .word-row .word-cell-left {
         justify-content: flex-start;
-        flex: 1;
-        min-width: 0;
-        overflow: hidden;
       }
     
       .result-item .word-row .word-cell-center {
         justify-content: flex-start;
-        flex: 1;
-        min-width: 0;
-        overflow: hidden;
       }
     
       .result-item .word-row .word-cell-right {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex-shrink: 0;
-        width: auto;
-        padding-left: 4px;
+        display: none;
       }
     
       .result-item .word-row .word-gr {
-        font-size: 17px;
+        font-size: 18px;
         font-weight: 600;
         color: #2c3e50;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         flex-shrink: 1;
         min-width: 0;
-        max-width: calc(100% - 60px);
+        word-break: break-word;
       }
     
       .result-item .word-row .word-ru {
-        font-size: 17px;
+        font-size: 18px;
         font-weight: 600;
         color: #2c3e50;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         flex-shrink: 1;
         min-width: 0;
-        max-width: calc(100% - 60px);
+        word-break: break-word;
       }
     
       .result-item .word-row .copy-btn {
-        font-size: 15px;
-        padding: 4px 6px;
+        font-size: 16px;
+        padding: 4px 8px;
         flex-shrink: 0;
-        min-width: 28px;
         background: none;
         border: none;
         cursor: pointer;
         transition: all 0.3s;
         color: #95a5a6;
         line-height: 1;
+        min-width: 32px;
         opacity: 0.7;
       }
     
@@ -1747,19 +1756,30 @@
         color: #27ae60;
       }
     
-      .result-item .word-row .word-cell-right .icon-btn {
+      /* Скрываем старые кнопки внизу на телефоне */
+      .result-item .actions {
+        display: none !important;
+      }
+    
+      /* Кнопки редактора на телефоне — справа от слова */
+      .result-item .word-cell-right {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        flex-shrink: 0;
+        width: auto;
+        padding-left: 4px;
+      }
+      
+      .result-item .word-cell-right .icon-btn {
         padding: 4px 6px;
         min-width: 32px;
         min-height: 32px;
       }
-    
-      .result-item .word-row .word-cell-right .icon-btn svg {
+      
+      .result-item .word-cell-right .icon-btn svg {
         width: 18px;
         height: 18px;
-      }
-    
-      .result-item .actions {
-        display: none !important;
       }
     
       /* ===== ВЫПАДАЮЩИЙ СПИСОК ТЕМ И ЧАСТЕЙ РЕЧИ НА ТЕЛЕФОНЕ ===== */
@@ -2006,23 +2026,16 @@
     </h1>
     
     <div class="search-section">
-      <!-- Строка поиска -->
+      <!-- Строка поиска (на всю ширину) -->
       <div class="search-row">
         <div class="search-input-wrapper">
           <input type="text" id="searchInput" placeholder="Введите слово для поиска..." autofocus>
           <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
         </div>
-        <button class="search-btn" id="searchBtn">🔍 Найти</button>
       </div>
       
-      <!-- Строка: Темы (слева) + языки (справа) -->
-      <div class="controls-row">
-        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
-          📂 Темы
-        </button>
-        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
-          ➕ Добавить тему
-        </button>
+      <!-- Строка: языки слева + Найти справа -->
+      <div class="search-controls-row">
         <div class="mode-selector" id="modeSelector">
           <button id="modeGreek" data-mode="greek">
             <svg class="flag-icon" viewBox="0 0 24 16" style="width:20px;height:13px;display:inline-block;vertical-align:middle;margin-right:4px;">
@@ -2045,9 +2058,20 @@
             </svg>
           </button>
         </div>
+        <button class="search-btn" id="searchBtn">🔍 Найти</button>
       </div>
       
-      <!-- Строка: Части речи -->
+      <!-- Строка: Темы + Добавить тему -->
+      <div class="controls-row">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+          📂 Темы
+        </button>
+        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+          ➕ Добавить тему
+        </button>
+      </div>
+      
+      <!-- Строка: Части речи + Добавить -->
       <div class="controls-row">
         <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
           📚 Части речи
@@ -2704,6 +2728,7 @@
       themeDropdownVisible = false;
       showAllThemes();
       document.getElementById('themeInput').focus();
+      performSearch();
     }
     
     // ========== УПРАВЛЕНИЕ ЧАСТЯМИ РЕЧИ ==========
@@ -2820,6 +2845,7 @@
       posDropdownVisible = false;
       showAllPos();
       document.getElementById('posInput').focus();
+      performSearch();
     }
     
     // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
@@ -2904,7 +2930,8 @@
     function clearSearch() {
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('visible');
-      showInitialMessage();
+      // Не сбрасываем тему и часть речи
+      performSearch();
       document.getElementById('searchInput').focus();
     }
     
@@ -3588,9 +3615,11 @@
       const isMobile = window.innerWidth < 768;
       
       let actionsHtml = '';
+      let editorActionsHtml = '';
       if (isEditor) {
+        // Кнопки редактора на телефоне — справа от каждого слова
         if (isMobile) {
-          actionsHtml = `
+          editorActionsHtml = `
             <div class="word-cell word-cell-right">
               <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
                 <svg><use href="#icon-edit"/></svg>
@@ -3615,6 +3644,7 @@
       }
       
       if (isMobile) {
+        // На телефоне — греческое слово на одной строке, русское на второй
         return `
           <div class="result-item" data-id="${item.id}">
             <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
@@ -3627,6 +3657,9 @@
                 <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
                   <svg><use href="#icon-edit"/></svg>
                 </button>
+                <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
+                  <svg><use href="#icon-delete"/></svg>
+                </button>
               </div>` : ''}
             </div>
             <div class="word-row">
@@ -3634,16 +3667,13 @@
                 <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
                 <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
               </div>
-              ${isEditor ? `<div class="word-cell word-cell-right">
-                <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                  <svg><use href="#icon-delete"/></svg>
-                </button>
-              </div>` : ''}
             </div>
+            ${actionsHtml}
           </div>
         `;
       }
       
+      // Десктоп
       return `
         <div class="result-item" data-id="${item.id}">
           <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
