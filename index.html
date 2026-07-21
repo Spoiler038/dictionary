@@ -2137,6 +2137,19 @@ h1:active {
   <!-- SVG иконки и флаги -->
   <svg style="display:none;">
     <defs>
+      <symbol id="icon-auto" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+      <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+      <line x1="12" y1="5" x2="12" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="12" y1="17" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="5" y1="12" x2="7" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="17" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="7.05" y1="7.05" x2="8.46" y2="8.46" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="15.54" y1="15.54" x2="16.95" y2="16.95" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="7.05" y1="16.95" x2="8.46" y2="15.54" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="15.54" y1="8.46" x2="16.95" y2="7.05" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+      
       <symbol id="flag-gr" viewBox="0 0 24 16">
         <rect width="24" height="16" fill="#0d5eaf"/>
         <rect y="0" width="24" height="2" fill="white"/>
@@ -2222,7 +2235,11 @@ h1:active {
                 <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
               </svg>
             </button>
-            <button id="modeAuto" class="active" data-mode="auto">🤖</button>
+            <button id="modeAuto" class="active" data-mode="auto">
+  <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
+    <use href="#icon-auto"/>
+  </svg>
+</button>
             <button id="modeRussian" data-mode="russian">
               <svg class="flag-icon" viewBox="0 0 24 16">
                 <rect width="24" height="16" fill="white"/>
@@ -2260,7 +2277,11 @@ h1:active {
               <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
             </svg>
           </button>
-          <button id="modeAutoMobile" class="active" data-mode="auto">🤖</button>
+          <button id="modeAutoMobile" class="active" data-mode="auto">
+  <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
+    <use href="#icon-auto"/>
+  </svg>
+</button>
           <button id="modeRussianMobile" data-mode="russian">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="white"/>
