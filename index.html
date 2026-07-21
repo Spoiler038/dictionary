@@ -173,6 +173,7 @@
       margin-bottom: 20px;
     }
     
+    /* Строка поиска */
     .search-row {
       display: flex;
       gap: 10px;
@@ -255,6 +256,7 @@
       transform: scale(0.95);
     }
     
+    /* Строка управления: Темы + языки */
     .controls-row {
       display: flex;
       gap: 10px;
@@ -1512,10 +1514,6 @@
         font-size: 14px;
         padding: 8px 16px;
       }
-      
-      .controls-row .mode-selector {
-        justify-content: flex-end;
-      }
     }
     
     /* Мобильная версия */
@@ -1559,7 +1557,11 @@
         font-size: 22px;
       }
     
-      /* Языки слева + Найти справа на одной строке */
+      .search-row .search-btn {
+        display: none;
+      }
+    
+      /* Языки слева + Найти справа */
       .search-controls-row {
         display: flex;
         flex-direction: row;
@@ -1582,6 +1584,32 @@
         padding: 10px 12px;
         flex: 1;
         min-width: 40px;
+        border: 2px solid #ddd;
+        background: white;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        color: #333;
+      }
+      
+      .search-controls-row .mode-selector button.active {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+      }
+      
+      .search-controls-row .mode-selector button:hover {
+        background: #e8f4fd;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      
+      .search-controls-row .mode-selector button:active {
+        transform: scale(0.95);
       }
       
       .search-controls-row .search-btn {
@@ -1637,11 +1665,6 @@
         padding: 10px 12px;
         font-size: 14px;
         min-width: 60px;
-      }
-    
-      /* Скрываем старую кнопку поиска в строке поиска */
-      .search-row .search-btn {
-        display: none;
       }
     
       .theme-row {
@@ -2032,13 +2055,20 @@
           <input type="text" id="searchInput" placeholder="Введите слово для поиска..." autofocus>
           <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
         </div>
+        <button class="search-btn" id="searchBtnDesktop">🔍 Найти</button>
       </div>
       
-      <!-- Строка: языки слева + Найти справа -->
-      <div class="search-controls-row">
+      <!-- Строка: Темы + Добавить тему + языки (для ПК) -->
+      <div class="controls-row">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+          📂 Темы
+        </button>
+        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+          ➕ Добавить тему
+        </button>
         <div class="mode-selector" id="modeSelector">
           <button id="modeGreek" data-mode="greek">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width:20px;height:13px;display:inline-block;vertical-align:middle;margin-right:4px;">
+            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
               <rect width="24" height="16" fill="#0d5eaf"/>
               <rect y="0" width="24" height="2" fill="white"/>
               <rect y="4" width="24" height="2" fill="white"/>
@@ -2051,24 +2081,13 @@
           </button>
           <button id="modeAuto" class="active" data-mode="auto">🤖</button>
           <button id="modeRussian" data-mode="russian">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width:20px;height:13px;display:inline-block;vertical-align:middle;margin-right:4px;">
+            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
               <rect width="24" height="16" fill="white"/>
               <rect y="0" width="24" height="5.33" fill="#0039a6"/>
               <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
             </svg>
           </button>
         </div>
-        <button class="search-btn" id="searchBtn">🔍 Найти</button>
-      </div>
-      
-      <!-- Строка: Темы + Добавить тему -->
-      <div class="controls-row">
-        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
-          📂 Темы
-        </button>
-        <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
-          ➕ Добавить тему
-        </button>
       </div>
       
       <!-- Строка: Части речи + Добавить -->
@@ -2079,6 +2098,33 @@
         <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
           ➕ Добавить
         </button>
+      </div>
+      
+      <!-- Телефон: языки + Найти -->
+      <div class="search-controls-row" id="mobileSearchControls" style="display:none;">
+        <div class="mode-selector" id="modeSelectorMobile">
+          <button id="modeGreekMobile" data-mode="greek">
+            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
+              <rect width="24" height="16" fill="#0d5eaf"/>
+              <rect y="0" width="24" height="2" fill="white"/>
+              <rect y="4" width="24" height="2" fill="white"/>
+              <rect y="8" width="24" height="2" fill="white"/>
+              <rect y="12" width="24" height="2" fill="white"/>
+              <rect x="0" y="0" width="8" height="6" fill="white"/>
+              <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+              <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+            </svg>
+          </button>
+          <button id="modeAutoMobile" class="active" data-mode="auto">🤖</button>
+          <button id="modeRussianMobile" data-mode="russian">
+            <svg class="flag-icon" viewBox="0 0 24 16" style="width:22px;height:16px;display:inline-block;vertical-align:middle;margin-right:4px;">
+              <rect width="24" height="16" fill="white"/>
+              <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+              <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+            </svg>
+          </button>
+        </div>
+        <button class="search-btn" id="searchBtnMobile">🔍 Найти</button>
       </div>
       
       <div class="theme-row" id="themeSection">
@@ -2328,6 +2374,24 @@
     let posEditingTarget = null;
     let isShowingAll = false;
     
+    // ========== УПРАВЛЕНИЕ ОТОБРАЖЕНИЕМ НА ПК/ТЕЛЕФОН ==========
+    function updateMobileVisibility() {
+      const isMobile = window.innerWidth < 768;
+      const desktopSearchBtn = document.getElementById('searchBtnDesktop');
+      const mobileControls = document.getElementById('mobileSearchControls');
+      const desktopModeSelector = document.getElementById('modeSelector');
+      
+      if (isMobile) {
+        desktopSearchBtn.style.display = 'none';
+        mobileControls.style.display = 'flex';
+        desktopModeSelector.style.display = 'none';
+      } else {
+        desktopSearchBtn.style.display = 'flex';
+        mobileControls.style.display = 'none';
+        desktopModeSelector.style.display = 'flex';
+      }
+    }
+    
     // ========== JSONP ВЫЗОВЫ GAS ==========
     function callGAS(action, params) {
       return new Promise((resolve, reject) => {
@@ -2554,6 +2618,10 @@
       if (savedStatus === 'true') {
         isEditor = true;
       }
+      
+      // Показываем правильные кнопки для ПК/телефона
+      updateMobileVisibility();
+      window.addEventListener('resize', updateMobileVisibility);
       
       try {
         const needUpdate = await checkVersion();
@@ -3444,9 +3512,19 @@
     // ========== ПОИСК ==========
     
     function setupEventListeners() {
+      // ПК версия
       document.querySelectorAll('#modeSelector button').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentMode = this.dataset.mode;
+        });
+      });
+      
+      // Мобильная версия
+      document.querySelectorAll('#modeSelectorMobile button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#modeSelectorMobile button').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
           currentMode = this.dataset.mode;
         });
@@ -3458,7 +3536,8 @@
         }
       });
       
-      document.getElementById('searchBtn').addEventListener('click', performSearch);
+      document.getElementById('searchBtnDesktop').addEventListener('click', performSearch);
+      document.getElementById('searchBtnMobile').addEventListener('click', performSearch);
     }
     
     function performSearch() {
@@ -3617,7 +3696,6 @@
       let actionsHtml = '';
       let editorActionsHtml = '';
       if (isEditor) {
-        // Кнопки редактора на телефоне — справа от каждого слова
         if (isMobile) {
           editorActionsHtml = `
             <div class="word-cell word-cell-right">
@@ -3644,7 +3722,6 @@
       }
       
       if (isMobile) {
-        // На телефоне — греческое слово на одной строке, русское на второй
         return `
           <div class="result-item" data-id="${item.id}">
             <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
@@ -3653,14 +3730,7 @@
                 <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
                 <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
               </div>
-              ${isEditor ? `<div class="word-cell word-cell-right">
-                <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
-                  <svg><use href="#icon-edit"/></svg>
-                </button>
-                <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-                  <svg><use href="#icon-delete"/></svg>
-                </button>
-              </div>` : ''}
+              ${isEditor ? editorActionsHtml : ''}
             </div>
             <div class="word-row">
               <div class="word-cell word-cell-center">
@@ -3673,7 +3743,6 @@
         `;
       }
       
-      // Десктоп
       return `
         <div class="result-item" data-id="${item.id}">
           <div class="theme">📂 ${item.themeGr} ${item.posGr ? '| ' + item.posGr : ''}</div>
