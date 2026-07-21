@@ -3740,58 +3740,81 @@
     }
     
     function handleResults(data) {
-      if (data.error) {
-        document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ ${data.error}</div>`;
-        toggleSearchButton('cancel');
-        return;
-      }
-      
-      if (!data.results || data.results.length === 0) {
-        const modeText = data.searchMode === 'greek' ? 'греческом' : 'русском';
-        let filters = '';
-        if (selectedTheme) filters += ` Тема: ${selectedTheme}`;
-        if (selectedPos) filters += ` Часть речи: ${selectedPos}`;
-        document.getElementById('resultsContainer').innerHTML = `
-          <div class="no-results">
-            🔍 Ничего не найдено<br>
-            <small>Поиск в ${modeText} языке${filters}</small>
-          </div>
-        `;
-        toggleSearchButton('done');
-        return;
-      }
-      
-      const isMobile = window.innerWidth < 768;
-      let html = '';
-      
-      if (isMobile) {
-        html = `<div class="results">`;
-        data.results.forEach(item => {
-          html += createResultItem(item);
-        });
-        html += `</div>`;
-      } else {
-        html = `<div class="results-grid">`;
-        data.results.forEach(item => {
-          html += createResultItem(item);
-        });
-        html += `</div>`;
-      }
-      
-      let filters = '';
-      if (selectedTheme) filters += ` Тема: ${selectedTheme}`;
-      if (selectedPos) filters += ` Часть речи: ${selectedPos}`;
-      
-      const infoHtml = `
-        <div class="result-info">
-          Найдено ${data.results.length}
-          ${filters}
-        </div>
-        ${html}
-      `;
-      
-      document.getElementById('resultsContainer').innerHTML = infoHtml;
+  if (data.error) {
+    document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ ${data.error}</div>`;
+    toggleSearchButton('cancel');
+    return;
+  }
+  
+  if (!data.results || data.results.length === 0) {
+    const modeText = data.searchMode === 'greek' ? 'греческом' : 'русском';
+    let filters = '';
+    if (selectedTheme) {
+      const themeRu = allThemes.find(t => t.gr === selectedTheme);
+      filters += ` Тема: ${themeRu ? themeRu.ru : selectedTheme}`;
     }
+    if (selectedPos) {
+      const posRu = allPos.find(p => p.gr === selectedPos);
+      filters += ` Часть речи: ${posRu ? posRu.ru : selectedPos}`;
+    }
+    document.getElementById('resultsContainer').innerHTML = `
+      <div class="no-results">
+        🔍 Ничего не найдено<br>
+        <small>Поиск в ${modeText} языке${filters}</small>
+      </div>
+    `;
+    toggleSearchButton('done');
+    return;
+  }
+  
+  const isMobile = window.innerWidth < 768;
+  let html = '';
+  
+  if (isMobile) {
+    html = `<div class="results">`;
+    data.results.forEach(item => {
+      html += createResultItem(item);
+    });
+    html += `</div>`;
+  } else {
+    html = `<div class="results-grid">`;
+    data.results.forEach(item => {
+      html += createResultItem(item);
+    });
+    html += `</div>`;
+  }
+  
+  let filters = '';
+  if (selectedTheme) {
+    const themeRu = allThemes.find(t => t.gr === selectedTheme);
+    filters += ` Тема: ${themeRu ? themeRu.ru : selectedTheme}`;
+  }
+  if (selectedPos) {
+    const posRu = allPos.find(p => p.gr === selectedPos);
+    filters += ` Часть речи: ${posRu ? posRu.ru : selectedPos}`;
+  }
+  
+  // Формируем строку с темой и частью речи на русском
+  let themeDisplay = '';
+  if (selectedTheme) {
+    const themeRu = allThemes.find(t => t.gr === selectedTheme);
+    themeDisplay = `📂 ${selectedTheme} / ${themeRu ? themeRu.ru : selectedTheme}`;
+  } else if (selectedPos) {
+    const posRu = allPos.find(p => p.gr === selectedPos);
+    themeDisplay = `📚 ${selectedPos} / ${posRu ? posRu.ru : selectedPos}`;
+  }
+  
+  const infoHtml = `
+    <div class="result-info">
+      ${themeDisplay ? themeDisplay + '<br>' : ''}
+      Найдено ${data.results.length}
+      ${filters}
+    </div>
+    ${html}
+  `;
+  
+  document.getElementById('resultsContainer').innerHTML = infoHtml;
+}
     
     function createResultItem(item) {
       const isMobile = window.innerWidth < 768;
