@@ -1105,11 +1105,6 @@
       margin-bottom: 10px;
     }
     
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
     .result-info {
       text-align: center;
       color: #7f8c8d;
@@ -2384,7 +2379,6 @@
   
   <script>
     // ========== НАСТРОЙКИ ==========
-    // ЗАМЕНИТЕ ЭТОТ URL НА ВАШ!
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsF633XdFiInhTqFLNUp3Q98sp6Z7AXlVeyvKhr8xaR3yKw2FRdVLBoH0k8R3eLHiapQ/exec';
     const PAGE_SIZE = 100;
     
@@ -2428,7 +2422,9 @@
         searchBtn.classList.remove('searching', 'loading');
         searchBtn.querySelector('.btn-text').textContent = 'Готово!';
         setTimeout(() => {
-          searchBtn.querySelector('.btn-text').textContent = 'Найти';
+          if (!isSearching) {
+            searchBtn.querySelector('.btn-text').textContent = 'Найти';
+          }
         }, 1500);
       }
     }
@@ -2706,6 +2702,12 @@
           </div>
         `;
       }
+      // Сбрасываем кнопку поиска
+      if (searchBtn) {
+        isSearching = false;
+        searchBtn.classList.remove('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Найти';
+      }
     }
     
     // ========== ОБНОВЛЕНИЕ КЕША ==========
@@ -2833,7 +2835,6 @@
       document.getElementById('themeInput').value = '';
       document.getElementById('themeClearInputBtn').classList.remove('visible');
       selectedTheme = '';
-      // Не закрываем выпадающий список, остаёмся на фильтре
       showAllThemes();
       document.getElementById('themeInput').focus();
       performSearch();
@@ -2953,7 +2954,6 @@
       document.getElementById('posInput').value = '';
       document.getElementById('posClearInputBtn').classList.remove('visible');
       selectedPos = '';
-      // Не закрываем выпадающий список, остаёмся на фильтре
       showAllPos();
       document.getElementById('posInput').focus();
       performSearch();
@@ -3042,7 +3042,6 @@
     function clearSearch() {
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('visible');
-      // При нажатии на крестик поле очищается, но поиск не выполняется автоматически
       document.getElementById('searchInput').focus();
     }
     
@@ -3412,7 +3411,6 @@
     
     function selectThemeFromDatalist(gr, ru) {
       document.getElementById('editThemeGr').value = gr;
-      document.getElementById('editPosGr').value = '';
       document.getElementById('themeDatalist').classList.remove('active');
       checkDuplicate();
     }
@@ -3584,11 +3582,14 @@
       });
       
       // Обработчик для анимированной кнопки поиска
-      document.getElementById('searchBtn').addEventListener('click', function() {
+      document.getElementById('searchBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
         if (isSearching) {
           // Отмена поиска (крестик)
-          toggleSearchButton('cancel');
-          // Очищаем поле поиска
+          isSearching = false;
+          this.classList.remove('searching', 'loading');
+          this.querySelector('.btn-text').textContent = 'Найти';
           document.getElementById('searchInput').value = '';
           document.getElementById('clearBtn').classList.remove('visible');
           showInitialMessage();
@@ -3596,14 +3597,17 @@
         }
         
         const query = document.getElementById('searchInput').value.trim();
-        if (!query) {
-          if (!selectedTheme && !selectedPos) {
-            showToast('Введите слово для поиска', true);
-            return;
-          }
+        const theme = selectedTheme;
+        const pos = selectedPos;
+        
+        if (!query && !theme && !pos) {
+          showToast('Введите слово для поиска или выберите тему');
+          return;
         }
         
-        toggleSearchButton('searching');
+        isSearching = true;
+        this.classList.add('searching', 'loading');
+        this.querySelector('.btn-text').textContent = 'Поиск...';
         performSearch();
       });
     }
@@ -3622,7 +3626,11 @@
       
       if (!query && !theme && !pos) {
         showInitialMessage();
-        toggleSearchButton('cancel');
+        if (searchBtn) {
+          isSearching = false;
+          searchBtn.classList.remove('searching', 'loading');
+          searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        }
         return;
       }
       
@@ -3641,18 +3649,40 @@
           const results = searchInCache(query, currentMode, theme, pos);
           handleResults(results);
           isSearchingNow = false;
-          toggleSearchButton('done');
+          if (searchBtn) {
+            isSearching = false;
+            searchBtn.classList.remove('searching', 'loading');
+            searchBtn.querySelector('.btn-text').textContent = 'Готово!';
+            setTimeout(() => {
+              if (!isSearching) {
+                searchBtn.querySelector('.btn-text').textContent = 'Найти';
+              }
+            }, 1500);
+          }
         }, 300);
       } else {
         loadData().then(() => {
           const results = searchInCache(query, currentMode, theme, pos);
           handleResults(results);
           isSearchingNow = false;
-          toggleSearchButton('done');
+          if (searchBtn) {
+            isSearching = false;
+            searchBtn.classList.remove('searching', 'loading');
+            searchBtn.querySelector('.btn-text').textContent = 'Готово!';
+            setTimeout(() => {
+              if (!isSearching) {
+                searchBtn.querySelector('.btn-text').textContent = 'Найти';
+              }
+            }, 1500);
+          }
         }).catch(error => {
           handleError(error);
           isSearchingNow = false;
-          toggleSearchButton('cancel');
+          if (searchBtn) {
+            isSearching = false;
+            searchBtn.classList.remove('searching', 'loading');
+            searchBtn.querySelector('.btn-text').textContent = 'Найти';
+          }
         });
       }
     }
@@ -3712,7 +3742,11 @@
     function handleResults(data) {
       if (data.error) {
         document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ ${data.error}</div>`;
-        toggleSearchButton('cancel');
+        if (searchBtn) {
+          isSearching = false;
+          searchBtn.classList.remove('searching', 'loading');
+          searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        }
         return;
       }
       
@@ -3727,7 +3761,11 @@
             <small>Поиск в ${modeText} языке${filters}</small>
           </div>
         `;
-        toggleSearchButton('done');
+        if (searchBtn) {
+          isSearching = false;
+          searchBtn.classList.remove('searching', 'loading');
+          searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        }
         return;
       }
       
@@ -3761,6 +3799,17 @@
       `;
       
       document.getElementById('resultsContainer').innerHTML = infoHtml;
+      
+      if (searchBtn) {
+        isSearching = false;
+        searchBtn.classList.remove('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Готово!';
+        setTimeout(() => {
+          if (!isSearching) {
+            searchBtn.querySelector('.btn-text').textContent = 'Найти';
+          }
+        }, 1500);
+      }
     }
     
     function createResultItem(item) {
@@ -3871,6 +3920,7 @@
     
     // ========== ОПЕРАЦИИ С ДАННЫМИ ==========
     
+    // ========== ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ СЛОВА ==========
     async function saveWord() {
       const wordGr = document.getElementById('editWordGr').value.trim();
       const wordRu = document.getElementById('editWordRu').value.trim();
@@ -3882,47 +3932,69 @@
         return;
       }
       
+      // Если тема не указана, используем пустую строку
+      const finalThemeGr = themeGr || '';
+      const finalThemeRu = themeGr || '';
+      const finalPosGr = posGr || '';
+      const finalPosRu = posGr || '';
+      
       document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
       
       try {
         const action = editingId === null ? 'addWord' : 'editWord';
         const params = editingId === null 
-          ? { wordGr, wordRu, themeGr, posGr }
-          : { id: editingId, wordGr, wordRu, themeGr, posGr };
+          ? { 
+              wordGr, 
+              wordRu, 
+              themeGr: finalThemeGr, 
+              themeRu: finalThemeRu,
+              posGr: finalPosGr,
+              posRu: finalPosRu
+            }
+          : { 
+              id: editingId, 
+              wordGr, 
+              wordRu, 
+              themeGr: finalThemeGr, 
+              themeRu: finalThemeRu,
+              posGr: finalPosGr,
+              posRu: finalPosRu
+            };
         
         const result = await callGAS(action, params);
         
         if (result.success) {
           document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
           
+          // Обновляем локальные данные
+          const newWord = {
+            id: editingId || (allData.words.length + 1),
+            wordGr: wordGr,
+            wordRu: wordRu,
+            themeGr: finalThemeGr,
+            themeRu: finalThemeRu,
+            posGr: finalPosGr,
+            posRu: finalPosRu
+          };
+          
           if (editingId === null) {
-            const newWord = {
-              id: allData.words.length + 1,
-              wordGr: wordGr,
-              wordRu: wordRu,
-              themeGr: themeGr || '',
-              themeRu: themeGr || '',
-              posGr: posGr || '',
-              posRu: posGr || ''
-            };
             allData.words.push(newWord);
             allData.total = allData.words.length;
-            if (themeGr && !allThemes.some(t => t.gr === themeGr)) {
-              allThemes.push({ gr: themeGr, ru: themeGr });
-            }
-            if (posGr && !allPos.some(p => p.gr === posGr)) {
-              allPos.push({ gr: posGr, ru: posGr });
-            }
           } else {
             const index = allData.words.findIndex(w => w.id === editingId);
             if (index !== -1) {
-              allData.words[index].wordGr = wordGr;
-              allData.words[index].wordRu = wordRu;
-              allData.words[index].themeGr = themeGr || '';
-              allData.words[index].themeRu = themeGr || '';
-              allData.words[index].posGr = posGr || '';
-              allData.words[index].posRu = posGr || '';
+              allData.words[index] = newWord;
             }
+          }
+          
+          // Добавляем тему, если её нет
+          if (finalThemeGr && !allThemes.some(t => t.gr === finalThemeGr)) {
+            allThemes.push({ gr: finalThemeGr, ru: finalThemeRu });
+          }
+          
+          // Добавляем часть речи, если её нет
+          if (finalPosGr && !allPos.some(p => p.gr === finalPosGr)) {
+            allPos.push({ gr: finalPosGr, ru: finalPosRu });
           }
           
           try {
