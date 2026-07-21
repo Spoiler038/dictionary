@@ -1999,7 +1999,7 @@
   <div id="app">
     <h1 id="headerTitle" onclick="handleTitleClick()">
       📖 Словарь
-      <span class="version-badge" id="versionBadge">Загрузка...</span>
+      <span class="version-badge" id="versionBadge">v1.0.0</span>
       <div class="header-buttons" id="headerButtons">
         <!-- Кнопки будут динамически обновляться -->
       </div>
@@ -2590,6 +2590,16 @@
       const input = document.getElementById('themeInput');
       const btn = document.getElementById('themeToggleBtn');
       
+      // Если открыта секция частей речи — закрываем её
+      const posSection = document.getElementById('posSection');
+      const posBtn = document.getElementById('posToggleBtn');
+      if (posSection.classList.contains('active')) {
+        posSection.classList.remove('active');
+        posBtn.classList.remove('active-pos');
+        document.getElementById('posDropdown').classList.remove('active');
+        posDropdownVisible = false;
+      }
+      
       section.classList.toggle('active');
       btn.classList.toggle('active-theme');
       
@@ -2695,6 +2705,16 @@
       const section = document.getElementById('posSection');
       const input = document.getElementById('posInput');
       const btn = document.getElementById('posToggleBtn');
+      
+      // Если открыта секция тем — закрываем её
+      const themeSection = document.getElementById('themeSection');
+      const themeBtn = document.getElementById('themeToggleBtn');
+      if (themeSection.classList.contains('active')) {
+        themeSection.classList.remove('active');
+        themeBtn.classList.remove('active-theme');
+        document.getElementById('themeDropdown').classList.remove('active');
+        themeDropdownVisible = false;
+      }
       
       section.classList.toggle('active');
       btn.classList.toggle('active-pos');
@@ -3369,6 +3389,12 @@
     }
     
     function performSearch() {
+      // Закрываем все списки
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      document.getElementById('posDropdown').classList.remove('active');
+      posDropdownVisible = false;
+      
       if (isSearchingNow) return;
       
       const query = document.getElementById('searchInput').value.trim();
@@ -3849,13 +3875,29 @@
     }
     
     window.onclick = function(event) {
-      const modals = ['loginModal', 'editModal', 'themeEditModal', 'posEditModal', 'deleteModal', 'adminModal', 'logoutModal'];
-      modals.forEach(id => {
-        const modal = document.getElementById(id);
-        if (event.target === modal) {
-          closeModal(id);
-        }
-      });
+      // Проверяем клик по выпадающему списку тем
+      const dropdown = document.getElementById('themeDropdown');
+      const posDropdown = document.getElementById('posDropdown');
+      
+      const isThemeClick = e.target.closest('.theme-input-wrapper') || 
+                           e.target.closest('#themeToggleBtn') || 
+                           e.target.closest('.theme-actions');
+      
+      const isPosClick = e.target.closest('.part-of-speech-input-wrapper') || 
+                         e.target.closest('#posToggleBtn') || 
+                         e.target.closest('.pos-actions');
+      
+      // Закрываем список тем, если клик был вне его
+      if (!isThemeClick && !e.target.closest('.theme-dropdown')) {
+        dropdown.classList.remove('active');
+        themeDropdownVisible = false;
+      }
+      
+      // Закрываем список частей речи, если клик был вне его
+      if (!isPosClick && !e.target.closest('.part-of-speech-dropdown')) {
+        posDropdown.classList.remove('active');
+        posDropdownVisible = false;
+      }
     };
     
     window.addEventListener('load', function() {
