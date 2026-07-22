@@ -686,7 +686,7 @@ h1:active {
   color: #2c3e50;
   flex-shrink: 0;
   white-space: nowrap;
-  padding-right: 12px; /* добавить отступ справа */
+  padding-right: 16px;
 }
 
 .theme-dropdown .theme-item .theme-actions {
@@ -697,7 +697,7 @@ h1:active {
   position: sticky;
   right: 0;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0 8px 0 16px;
+  padding: 0 4px 0 16px;
   z-index: 2;
   backdrop-filter: blur(4px);
 }
@@ -707,21 +707,21 @@ h1:active {
 }
 
 .theme-dropdown .theme-item .theme-actions button {
-  padding: 8px 12px; /* увеличил padding */
+  padding: 8px 12px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px; /* увеличил шрифт */
+  font-size: 14px;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px; /* минимальная ширина */
-  min-height: 36px; /* минимальная высота */
+  min-width: 36px;
+  min-height: 36px;
 }
 
 .theme-dropdown .theme-item .theme-actions button svg {
-  width: 20px; /* увеличил иконку */
+  width: 20px;
   height: 20px;
   stroke: white;
   stroke-width: 2;
@@ -868,7 +868,7 @@ h1:active {
   color: #2c3e50;
   flex-shrink: 0;
   white-space: nowrap;
-  padding-right: 12px; /* добавить отступ справа */
+  padding-right: 16px;
 }
     
 .part-of-speech-dropdown .pos-item .pos-actions {
@@ -879,7 +879,7 @@ h1:active {
   position: sticky;
   right: 0;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0 8px 0 16px;
+  padding: 0 4px 0 16px;
   z-index: 2;
   backdrop-filter: blur(4px);
 }
@@ -1981,7 +1981,7 @@ h1:active {
     position: sticky;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
-    padding: 0 8px 0 20px; /* больше отступ слева */
+    padding: 0 4px 0 20px;
     gap: 10px;
     z-index: 2;
     backdrop-filter: blur(4px);
@@ -2005,7 +2005,7 @@ h1:active {
     position: sticky;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
-    padding: 0 8px 0 20px;
+    padding: 0 4px 0 20px;
     gap: 10px;
     z-index: 2;
     backdrop-filter: blur(4px);
@@ -2162,10 +2162,10 @@ h1:active {
       </symbol>
       
       <symbol id="flag-ru" viewBox="0 0 24 16">
-  <rect width="24" height="16" fill="white"/>
-  <rect y="0" width="24" height="5.33" fill="#0039a6"/>
-  <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
-</symbol>
+        <rect width="24" height="16" fill="white"/>
+        <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+        <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+      </symbol>
       
       <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -2236,10 +2236,10 @@ h1:active {
               </svg>
             </button>
             <button id="modeAuto" class="active" data-mode="auto">
-  <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
-    <use href="#icon-auto"/>
-  </svg>
-</button>
+              <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
+                <use href="#icon-auto"/>
+              </svg>
+            </button>
             <button id="modeRussian" data-mode="russian">
               <svg class="flag-icon" viewBox="0 0 24 16">
                 <rect width="24" height="16" fill="white"/>
@@ -2278,10 +2278,10 @@ h1:active {
             </svg>
           </button>
           <button id="modeAutoMobile" class="active" data-mode="auto">
-  <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
-    <use href="#icon-auto"/>
-  </svg>
-</button>
+            <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
+              <use href="#icon-auto"/>
+            </svg>
+          </button>
           <button id="modeRussianMobile" data-mode="russian">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="white"/>
@@ -2980,16 +2980,16 @@ h1:active {
     }
     
     function clearThemeInput(event) {
-  event.stopPropagation();
-  document.getElementById('themeInput').value = '';
-  document.getElementById('themeClearInputBtn').classList.remove('visible');
-  selectedTheme = '';
-  // Показываем все темы, НЕ закрывая список
-  showAllThemes();
-  document.getElementById('themeInput').focus();
-  // Выполняем поиск с пустой темой
-  performSearch();
-}
+      event.stopPropagation();
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      selectedTheme = '';
+      // Показываем все темы, НЕ закрывая список
+      showAllThemes();
+      document.getElementById('themeInput').focus();
+      // Выполняем поиск с пустой темой
+      performSearch();
+    }
     
     // ========== УПРАВЛЕНИЕ ЧАСТЯМИ РЕЧИ ==========
     function togglePosSection() {
@@ -3101,16 +3101,16 @@ h1:active {
     }
     
     function clearPosInput(event) {
-  event.stopPropagation();
-  document.getElementById('posInput').value = '';
-  document.getElementById('posClearInputBtn').classList.remove('visible');
-  selectedPos = '';
-  // Показываем все части речи, НЕ закрывая список
-  showAllPos();
-  document.getElementById('posInput').focus();
-  // Выполняем поиск с пустой частью речи
-  performSearch();
-}
+      event.stopPropagation();
+      document.getElementById('posInput').value = '';
+      document.getElementById('posClearInputBtn').classList.remove('visible');
+      selectedPos = '';
+      // Показываем все части речи, НЕ закрывая список
+      showAllPos();
+      document.getElementById('posInput').focus();
+      // Выполняем поиск с пустой частью речи
+      performSearch();
+    }
     
     // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
     
