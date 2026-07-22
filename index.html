@@ -1,0 +1,4297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Словарь">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Словарь">
+  <meta name="theme-color" content="#3498db">
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  
+  <title>Словарь</title>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
+  overflow: auto;
+}
+
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+#app {
+  max-width: 1200px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin: 0 auto;
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s;
+  position: relative;
+}
+
+h1:active {
+  transform: scale(0.95);
+}
+
+.version-badge {
+  position: absolute;
+  bottom: -15px;
+  right: 10px;
+  font-size: 11px;
+  color: rgba(0,0,0,0.15);
+  user-select: none;
+  pointer-events: none;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 8px;
+  font-size: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.header-buttons button {
+  padding: 6px 14px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-buttons button:hover {
+  background: #e8f4fd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.header-buttons button:active {
+  transform: scale(0.95);
+}
+
+.header-buttons button.active-btn {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.header-buttons button.active-btn:hover {
+  background: #2980b9;
+}
+
+.btn-logout {
+  background: #e74c3c;
+  color: white !important;
+  border-color: #e74c3c !important;
+}
+
+.btn-logout:hover {
+  background: #c0392b !important;
+  color: white !important;
+}
+
+.btn-show-all {
+  background: #8e44ad;
+  color: white !important;
+  border-color: #8e44ad !important;
+}
+
+.btn-show-all:hover {
+  background: #7d3c98 !important;
+  color: white !important;
+}
+
+.editor-badge {
+  background: #f39c12;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  position: relative;
+  min-width: 200px;
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  padding: 12px 45px 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+  background: #fafafa;
+}
+
+.search-input-wrapper input:focus {
+  border-color: #3498db;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.search-input-wrapper .clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  display: none;
+  color: #95a5a6;
+  line-height: 1;
+}
+
+.search-input-wrapper .clear-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.search-input-wrapper .clear-btn:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.search-input-wrapper .clear-btn.visible {
+  display: block;
+}
+
+/* Анимированная кнопка поиска */
+.search-btn {
+  padding: 12px 24px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  min-width: 100px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.search-btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.search-btn:active {
+  transform: scale(0.95);
+}
+
+.search-btn .btn-text {
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.search-btn .btn-icon {
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+.search-btn .btn-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: all 0.4s ease;
+}
+
+.search-btn .btn-icon .close-svg {
+  position: absolute;
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+.search-btn.searching {
+  background: #e74c3c;
+  min-width: 48px;
+  padding: 0 12px;
+  border-radius: 50%;
+}
+
+.search-btn.searching:hover {
+  background: #c0392b;
+}
+
+.search-btn.searching .btn-text {
+  opacity: 0;
+  width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.search-btn.searching .btn-icon .search-svg {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.search-btn.searching .btn-icon .close-svg {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.search-btn.loading .btn-icon .search-svg {
+  animation: spin 1s linear infinite;
+  opacity: 1 !important;
+  transform: rotate(0deg) !important;
+}
+
+.search-btn.loading .btn-icon .close-svg {
+  opacity: 0 !important;
+  transform: rotate(90deg) scale(0.5) !important;
+}
+
+.search-btn.loading.searching {
+  background: #3498db;
+  min-width: 100px;
+  padding: 0 20px;
+  border-radius: 8px;
+}
+
+.search-btn.loading.searching .btn-text {
+  opacity: 1;
+  width: auto;
+  margin: 0 0 0 8px;
+  padding: 0;
+}
+
+/* Контролы для телефона */
+.mobile-controls {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Контролы для ПК */
+.desktop-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.controls-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.controls-row .theme-toggle-btn {
+  padding: 8px 20px;
+  background: #f39c12;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.controls-row .theme-toggle-btn:hover {
+  background: #e67e22;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(243, 156, 18, 0.3);
+}
+
+.controls-row .theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.controls-row .theme-toggle-btn.active-theme {
+  background: #27ae60;
+}
+
+.controls-row .mode-selector {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+  min-width: 200px;
+}
+
+.controls-row .mode-selector button {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  max-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.controls-row .mode-selector button.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.controls-row .mode-selector button:hover {
+  background: #e8f4fd;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.controls-row .mode-selector button:active {
+  transform: scale(0.95);
+}
+
+.controls-row .mode-selector button.active:hover {
+  background: #2980b9;
+}
+
+.controls-row .add-theme-btn {
+  padding: 8px 16px;
+  background: #f39c12;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.controls-row .add-theme-btn:hover {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.controls-row .add-theme-btn:active {
+  transform: scale(0.95);
+}
+
+.controls-row .add-theme-btn.visible {
+  display: flex;
+}
+
+.controls-row .add-pos-btn {
+  padding: 8px 16px;
+  background: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.controls-row .add-pos-btn:hover {
+  background: #7d3c98;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
+}
+
+.controls-row .add-pos-btn:active {
+  transform: scale(0.95);
+}
+
+.controls-row .add-pos-btn.visible {
+  display: flex;
+}
+
+.part-of-speech-toggle-btn {
+  padding: 8px 20px;
+  background: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  width: auto;
+}
+
+.part-of-speech-toggle-btn:hover {
+  background: #7d3c98;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
+}
+
+.part-of-speech-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.part-of-speech-toggle-btn.active-pos {
+  background: #27ae60;
+}
+
+.theme-row {
+  display: none;
+  animation: slideDown 0.3s ease;
+  width: 100%;
+}
+
+.theme-row.active {
+  display: block;
+}
+
+.part-of-speech-row {
+  display: none;
+  animation: slideDown 0.3s ease;
+  width: 100%;
+}
+
+.part-of-speech-row.active {
+  display: block;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.theme-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.theme-input-wrapper input {
+  width: 100%;
+  padding: 12px 45px 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+  background: #fafafa;
+}
+
+.theme-input-wrapper input:focus {
+  border-color: #f39c12;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+}
+
+.theme-input-wrapper .theme-clear-input-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  display: none;
+  color: #95a5a6;
+  line-height: 1;
+  z-index: 5;
+}
+
+.theme-input-wrapper .theme-clear-input-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.theme-input-wrapper .theme-clear-input-btn:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.theme-input-wrapper .theme-clear-input-btn.visible {
+  display: block;
+}
+
+.theme-dropdown {
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  border: 2px solid #f39c12;
+  border-radius: 8px;
+  margin-top: 5px;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideDown 0.2s ease;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+}
+
+.theme-dropdown.active {
+  display: block;
+}
+
+.theme-dropdown .theme-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* Скрываем скроллбар */
+.theme-dropdown .theme-item::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
+.theme-dropdown .theme-item {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.theme-dropdown .theme-item:hover {
+  background: #fef9e7;
+  transform: translateX(4px);
+}
+
+.theme-dropdown .theme-item:active {
+  background: #fdebd0;
+}
+
+.theme-dropdown .theme-item:last-child {
+  border-bottom: none;
+}
+
+.theme-dropdown .theme-item .theme-gr,
+.theme-dropdown .theme-item .theme-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-right: 12px; /* добавить отступ справа */
+}
+
+.theme-dropdown .theme-item .theme-actions {
+  display: none;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 8px 0 16px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.theme-dropdown .theme-item .theme-actions.visible {
+  display: flex;
+}
+
+.theme-dropdown .theme-item .theme-actions button {
+  padding: 8px 12px; /* увеличил padding */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px; /* увеличил шрифт */
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px; /* минимальная ширина */
+  min-height: 36px; /* минимальная высота */
+}
+
+.theme-dropdown .theme-item .theme-actions button svg {
+  width: 20px; /* увеличил иконку */
+  height: 20px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-edit-btn {
+  background: #f39c12;
+  color: white;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-edit-btn:hover {
+  background: #e67e22;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.theme-dropdown .theme-item .theme-actions .theme-delete-btn:hover {
+  background: #c0392b;
+}
+
+.part-of-speech-input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.part-of-speech-input-wrapper input {
+  width: 100%;
+  padding: 12px 45px 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+  background: #fafafa;
+}
+
+.part-of-speech-input-wrapper input:focus {
+  border-color: #8e44ad;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+}
+
+.part-of-speech-input-wrapper .pos-clear-input-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  display: none;
+  color: #95a5a6;
+  line-height: 1;
+  z-index: 5;
+}
+
+.part-of-speech-input-wrapper .pos-clear-input-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.part-of-speech-input-wrapper .pos-clear-input-btn:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.part-of-speech-input-wrapper .pos-clear-input-btn.visible {
+  display: block;
+}
+
+.part-of-speech-dropdown {
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  border: 2px solid #8e44ad;
+  border-radius: 8px;
+  margin-top: 5px;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideDown 0.2s ease;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+}
+
+.part-of-speech-dropdown.active {
+  display: block;
+}
+
+.part-of-speech-dropdown .pos-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+.part-of-speech-dropdown .pos-item::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
+.part-of-speech-dropdown .pos-item {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.part-of-speech-dropdown .pos-item:hover {
+  background: #f4ecf7;
+  transform: translateX(4px);
+}
+
+.part-of-speech-dropdown .pos-item:active {
+  background: #e8daef;
+}
+
+.part-of-speech-dropdown .pos-item:last-child {
+  border-bottom: none;
+}
+
+.part-of-speech-dropdown .pos-item .pos-gr,
+.part-of-speech-dropdown .pos-item .pos-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-right: 12px; /* добавить отступ справа */
+}
+    
+.part-of-speech-dropdown .pos-item .pos-actions {
+  display: none;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 8px 0 16px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions.visible {
+  display: flex;
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions button svg {
+  width: 20px;
+  height: 20px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn {
+  background: #f39c12;
+  color: white;
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn:hover {
+  background: #e67e22;
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.part-of-speech-dropdown .pos-item .pos-actions .pos-delete-btn:hover {
+  background: #c0392b;
+}
+
+.results {
+  margin-top: 20px;
+}
+
+.result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px;
+  margin-bottom: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+  transition: all 0.3s;
+  position: relative;
+  animation: fadeInItem 0.3s ease;
+}
+
+.result-item:hover {
+  background: #f0f7ff;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.result-item .theme {
+  font-size: 14px;
+  color: #7f8c8d;
+  font-weight: 500;
+  text-align: center;
+}
+
+.result-item .word-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.result-item .word-row .word-cell {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  width: 100%;
+}
+
+.result-item .word-row .word-cell-left {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.result-item .word-row .word-cell-center {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.result-item .word-row .word-cell-right {
+  display: none;
+}
+
+.result-item .word-row .word-gr {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  word-break: break-word;
+  flex: 1;
+}
+
+.result-item .word-row .word-ru {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  word-break: break-word;
+  flex: 1;
+}
+
+.result-item .word-row .copy-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.3s;
+  color: #95a5a6;
+  opacity: 0.5;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.result-item:hover .copy-btn {
+  opacity: 1;
+}
+
+.result-item .word-row .copy-btn:hover {
+  background: #ecf0f1;
+  color: #2c3e50;
+  transform: scale(1.1);
+}
+
+.result-item .word-row .copy-btn:active {
+  transform: scale(0.9);
+}
+
+.result-item .word-row .copy-btn.copied {
+  color: #27ae60;
+}
+
+.result-item .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.result-item .actions button {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 16px;
+}
+
+.result-item .actions button svg {
+  width: 20px;
+  height: 20px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
+
+.result-item .actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.result-item .actions button:active {
+  transform: scale(0.95);
+}
+
+.btn-edit {
+  background: #f39c12;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #e67e22;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+.no-results {
+  text-align: center;
+  color: #95a5a6;
+  font-size: 16px;
+  padding: 40px 20px;
+  animation: fadeInItem 0.3s ease;
+}
+
+.error {
+  color: #e74c3c;
+  text-align: center;
+  padding: 20px;
+  background: #fde8e8;
+  border-radius: 8px;
+  animation: fadeInItem 0.3s ease;
+}
+
+.success {
+  color: #27ae60;
+  text-align: center;
+  padding: 20px;
+  background: #e8f8ed;
+  border-radius: 8px;
+  animation: fadeInItem 0.3s ease;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 18px;
+  color: #3498db;
+}
+
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+.result-info {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.progress-container {
+  display: none;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.progress-container.active {
+  display: block;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-bar .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.progress-text .percent {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.toast {
+  position: fixed;
+  top: calc(20px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 2000;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.scroll-top-btn {
+  position: fixed;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  right: calc(20px + env(safe-area-inset-right));
+  bottom: calc(20px + constant(safe-area-inset-bottom));
+  right: calc(20px + constant(safe-area-inset-right));
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #3498db;
+  color: white;
+  border: none;
+  font-size: 28px;
+  font-weight: 1000;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+  transition: all 0.3s;
+  display: none;
+  z-index: 999;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.scroll-top-btn.visible {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+  animation: bounceIn 0.5s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.scroll-top-btn:hover {
+  background: #2980b9;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+}
+
+.scroll-top-btn:active {
+  transform: scale(0.9);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s ease;
+  margin-top: env(safe-area-inset-top);
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content .modal-icon {
+  text-align: center;
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 24px;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #95a5a6;
+  transition: all 0.3s;
+  background: none;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content .close:hover {
+  background: #f0f0f0;
+  color: #2c3e50;
+  transform: rotate(90deg);
+}
+
+.modal-message {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s;
+  background: #fafafa;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group .duplicate-warning {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+
+.form-group .duplicate-warning.visible {
+  display: block;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.form-actions button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 80px;
+}
+
+.form-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.form-actions button:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #2980b9, #1a6e9e);
+}
+
+.btn-secondary {
+  background: #ecf0f1;
+  color: #555;
+}
+
+.btn-secondary:hover {
+  background: #dde1e3;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #27ae60, #229954);
+  color: white;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #229954, #1a7a3e);
+}
+
+.btn-danger-modal {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.btn-danger-modal:hover {
+  background: linear-gradient(135deg, #c0392b, #962d22);
+}
+
+.password-input {
+  position: relative;
+}
+
+.password-input input {
+  padding-right: 50px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.password-toggle:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.password-toggle:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.theme-datalist {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.theme-datalist.active {
+  display: block;
+}
+
+.theme-datalist .datalist-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theme-datalist .datalist-item:hover {
+  background: #e8f4fd;
+}
+
+.theme-datalist .datalist-item:last-child {
+  border-bottom: none;
+}
+
+.pos-datalist {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #8e44ad;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.pos-datalist.active {
+  display: block;
+}
+
+.pos-datalist .datalist-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pos-datalist .datalist-item:hover {
+  background: #f4ecf7;
+}
+
+.pos-datalist .datalist-item:last-child {
+  border-bottom: none;
+}
+
+/* Десктопная версия */
+@media (min-width: 768px) {
+  #app {
+    padding: 30px;
+  }
+  
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .result-item {
+    margin-bottom: 0;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .result-item .word-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .result-item .word-row .word-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 50%;
+  }
+
+  .result-item .word-row .word-cell-left {
+    justify-content: flex-start;
+  }
+
+  .result-item .word-row .word-cell-center {
+    justify-content: flex-start;
+  }
+
+  .result-item .word-row .word-cell-right {
+    display: none;
+  }
+
+  .result-item .word-row .word-gr {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2c3e50;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .result-item .word-row .word-ru {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2c3e50;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .result-item .word-row .copy-btn {
+    opacity: 0.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: all 0.3s;
+    color: #95a5a6;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .result-item:hover .copy-btn {
+    opacity: 1;
+  }
+
+  .result-item .word-row .copy-btn:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+    transform: scale(1.1);
+  }
+
+  .result-item .word-row .copy-btn:active {
+    transform: scale(0.9);
+  }
+
+  .result-item .word-row .copy-btn.copied {
+    color: #27ae60;
+  }
+  
+  .result-item .actions button {
+    font-size: 16px;
+    padding: 6px 14px;
+  }
+  
+  .result-item .actions button svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .controls-row .theme-toggle-btn,
+  .controls-row .part-of-speech-toggle-btn,
+  .controls-row .add-theme-btn,
+  .controls-row .add-pos-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  
+  .controls-row .mode-selector button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  
+  .search-btn .btn-text {
+    display: inline;
+  }
+  
+  .desktop-controls {
+    display: flex;
+  }
+  
+  .mobile-controls {
+    display: none !important;
+  }
+  
+  /* На ПК кнопки действий появляются при наведении */
+  .theme-dropdown .theme-item .theme-actions {
+    display: none;
+  }
+  
+  .theme-dropdown .theme-item:hover .theme-actions {
+    display: flex;
+  }
+  
+  .part-of-speech-dropdown .pos-item .pos-actions {
+    display: none;
+  }
+  
+  .part-of-speech-dropdown .pos-item:hover .pos-actions {
+    display: flex;
+  }
+}
+
+/* Мобильная версия */
+@media (max-width: 767px) {
+  #app {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .search-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .search-input-wrapper {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
+
+  .search-input-wrapper input {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px 50px 14px 16px;
+  }
+
+  .search-input-wrapper .clear-btn {
+    right: 12px;
+    font-size: 22px;
+  }
+
+  .search-btn {
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  .search-btn .btn-text {
+    display: none;
+  }
+  
+  .search-btn.loading.searching {
+    min-width: 48px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  
+  .search-btn.loading.searching .btn-text {
+    display: none;
+  }
+  
+  .desktop-controls {
+    display: none !important;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .mobile-controls .mode-selector {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .mobile-controls .mode-selector button {
+    flex: 1;
+    max-width: unset;
+    font-size: 14px;
+    padding: 8px 12px;
+    min-width: 40px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: #333;
+  }
+  
+  .mobile-controls .mode-selector button.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+  }
+
+  .controls-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .controls-row .theme-toggle-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+
+  .controls-row .add-theme-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+
+  .controls-row .add-pos-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+
+  .controls-row .part-of-speech-toggle-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+
+  .theme-row {
+    width: 100%;
+  }
+
+  .theme-input-wrapper {
+    width: 100%;
+  }
+
+  .theme-input-wrapper input {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px 50px 14px 16px;
+  }
+
+  .theme-input-wrapper .theme-clear-input-btn {
+    right: 12px;
+    font-size: 22px;
+  }
+
+  .part-of-speech-row {
+    width: 100%;
+  }
+
+  .part-of-speech-input-wrapper {
+    width: 100%;
+  }
+
+  .part-of-speech-input-wrapper input {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px 50px 14px 16px;
+  }
+
+  .part-of-speech-input-wrapper .pos-clear-input-btn {
+    right: 12px;
+    font-size: 22px;
+  }
+
+  .result-item .word-row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .result-item .word-row .word-cell {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .result-item .word-row .word-cell-left {
+    justify-content: flex-start;
+  }
+
+  .result-item .word-row .word-cell-center {
+    justify-content: flex-start;
+  }
+
+  .result-item .word-row .word-cell-right {
+    display: none;
+  }
+
+  .result-item .word-row .word-gr {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    flex-shrink: 1;
+    min-width: 0;
+    word-break: break-word;
+  }
+
+  .result-item .word-row .word-ru {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    flex-shrink: 1;
+    min-width: 0;
+    word-break: break-word;
+  }
+
+  .result-item .word-row .copy-btn {
+    font-size: 16px;
+    padding: 4px 8px;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #95a5a6;
+    line-height: 1;
+    min-width: 32px;
+    opacity: 0.7;
+  }
+
+  .result-item .word-row .copy-btn:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+    transform: scale(1.1);
+  }
+
+  .result-item .word-row .copy-btn:active {
+    transform: scale(0.9);
+  }
+
+  .result-item .word-row .copy-btn.copied {
+    color: #27ae60;
+  }
+
+  .result-item .actions {
+    display: flex !important;
+    gap: 8px;
+    margin-top: 10px;
+    justify-content: flex-end;
+  }
+
+  .result-item .actions button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .result-item .actions button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .result-item .word-cell-right {
+    display: none !important;
+  }
+
+  /* На телефоне кнопки действий всегда видны и зафиксированы справа */
+  .theme-dropdown .theme-item .theme-actions {
+    display: flex !important;
+    position: sticky;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 8px 0 20px; /* больше отступ слева */
+    gap: 10px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: -8px 0 12px rgba(255, 255, 255, 0.8);
+  }
+  
+  .theme-dropdown .theme-item .theme-actions button {
+    padding: 10px 14px;
+    font-size: 16px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .theme-dropdown .theme-item .theme-actions button svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .part-of-speech-dropdown .pos-item .pos-actions {
+    display: flex !important;
+    position: sticky;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 8px 0 20px;
+    gap: 10px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: -8px 0 12px rgba(255, 255, 255, 0.8);
+  }
+
+  .part-of-speech-dropdown .pos-item .pos-actions button {
+    padding: 10px 14px;
+    font-size: 16px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .part-of-speech-dropdown .pos-item .pos-actions button svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .modal .form-actions {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+  }
+  
+  .modal .form-actions button {
+    min-width: 80px;
+    flex: 1;
+  }
+
+  .modal-content {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .scroll-top-btn {
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+}
+
+.flag-icon {
+  width: 22px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* SVG иконка "Авто" */
+.auto-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  color: currentColor;
+}
+
+.auto-icon use {
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Активная кнопка — белая иконка */
+.mode-selector button.active .auto-icon use {
+  stroke: white;
+}
+
+/* Неактивная кнопка — темная иконка */
+.mode-selector button:not(.active) .auto-icon use {
+  stroke: #333;
+}
+
+.mode-selector button.active .auto-icon {
+  color: white;
+}
+
+.mode-selector button:not(.active) .auto-icon {
+  color: #333;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: #555;
+  stroke-width: 2;
+  fill: none;
+  transition: stroke 0.2s;
+}
+
+.icon-btn:hover {
+  background: #f0f0f0;
+}
+
+.icon-btn:hover svg {
+  stroke: #2c3e50;
+}
+
+.icon-btn.icon-edit:hover svg {
+  stroke: #f39c12;
+}
+
+.icon-btn.icon-delete:hover svg {
+  stroke: #e74c3c;
+}
+  </style>
+</head>
+<body>
+  <!-- SVG иконки и флаги -->
+  <svg style="display:none;">
+    <defs>
+      <symbol id="icon-auto" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+      <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2" fill="none"/>
+      <line x1="12" y1="5" x2="12" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="12" y1="17" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="5" y1="12" x2="7" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="17" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="7.05" y1="7.05" x2="8.46" y2="8.46" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="15.54" y1="15.54" x2="16.95" y2="16.95" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="7.05" y1="16.95" x2="8.46" y2="15.54" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="15.54" y1="8.46" x2="16.95" y2="7.05" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+      
+      <symbol id="flag-gr" viewBox="0 0 24 16">
+        <rect width="24" height="16" fill="#0d5eaf"/>
+        <rect y="0" width="24" height="2" fill="white"/>
+        <rect y="4" width="24" height="2" fill="white"/>
+        <rect y="8" width="24" height="2" fill="white"/>
+        <rect y="12" width="24" height="2" fill="white"/>
+        <rect x="0" y="0" width="8" height="6" fill="white"/>
+        <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+        <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+      </symbol>
+      
+      <symbol id="flag-ru" viewBox="0 0 24 16">
+  <rect width="24" height="16" fill="white"/>
+  <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+  <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+</symbol>
+      
+      <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </symbol>
+      
+      <symbol id="icon-delete" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <line x1="10" y1="11" x2="10" y2="17"/>
+        <line x1="14" y1="11" x2="14" y2="17"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div id="app">
+    <h1 id="headerTitle" onclick="handleTitleClick()">
+      📖 Словарь
+      <span class="version-badge" id="versionBadge">Загрузка...</span>
+      <div class="header-buttons" id="headerButtons">
+        <!-- Кнопки будут динамически обновляться -->
+      </div>
+    </h1>
+    
+    <div class="search-section">
+      <!-- Строка поиска: поле + анимированная кнопка -->
+      <div class="search-row">
+        <div class="search-input-wrapper">
+          <input type="text" id="searchInput" placeholder="Введите слово для поиска..." autofocus>
+          <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        </div>
+        <button class="search-btn" id="searchBtn">
+          <span class="btn-icon">
+            <svg class="search-svg" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="16.5" y1="16.5" x2="21" y2="21"/>
+            </svg>
+            <svg class="close-svg" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </span>
+          <span class="btn-text">Найти</span>
+        </button>
+      </div>
+      
+      <!-- Контролы для ПК -->
+      <div class="desktop-controls">
+        <!-- Темы + языки -->
+        <div class="controls-row">
+          <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeSection()">
+            📂 Темы
+          </button>
+          <button class="add-theme-btn" id="addThemeBtn" onclick="openAddThemeModal()">
+            ➕ Добавить тему
+          </button>
+          <div class="mode-selector" id="modeSelector">
+            <button id="modeGreek" data-mode="greek">
+              <svg class="flag-icon" viewBox="0 0 24 16">
+                <rect width="24" height="16" fill="#0d5eaf"/>
+                <rect y="0" width="24" height="2" fill="white"/>
+                <rect y="4" width="24" height="2" fill="white"/>
+                <rect y="8" width="24" height="2" fill="white"/>
+                <rect y="12" width="24" height="2" fill="white"/>
+                <rect x="0" y="0" width="8" height="6" fill="white"/>
+                <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+                <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+              </svg>
+            </button>
+            <button id="modeAuto" class="active" data-mode="auto">
+  <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
+    <use href="#icon-auto"/>
+  </svg>
+</button>
+            <button id="modeRussian" data-mode="russian">
+              <svg class="flag-icon" viewBox="0 0 24 16">
+                <rect width="24" height="16" fill="white"/>
+                <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+                <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Части речи -->
+        <div class="controls-row">
+          <button class="part-of-speech-toggle-btn" id="posToggleBtn" onclick="togglePosSection()">
+            📚 Части речи
+          </button>
+          <button class="add-pos-btn" id="addPosBtn" onclick="openAddPosModal()">
+            ➕ Добавить
+          </button>
+        </div>
+      </div>
+      
+      <!-- Контролы для телефона -->
+      <div class="mobile-controls">
+        <!-- Языки -->
+        <div class="mode-selector" id="modeSelectorMobile">
+          <button id="modeGreekMobile" data-mode="greek">
+            <svg class="flag-icon" viewBox="0 0 24 16">
+              <rect width="24" height="16" fill="#0d5eaf"/>
+              <rect y="0" width="24" height="2" fill="white"/>
+              <rect y="4" width="24" height="2" fill="white"/>
+              <rect y="8" width="24" height="2" fill="white"/>
+              <rect y="12" width="24" height="2" fill="white"/>
+              <rect x="0" y="0" width="8" height="6" fill="white"/>
+              <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+              <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+            </svg>
+          </button>
+          <button id="modeAutoMobile" class="active" data-mode="auto">
+  <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
+    <use href="#icon-auto"/>
+  </svg>
+</button>
+          <button id="modeRussianMobile" data-mode="russian">
+            <svg class="flag-icon" viewBox="0 0 24 16">
+              <rect width="24" height="16" fill="white"/>
+              <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+              <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Темы -->
+        <div class="controls-row">
+          <button class="theme-toggle-btn" id="themeToggleBtnMobile" onclick="toggleThemeSection()">
+            📂 Темы
+          </button>
+          <button class="add-theme-btn" id="addThemeBtnMobile" onclick="openAddThemeModal()">
+            ➕ Добавить тему
+          </button>
+        </div>
+        
+        <!-- Части речи -->
+        <div class="controls-row">
+          <button class="part-of-speech-toggle-btn" id="posToggleBtnMobile" onclick="togglePosSection()">
+            📚 Части речи
+          </button>
+          <button class="add-pos-btn" id="addPosBtnMobile" onclick="openAddPosModal()">
+            ➕ Добавить
+          </button>
+        </div>
+      </div>
+      
+      <div class="theme-row" id="themeSection">
+        <div class="theme-input-wrapper">
+          <input type="text" id="themeInput" placeholder="Введите тему для поиска..." oninput="filterThemes()" onfocus="filterThemes()">
+          <button class="theme-clear-input-btn" id="themeClearInputBtn" onclick="clearThemeInput(event)">✕</button>
+          <div class="theme-dropdown" id="themeDropdown"></div>
+        </div>
+      </div>
+      
+      <div class="part-of-speech-row" id="posSection">
+        <div class="part-of-speech-input-wrapper">
+          <input type="text" id="posInput" placeholder="Введите часть речи..." oninput="filterPos()" onfocus="filterPos()">
+          <button class="pos-clear-input-btn" id="posClearInputBtn" onclick="clearPosInput(event)">✕</button>
+          <div class="part-of-speech-dropdown" id="posDropdown"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Индикатор прогресса загрузки -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-text">
+        Загрузка данных... <span class="percent" id="progressPercent">0</span>%
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+    
+    <div id="resultsContainer">
+      <div class="no-results">Введите слово для поиска или выберите тему</div>
+    </div>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+  
+  <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">⬆</button>
+  
+  <!-- Модальное окно для входа -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('loginModal')">&times;</button>
+      <div class="modal-icon">🔐</div>
+      <h2>Вход в режим редактора</h2>
+      <div id="loginMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Введите пароль редактора</label>
+        <div class="password-input">
+          <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter') login()">
+          <button class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('loginModal')">Отмена</button>
+        <button class="btn-success" onclick="login()">🔓 Войти</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для добавления/редактирования слова -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('editModal')">&times;</button>
+      <div class="modal-icon" id="editIcon">➕</div>
+      <h2 id="modalTitle">Добавить слово</h2>
+      <div id="editMessage" class="modal-message"></div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Слово (греческий)</label>
+        <input type="text" id="editWordGr" placeholder="π.χ. Δουλειά" oninput="checkDuplicate()">
+        <div class="duplicate-warning" id="duplicateWordGr">⚠️ Такое слово уже существует</div>
+      </div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Слово (русский)</label>
+        <input type="text" id="editWordRu" placeholder="например: Работа" oninput="checkDuplicate()">
+        <div class="duplicate-warning" id="duplicateWordRu">⚠️ Такое слово уже существует</div>
+      </div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Тема</label>
+        <input type="text" id="editThemeGr" placeholder="π.χ. Εργασία (необязательно)" oninput="filterThemeDatalist()" onfocus="filterThemeDatalist()" autocomplete="off">
+        <div class="theme-datalist" id="themeDatalist"></div>
+      </div>
+      
+      <div class="form-group" style="position: relative;">
+        <label>Часть речи</label>
+        <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό (необязательно)" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
+        <div class="pos-datalist" id="posDatalist"></div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('editModal')">Отмена</button>
+        <button class="btn-primary" id="saveBtn">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для добавления/редактирования темы -->
+  <div id="themeEditModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('themeEditModal')">&times;</button>
+      <div class="modal-icon" id="themeEditIcon">📂</div>
+      <h2 id="themeEditTitle">Добавить тему</h2>
+      <div id="themeEditMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Тема (греческий)</label>
+        <input type="text" id="editThemeGrOnly" placeholder="π.χ. Εργασία">
+        <div class="duplicate-warning" id="duplicateThemeGrOnly">⚠️ Такая тема уже существует</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Тема (русский)</label>
+        <input type="text" id="editThemeRuOnly" placeholder="например: Работа">
+        <div class="duplicate-warning" id="duplicateThemeRuOnly">⚠️ Такая тема уже существует</div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('themeEditModal')">Отмена</button>
+        <button class="btn-primary" id="saveThemeBtn">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для добавления/редактирования части речи -->
+  <div id="posEditModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('posEditModal')">&times;</button>
+      <div class="modal-icon" id="posEditIcon">📚</div>
+      <h2 id="posEditTitle">Добавить часть речи</h2>
+      <div id="posEditMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Часть речи (греческий)</label>
+        <input type="text" id="editPosGrOnly" placeholder="π.χ. Ουσιαστικό">
+        <div class="duplicate-warning" id="duplicatePosGrOnly">⚠️ Такая часть речи уже существует</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Часть речи (русский)</label>
+        <input type="text" id="editPosRuOnly" placeholder="например: Существительное">
+        <div class="duplicate-warning" id="duplicatePosRuOnly">⚠️ Такая часть речи уже существует</div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('posEditModal')">Отмена</button>
+        <button class="btn-primary" id="savePosBtn">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для подтверждения удаления -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('deleteModal')">&times;</button>
+      <div class="modal-icon">🗑️</div>
+      <h2>Удаление</h2>
+      <div id="deleteMessage" class="modal-message"></div>
+      <p style="text-align: center; color: #555; margin-bottom: 20px;">
+        Вы уверены, что хотите удалить это?<br>
+        <small style="color: #95a5a6;">Это действие нельзя отменить</small>
+      </p>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('deleteModal')">Отмена</button>
+        <button class="btn-danger-modal" onclick="confirmDelete()">🗑️ Удалить</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для смены пароля -->
+  <div id="adminModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('adminModal')">&times;</button>
+      <div class="modal-icon">🔑</div>
+      <h2>Смена пароля</h2>
+      <div id="adminMessage" class="modal-message"></div>
+      
+      <div class="form-group">
+        <label>Текущий пароль</label>
+        <div class="password-input">
+          <input type="password" id="oldPassword" placeholder="Введите текущий пароль">
+          <button class="password-toggle" onclick="togglePassword('oldPassword')">👁️</button>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Новый пароль (мин. 4 символа)</label>
+        <div class="password-input">
+          <input type="password" id="newPassword" placeholder="Введите новый пароль">
+          <button class="password-toggle" onclick="togglePassword('newPassword')">👁️</button>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('adminModal')">Отмена</button>
+        <button class="btn-danger-modal" onclick="changePassword()">🔄 Сменить пароль</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно для подтверждения выхода -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal('logoutModal')">&times;</button>
+      <div class="modal-icon">🚪</div>
+      <h2>Выход из режима редактора</h2>
+      <div id="logoutMessage" class="modal-message"></div>
+      <p style="text-align: center; color: #555; margin-bottom: 20px;">
+        Вы уверены, что хотите выйти из режима редактора?<br>
+        <small style="color: #95a5a6;">Редактирование слов станет недоступно</small>
+      </p>
+      
+      <div class="form-actions">
+        <button class="btn-secondary" onclick="closeModal('logoutModal')">Остаться</button>
+        <button class="btn-danger-modal" onclick="logout()">🚪 Выйти</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // ========== НАСТРОЙКИ ==========
+    // ЗАМЕНИТЕ ЭТОТ URL НА ВАШ!
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsF633XdFiInhTqFLNUp3Q98sp6Z7AXlVeyvKhr8xaR3yKw2FRdVLBoH0k8R3eLHiapQ/exec';
+    const PAGE_SIZE = 100;
+    
+    // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
+    let currentMode = 'auto';
+    let editingId = null;
+    let isEditor = false;
+    let allData = null;
+    let allThemes = [];
+    let allPos = [];
+    let selectedTheme = '';
+    let selectedPos = '';
+    let themeDropdownVisible = false;
+    let posDropdownVisible = false;
+    let currentVersion = '';
+    let deleteTarget = null;
+    let deleteType = 'word';
+    let isSearchingNow = false;
+    let isLoading = false;
+    let themeEditingTarget = null;
+    let posEditingTarget = null;
+    let isShowingAll = false;
+    let isSearching = false;
+    let searchTimeout = null;
+    
+    // ========== КНОПКА ПОИСКА ==========
+    const searchBtn = document.getElementById('searchBtn');
+    
+    function toggleSearchButton(state) {
+      if (state === 'searching') {
+        isSearching = true;
+        searchBtn.classList.add('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Поиск...';
+      } else if (state === 'cancel') {
+        isSearching = false;
+        searchBtn.classList.remove('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        clearTimeout(searchTimeout);
+      } else if (state === 'done') {
+        isSearching = false;
+        searchBtn.classList.remove('searching', 'loading');
+        searchBtn.querySelector('.btn-text').textContent = 'Готово!';
+        setTimeout(() => {
+          searchBtn.querySelector('.btn-text').textContent = 'Найти';
+        }, 1500);
+      }
+    }
+    
+    // ========== JSONP ВЫЗОВЫ GAS ==========
+    function callGAS(action, params) {
+      return new Promise((resolve, reject) => {
+        const callback = 'callback_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        
+        window[callback] = function(data) {
+          delete window[callback];
+          resolve(data);
+        };
+        
+        const script = document.createElement('script');
+        const url = new URL(GAS_URL);
+        url.searchParams.set('action', action);
+        url.searchParams.set('callback', callback);
+        
+        if (params) {
+          Object.keys(params).forEach(key => {
+            url.searchParams.set(key, params[key]);
+          });
+        }
+        
+        script.src = url.toString();
+        script.onerror = function() {
+          delete window[callback];
+          reject(new Error('Ошибка соединения с сервером'));
+        };
+        
+        const timeout = setTimeout(() => {
+          delete window[callback];
+          reject(new Error('Превышено время ожидания ответа'));
+        }, 30000);
+        
+        const originalCallback = window[callback];
+        window[callback] = function(data) {
+          clearTimeout(timeout);
+          originalCallback(data);
+        };
+        
+        document.head.appendChild(script);
+      });
+    }
+    
+    // ========== TOAST УВЕДОМЛЕНИЕ ==========
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toast.timeout);
+      toast.timeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+    
+    // ========== ИНДИКАТОР ПРОГРЕССА ==========
+    function showProgress(percent) {
+      const container = document.getElementById('progressContainer');
+      const fill = document.getElementById('progressFill');
+      const text = document.getElementById('progressPercent');
+      
+      container.classList.add('active');
+      fill.style.width = percent + '%';
+      text.textContent = percent;
+      
+      if (percent >= 100) {
+        setTimeout(() => {
+          container.classList.remove('active');
+        }, 500);
+      }
+    }
+    
+    // ========== БЛОКИРОВКА СКРОЛЛА ==========
+    function toggleBodyScroll(disable) {
+      if (disable) {
+        document.body.classList.add('modal-open');
+      } else {
+        document.body.classList.remove('modal-open');
+      }
+    }
+    
+    // ========== ЗАГРУЗКА ДАННЫХ ==========
+    async function loadData() {
+      if (isLoading) return;
+      isLoading = true;
+      
+      document.getElementById('resultsContainer').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <br>Загрузка данных...
+        </div>
+      `;
+      
+      try {
+        const meta = await callGAS('getAll');
+        if (meta.error) {
+          throw new Error(meta.error);
+        }
+        
+        currentVersion = meta.version;
+        allThemes = meta.themes || [];
+        allPos = meta.pos || [];
+        document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+        
+        const totalPages = meta.totalPages || 0;
+        const totalWords = meta.total || 0;
+        
+        if (totalWords === 0) {
+          allData = { words: [], themes: allThemes, pos: allPos, version: currentVersion, total: 0 };
+          isLoading = false;
+          showInitialMessage();
+          return;
+        }
+        
+        let loadedPages = 0;
+        const pagePromises = [];
+        
+        for (let page = 1; page <= totalPages; page++) {
+          const promise = loadPage(page, PAGE_SIZE).then(data => {
+            loadedPages++;
+            const progress = Math.round((loadedPages / totalPages) * 100);
+            showProgress(progress);
+            return data;
+          });
+          pagePromises.push(promise);
+        }
+        
+        const pagesData = await Promise.all(pagePromises);
+        
+        let allWords = [];
+        pagesData.forEach(pageData => {
+          if (pageData.words) {
+            allWords = allWords.concat(pageData.words);
+          }
+        });
+        
+        allData = {
+          words: allWords,
+          themes: allThemes,
+          pos: allPos,
+          version: currentVersion,
+          total: totalWords,
+          totalPages: totalPages
+        };
+        
+        try {
+          localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          localStorage.setItem('dictionary_version', currentVersion);
+        } catch (e) {}
+        
+        isLoading = false;
+        showInitialMessage();
+        return allData;
+        
+      } catch (error) {
+        isLoading = false;
+        console.error('Ошибка загрузки данных:', error);
+        
+        try {
+          const cached = localStorage.getItem('dictionary_data');
+          if (cached) {
+            allData = JSON.parse(cached);
+            allThemes = allData.themes || [];
+            allPos = allData.pos || [];
+            currentVersion = allData.version || '0';
+            document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+            showInitialMessage();
+            return allData;
+          }
+        } catch (e) {}
+        
+        throw error;
+      }
+    }
+    
+    function loadPage(page, pageSize) {
+      return new Promise((resolve, reject) => {
+        callGAS('getPage', { page: page, pageSize: pageSize })
+          .then(data => {
+            if (data.error) {
+              reject(new Error(data.error));
+            } else {
+              resolve(data);
+            }
+          })
+          .catch(reject);
+      });
+    }
+    
+    // ========== ПРОВЕРКА ВЕРСИИ ==========
+    async function checkVersion() {
+      try {
+        const data = await callGAS('getVersion');
+        const serverVersion = data.version || '0';
+        const cachedVersion = localStorage.getItem('dictionary_version') || '0';
+        
+        if (serverVersion !== cachedVersion) {
+          return true;
+        }
+        
+        const cached = localStorage.getItem('dictionary_data');
+        if (cached) {
+          try {
+            allData = JSON.parse(cached);
+            allThemes = allData.themes || [];
+            allPos = allData.pos || [];
+            currentVersion = allData.version || '0';
+            document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+            return false;
+          } catch (e) {
+            return true;
+          }
+        }
+        
+        return true;
+        
+      } catch (error) {
+        console.warn('Ошибка проверки версии:', error);
+        return false;
+      }
+    }
+    
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    document.addEventListener('DOMContentLoaded', async function() {
+      const savedStatus = localStorage.getItem('dictionary_editor');
+      if (savedStatus === 'true') {
+        isEditor = true;
+      }
+      
+      try {
+        const needUpdate = await checkVersion();
+        
+        if (needUpdate) {
+          await loadData();
+        } else {
+          showInitialMessage();
+        }
+        
+        updateHeaderButtons();
+        updateEditorUI();
+        setupEventListeners();
+        updateAddButtons();
+        
+      } catch (error) {
+        console.error('Ошибка инициализации:', error);
+        document.getElementById('resultsContainer').innerHTML = 
+          `<div class="error">❌ Ошибка загрузки данных: ${error.message}</div>`;
+      }
+      
+      window.addEventListener('scroll', function() {
+        const btn = document.getElementById('scrollTopBtn');
+        if (window.scrollY > 300) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+      });
+    });
+    
+    function showInitialMessage() {
+      const container = document.getElementById('resultsContainer');
+      if (allData && allData.total > 0) {
+        container.innerHTML = `
+          <div class="no-results">
+            📚 Введите слово для поиска или выберите тему
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="no-results">
+            📚 Словарь пуст<br>
+            <small>Добавьте слова через режим редактора</small>
+          </div>
+        `;
+      }
+    }
+    
+    // ========== ОБНОВЛЕНИЕ КЕША ==========
+    async function refreshCache() {
+      try {
+        await loadData();
+        return true;
+      } catch (error) {
+        console.error('Ошибка обновления кеша:', error);
+        return false;
+      }
+    }
+    
+    // ========== УПРАВЛЕНИЕ ТЕМАМИ ==========
+    function toggleThemeSection() {
+      const section = document.getElementById('themeSection');
+      const input = document.getElementById('themeInput');
+      const btn = document.getElementById('themeToggleBtn');
+      const btnMobile = document.getElementById('themeToggleBtnMobile');
+      
+      const posSection = document.getElementById('posSection');
+      const posBtn = document.getElementById('posToggleBtn');
+      const posBtnMobile = document.getElementById('posToggleBtnMobile');
+      if (posSection.classList.contains('active')) {
+        posSection.classList.remove('active');
+        posBtn.classList.remove('active-pos');
+        posBtnMobile.classList.remove('active-pos');
+        document.getElementById('posDropdown').classList.remove('active');
+        posDropdownVisible = false;
+      }
+      
+      section.classList.toggle('active');
+      btn.classList.toggle('active-theme');
+      if (btnMobile) btnMobile.classList.toggle('active-theme');
+      
+      if (section.classList.contains('active')) {
+        input.focus();
+        showAllThemes();
+      } else {
+        document.getElementById('themeDropdown').classList.remove('active');
+        themeDropdownVisible = false;
+      }
+    }
+    
+    function showAllThemes() {
+      const dropdown = document.getElementById('themeDropdown');
+      const isEditorMode = isEditor;
+      
+      if (allThemes.length === 0) {
+        dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+      } else {
+        dropdown.innerHTML = allThemes.map(t => `
+          <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <span class="theme-gr">${t.gr}</span>
+            <span class="theme-ru">${t.ru}</span>
+            ${isEditorMode ? `<div class="theme-actions visible">
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-edit"/></svg>
+              </button>
+              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-delete"/></svg>
+              </button>
+            </div>` : ''}
+          </div>
+        `).join('');
+      }
+      
+      dropdown.classList.add('active');
+      themeDropdownVisible = true;
+    }
+    
+    function filterThemes() {
+      const input = document.getElementById('themeInput');
+      const dropdown = document.getElementById('themeDropdown');
+      const clearBtn = document.getElementById('themeClearInputBtn');
+      const query = input.value.toLowerCase().trim();
+      const isEditorMode = isEditor;
+      
+      if (input.value.length > 0) {
+        clearBtn.classList.add('visible');
+      } else {
+        clearBtn.classList.remove('visible');
+      }
+      
+      const filtered = allThemes.filter(t => 
+        t.gr.toLowerCase().includes(query) || 
+        t.ru.toLowerCase().includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+      } else {
+        dropdown.innerHTML = filtered.map(t => `
+          <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <span class="theme-gr">${t.gr}</span>
+            <span class="theme-ru">${t.ru}</span>
+            ${isEditorMode ? `<div class="theme-actions visible">
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-edit"/></svg>
+              </button>
+              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-delete"/></svg>
+              </button>
+            </div>` : ''}
+          </div>
+        `).join('');
+      }
+      
+      dropdown.classList.add('active');
+      themeDropdownVisible = true;
+    }
+    
+    function selectTheme(gr, ru) {
+      document.getElementById('themeInput').value = gr;
+      document.getElementById('themeClearInputBtn').classList.add('visible');
+      selectedTheme = gr;
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      isShowingAll = false;
+      performSearch();
+    }
+    
+    function clearThemeInput(event) {
+  event.stopPropagation();
+  document.getElementById('themeInput').value = '';
+  document.getElementById('themeClearInputBtn').classList.remove('visible');
+  selectedTheme = '';
+  // Показываем все темы, НЕ закрывая список
+  showAllThemes();
+  document.getElementById('themeInput').focus();
+  // Выполняем поиск с пустой темой
+  performSearch();
+}
+    
+    // ========== УПРАВЛЕНИЕ ЧАСТЯМИ РЕЧИ ==========
+    function togglePosSection() {
+      const section = document.getElementById('posSection');
+      const input = document.getElementById('posInput');
+      const btn = document.getElementById('posToggleBtn');
+      const btnMobile = document.getElementById('posToggleBtnMobile');
+      
+      const themeSection = document.getElementById('themeSection');
+      const themeBtn = document.getElementById('themeToggleBtn');
+      const themeBtnMobile = document.getElementById('themeToggleBtnMobile');
+      if (themeSection.classList.contains('active')) {
+        themeSection.classList.remove('active');
+        themeBtn.classList.remove('active-theme');
+        if (themeBtnMobile) themeBtnMobile.classList.remove('active-theme');
+        document.getElementById('themeDropdown').classList.remove('active');
+        themeDropdownVisible = false;
+      }
+      
+      section.classList.toggle('active');
+      btn.classList.toggle('active-pos');
+      if (btnMobile) btnMobile.classList.toggle('active-pos');
+      
+      if (section.classList.contains('active')) {
+        input.focus();
+        showAllPos();
+      } else {
+        document.getElementById('posDropdown').classList.remove('active');
+        posDropdownVisible = false;
+      }
+    }
+    
+    function showAllPos() {
+      const dropdown = document.getElementById('posDropdown');
+      const isEditorMode = isEditor;
+      
+      if (allPos.length === 0) {
+        dropdown.innerHTML = '<div class="pos-item" style="color: #95a5a6; cursor: default;">Нет частей речи</div>';
+      } else {
+        dropdown.innerHTML = allPos.map(p => `
+          <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+            <span class="pos-gr">${p.gr}</span>
+            <span class="pos-ru">${p.ru}</span>
+            ${isEditorMode ? `<div class="pos-actions visible">
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-edit"/></svg>
+              </button>
+              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-delete"/></svg>
+              </button>
+            </div>` : ''}
+          </div>
+        `).join('');
+      }
+      
+      dropdown.classList.add('active');
+      posDropdownVisible = true;
+    }
+    
+    function filterPos() {
+      const input = document.getElementById('posInput');
+      const dropdown = document.getElementById('posDropdown');
+      const clearBtn = document.getElementById('posClearInputBtn');
+      const query = input.value.toLowerCase().trim();
+      const isEditorMode = isEditor;
+      
+      if (input.value.length > 0) {
+        clearBtn.classList.add('visible');
+      } else {
+        clearBtn.classList.remove('visible');
+      }
+      
+      const filtered = allPos.filter(p => 
+        p.gr.toLowerCase().includes(query) || 
+        p.ru.toLowerCase().includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        dropdown.innerHTML = '<div class="pos-item" style="color: #95a5a6; cursor: default;">Нет частей речи</div>';
+      } else {
+        dropdown.innerHTML = filtered.map(p => `
+          <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+            <span class="pos-gr">${p.gr}</span>
+            <span class="pos-ru">${p.ru}</span>
+            ${isEditorMode ? `<div class="pos-actions visible">
+              <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-edit"/></svg>
+              </button>
+              <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+                <svg><use href="#icon-delete"/></svg>
+              </button>
+            </div>` : ''}
+          </div>
+        `).join('');
+      }
+      
+      dropdown.classList.add('active');
+      posDropdownVisible = true;
+    }
+    
+    function selectPos(gr, ru) {
+      document.getElementById('posInput').value = gr;
+      document.getElementById('posClearInputBtn').classList.add('visible');
+      selectedPos = gr;
+      document.getElementById('posDropdown').classList.remove('active');
+      posDropdownVisible = false;
+      isShowingAll = false;
+      performSearch();
+    }
+    
+    function clearPosInput(event) {
+  event.stopPropagation();
+  document.getElementById('posInput').value = '';
+  document.getElementById('posClearInputBtn').classList.remove('visible');
+  selectedPos = '';
+  // Показываем все части речи, НЕ закрывая список
+  showAllPos();
+  document.getElementById('posInput').focus();
+  // Выполняем поиск с пустой частью речи
+  performSearch();
+}
+    
+    // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
+    
+    function handleTitleClick() {
+      if (!isEditor) {
+        openLoginModal();
+      }
+    }
+    
+    function updateHeaderButtons() {
+      const container = document.getElementById('headerButtons');
+      if (isEditor) {
+        container.innerHTML = `
+          <span class="editor-badge">✏️ РЕДАКТОР</span>
+          <button onclick="openAdminModal()">🔑 Пароль</button>
+          <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
+          <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
+          <button class="active-btn" onclick="openAddModal()">➕ Добавить слово</button>
+        `;
+      } else {
+        container.innerHTML = ``;
+      }
+      updateAddButtons();
+    }
+    
+    function updateAddButtons() {
+      const themeBtn = document.getElementById('addThemeBtn');
+      const posBtn = document.getElementById('addPosBtn');
+      const themeBtnMobile = document.getElementById('addThemeBtnMobile');
+      const posBtnMobile = document.getElementById('addPosBtnMobile');
+      
+      if (isEditor) {
+        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
+          if (el) { el.classList.add('visible'); el.style.display = 'flex'; }
+        });
+      } else {
+        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
+          if (el) { el.classList.remove('visible'); el.style.display = 'none'; }
+        });
+      }
+    }
+    
+    function updateEditorUI() {
+      document.querySelectorAll('.result-item .actions').forEach(el => {
+        el.style.display = isEditor ? 'flex' : 'none';
+      });
+      updateHeaderButtons();
+      if (document.getElementById('themeDropdown').classList.contains('active')) {
+        showAllThemes();
+      }
+      if (document.getElementById('posDropdown').classList.contains('active')) {
+        showAllPos();
+      }
+    }
+    
+    // ========== ПОКАЗ ВСЕХ СЛОВ ==========
+    function showAllWords() {
+      if (!isEditor) return;
+      
+      isShowingAll = true;
+      selectedTheme = '';
+      selectedPos = '';
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      document.getElementById('posInput').value = '';
+      document.getElementById('posClearInputBtn').classList.remove('visible');
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      
+      if (allData && allData.words) {
+        const results = {
+          results: allData.words,
+          total: allData.words.length,
+          searchMode: 'auto'
+        };
+        handleResults(results);
+        showToast(`📚 Показано ${allData.words.length} слов`);
+      }
+    }
+    
+    // ========== ОЧИСТКА ПОЛЯ ПОИСКА ==========
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearBtn').classList.remove('visible');
+      // При нажатии на крестик поле очищается, но поиск не выполняется автоматически
+      document.getElementById('searchInput').focus();
+    }
+    
+    // ========== МОДАЛЬНЫЕ ОКНА ==========
+    
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      toggleBodyScroll(true);
+      const messageEl = document.getElementById(id.replace('Modal', 'Message'));
+      if (messageEl) messageEl.innerHTML = '';
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      toggleBodyScroll(false);
+    }
+    
+    function openLoginModal() {
+      document.getElementById('loginPassword').value = '';
+      openModal('loginModal');
+      setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+    }
+    
+    function openLogoutModal() {
+      openModal('logoutModal');
+    }
+    
+    function openAdminModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('oldPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('adminMessage').innerHTML = '';
+      openModal('adminModal');
+    }
+    
+    function openAddModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('modalTitle').textContent = '➕ Добавить слово';
+      document.getElementById('editIcon').textContent = '➕';
+      document.getElementById('editWordGr').value = '';
+      document.getElementById('editWordRu').value = '';
+      document.getElementById('editThemeGr').value = '';
+      document.getElementById('editPosGr').value = '';
+      document.getElementById('editMessage').innerHTML = '';
+      document.getElementById('themeDatalist').classList.remove('active');
+      document.getElementById('posDatalist').classList.remove('active');
+      editingId = null;
+      hideAllWarnings();
+      openModal('editModal');
+      document.getElementById('saveBtn').onclick = saveWord;
+    }
+    
+    function openEditModal(id, wordGr, wordRu, themeGr, posGr) {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      document.getElementById('modalTitle').textContent = '✏️ Редактировать слово';
+      document.getElementById('editIcon').textContent = '✏️';
+      document.getElementById('editWordGr').value = wordGr;
+      document.getElementById('editWordRu').value = wordRu;
+      document.getElementById('editThemeGr').value = themeGr;
+      document.getElementById('editPosGr').value = posGr || '';
+      document.getElementById('editMessage').innerHTML = '';
+      document.getElementById('themeDatalist').classList.remove('active');
+      document.getElementById('posDatalist').classList.remove('active');
+      editingId = id;
+      hideAllWarnings();
+      checkDuplicate();
+      openModal('editModal');
+      document.getElementById('saveBtn').onclick = saveWord;
+    }
+    
+    function openDeleteModal(id, type) {
+      if (!isEditor) return;
+      deleteTarget = id;
+      deleteType = type || 'word';
+      document.getElementById('deleteMessage').innerHTML = '';
+      openModal('deleteModal');
+    }
+    
+    // ========== РАБОТА С ТЕМАМИ ==========
+    
+    function openAddThemeModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      themeEditingTarget = null;
+      document.getElementById('themeEditTitle').textContent = '➕ Добавить тему';
+      document.getElementById('themeEditIcon').textContent = '📂';
+      document.getElementById('editThemeGrOnly').value = '';
+      document.getElementById('editThemeRuOnly').value = '';
+      document.getElementById('themeEditMessage').innerHTML = '';
+      document.getElementById('duplicateThemeGrOnly').classList.remove('visible');
+      document.getElementById('duplicateThemeRuOnly').classList.remove('visible');
+      openModal('themeEditModal');
+      document.getElementById('saveThemeBtn').onclick = saveTheme;
+    }
+    
+    function openEditThemeModal(gr, ru) {
+      if (!isEditor) return;
+      themeEditingTarget = { gr: gr, ru: ru };
+      document.getElementById('themeEditTitle').textContent = '✏️ Редактировать тему';
+      document.getElementById('themeEditIcon').textContent = '📂';
+      document.getElementById('editThemeGrOnly').value = gr;
+      document.getElementById('editThemeRuOnly').value = ru;
+      document.getElementById('themeEditMessage').innerHTML = '';
+      document.getElementById('duplicateThemeGrOnly').classList.remove('visible');
+      document.getElementById('duplicateThemeRuOnly').classList.remove('visible');
+      openModal('themeEditModal');
+      document.getElementById('saveThemeBtn').onclick = saveTheme;
+    }
+    
+    function openDeleteThemeModal(gr, ru) {
+      if (!isEditor) return;
+      const themeToDelete = allThemes.find(t => t.gr === gr && t.ru === ru);
+      if (themeToDelete) {
+        deleteTarget = themeToDelete;
+        deleteType = 'theme';
+        document.getElementById('deleteMessage').innerHTML = '';
+        openModal('deleteModal');
+      }
+    }
+    
+    async function saveTheme() {
+      const gr = document.getElementById('editThemeGrOnly').value.trim();
+      const ru = document.getElementById('editThemeRuOnly').value.trim();
+      
+      if (!gr || !ru) {
+        document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
+      }
+      
+      const exists = allThemes.some(t => 
+        t.gr.toLowerCase() === gr.toLowerCase() && 
+        (themeEditingTarget === null || t.gr !== themeEditingTarget.gr)
+      );
+      
+      if (exists) {
+        document.getElementById('themeEditMessage').innerHTML = '<div class="error">❌ Такая тема уже существует</div>';
+        document.getElementById('duplicateThemeGrOnly').classList.add('visible');
+        return;
+      }
+      
+      document.getElementById('themeEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
+      try {
+        let result;
+        
+        if (themeEditingTarget) {
+          result = await callGAS('editTheme', { 
+            oldGr: themeEditingTarget.gr, 
+            newGr: gr, 
+            newRu: ru 
+          });
+        } else {
+          result = await callGAS('addTheme', { gr, ru });
+        }
+        
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        if (result.success) {
+          if (themeEditingTarget) {
+            const index = allThemes.findIndex(t => t.gr === themeEditingTarget.gr);
+            if (index !== -1) {
+              allThemes[index] = { gr, ru };
+            }
+            for (const word of allData.words) {
+              if (word.themeGr === themeEditingTarget.gr) {
+                word.themeGr = gr;
+                word.themeRu = ru;
+              }
+            }
+          } else {
+            allThemes.push({ gr, ru });
+          }
+          
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          document.getElementById('themeEditMessage').innerHTML = 
+            `<div class="success">✅ Тема успешно ${themeEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
+          
+          await refreshCache();
+          setTimeout(() => {
+            closeModal('themeEditModal');
+            if (document.getElementById('themeSection').classList.contains('active')) {
+              showAllThemes();
+            }
+          }, 1500);
+        }
+        
+      } catch (error) {
+        document.getElementById('themeEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    // ========== РАБОТА С ЧАСТЯМИ РЕЧИ ==========
+    
+    function openAddPosModal() {
+      if (!isEditor) {
+        openLoginModal();
+        return;
+      }
+      posEditingTarget = null;
+      document.getElementById('posEditTitle').textContent = '➕ Добавить часть речи';
+      document.getElementById('posEditIcon').textContent = '📚';
+      document.getElementById('editPosGrOnly').value = '';
+      document.getElementById('editPosRuOnly').value = '';
+      document.getElementById('posEditMessage').innerHTML = '';
+      document.getElementById('duplicatePosGrOnly').classList.remove('visible');
+      document.getElementById('duplicatePosRuOnly').classList.remove('visible');
+      openModal('posEditModal');
+      document.getElementById('savePosBtn').onclick = savePos;
+    }
+    
+    function openEditPosModal(gr, ru) {
+      if (!isEditor) return;
+      posEditingTarget = { gr: gr, ru: ru };
+      document.getElementById('posEditTitle').textContent = '✏️ Редактировать часть речи';
+      document.getElementById('posEditIcon').textContent = '📚';
+      document.getElementById('editPosGrOnly').value = gr;
+      document.getElementById('editPosRuOnly').value = ru;
+      document.getElementById('posEditMessage').innerHTML = '';
+      document.getElementById('duplicatePosGrOnly').classList.remove('visible');
+      document.getElementById('duplicatePosRuOnly').classList.remove('visible');
+      openModal('posEditModal');
+      document.getElementById('savePosBtn').onclick = savePos;
+    }
+    
+    function openDeletePosModal(gr, ru) {
+      if (!isEditor) return;
+      const posToDelete = allPos.find(p => p.gr === gr && p.ru === ru);
+      if (posToDelete) {
+        deleteTarget = posToDelete;
+        deleteType = 'pos';
+        document.getElementById('deleteMessage').innerHTML = '';
+        openModal('deleteModal');
+      }
+    }
+    
+    async function savePos() {
+      const gr = document.getElementById('editPosGrOnly').value.trim();
+      const ru = document.getElementById('editPosRuOnly').value.trim();
+      
+      if (!gr || !ru) {
+        document.getElementById('posEditMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
+      }
+      
+      const exists = allPos.some(p => 
+        p.gr.toLowerCase() === gr.toLowerCase() && 
+        (posEditingTarget === null || p.gr !== posEditingTarget.gr)
+      );
+      
+      if (exists) {
+        document.getElementById('posEditMessage').innerHTML = '<div class="error">❌ Такая часть речи уже существует</div>';
+        document.getElementById('duplicatePosGrOnly').classList.add('visible');
+        return;
+      }
+      
+      document.getElementById('posEditMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
+      try {
+        let result;
+        
+        if (posEditingTarget) {
+          result = await callGAS('editPos', { 
+            oldGr: posEditingTarget.gr, 
+            newGr: gr, 
+            newRu: ru 
+          });
+        } else {
+          result = await callGAS('addPos', { gr, ru });
+        }
+        
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        if (result.success) {
+          if (posEditingTarget) {
+            const index = allPos.findIndex(p => p.gr === posEditingTarget.gr);
+            if (index !== -1) {
+              allPos[index] = { gr, ru };
+            }
+            for (const word of allData.words) {
+              if (word.posGr === posEditingTarget.gr) {
+                word.posGr = gr;
+                word.posRu = ru;
+              }
+            }
+          } else {
+            allPos.push({ gr, ru });
+          }
+          
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          document.getElementById('posEditMessage').innerHTML = 
+            `<div class="success">✅ Часть речи успешно ${posEditingTarget ? 'изменена' : 'добавлена'}!</div>`;
+          
+          await refreshCache();
+          setTimeout(() => {
+            closeModal('posEditModal');
+            if (document.getElementById('posSection').classList.contains('active')) {
+              showAllPos();
+            }
+          }, 1500);
+        }
+        
+      } catch (error) {
+        document.getElementById('posEditMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    // ========== ВЫПАДАЮЩИЙ СПИСОК ТЕМ ==========
+    
+    function filterThemeDatalist() {
+      const input = document.getElementById('editThemeGr');
+      const datalist = document.getElementById('themeDatalist');
+      const query = input.value.toLowerCase().trim();
+      
+      if (!query) {
+        const filtered = allThemes;
+        if (filtered.length === 0) {
+          datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+        } else {
+          datalist.innerHTML = filtered.map(t => `
+            <div class="datalist-item" onclick="selectThemeFromDatalist('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+              <strong>${t.gr}</strong> — ${t.ru}
+            </div>
+          `).join('');
+        }
+        datalist.classList.add('active');
+        return;
+      }
+      
+      const filtered = allThemes.filter(t => 
+        t.gr.toLowerCase().includes(query) || 
+        t.ru.toLowerCase().includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет совпадений</div>';
+      } else {
+        datalist.innerHTML = filtered.map(t => `
+          <div class="datalist-item" onclick="selectThemeFromDatalist('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <strong>${t.gr}</strong> — ${t.ru}
+          </div>
+        `).join('');
+      }
+      
+      datalist.classList.add('active');
+    }
+    
+    function selectThemeFromDatalist(gr, ru) {
+      document.getElementById('editThemeGr').value = gr;
+      document.getElementById('editPosGr').value = '';
+      document.getElementById('themeDatalist').classList.remove('active');
+      checkDuplicate();
+    }
+    
+    document.addEventListener('click', function(e) {
+      const datalist = document.getElementById('themeDatalist');
+      if (!e.target.closest('#editThemeGr') && !e.target.closest('.theme-datalist')) {
+        datalist.classList.remove('active');
+      }
+    });
+    
+    // ========== ВЫПАДАЮЩИЙ СПИСОК ЧАСТЕЙ РЕЧИ ==========
+    
+    function filterPosDatalist() {
+      const input = document.getElementById('editPosGr');
+      const datalist = document.getElementById('posDatalist');
+      const query = input.value.toLowerCase().trim();
+      
+      if (!query) {
+        const filtered = allPos;
+        if (filtered.length === 0) {
+          datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет частей речи</div>';
+        } else {
+          datalist.innerHTML = filtered.map(p => `
+            <div class="datalist-item" onclick="selectPosFromDatalist('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+              <strong>${p.gr}</strong> — ${p.ru}
+            </div>
+          `).join('');
+        }
+        datalist.classList.add('active');
+        return;
+      }
+      
+      const filtered = allPos.filter(p => 
+        p.gr.toLowerCase().includes(query) || 
+        p.ru.toLowerCase().includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        datalist.innerHTML = '<div class="datalist-item" style="color: #95a5a6; cursor: default;">Нет совпадений</div>';
+      } else {
+        datalist.innerHTML = filtered.map(p => `
+          <div class="datalist-item" onclick="selectPosFromDatalist('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+            <strong>${p.gr}</strong> — ${p.ru}
+          </div>
+        `).join('');
+      }
+      
+      datalist.classList.add('active');
+    }
+    
+    function selectPosFromDatalist(gr, ru) {
+      document.getElementById('editPosGr').value = gr;
+      document.getElementById('posDatalist').classList.remove('active');
+      checkDuplicate();
+    }
+    
+    document.addEventListener('click', function(e) {
+      const datalist = document.getElementById('posDatalist');
+      if (!e.target.closest('#editPosGr') && !e.target.closest('.pos-datalist')) {
+        datalist.classList.remove('active');
+      }
+    });
+    
+    // ========== ПРОВЕРКА ДУБЛИКАТОВ ==========
+    function hideAllWarnings() {
+      document.querySelectorAll('.duplicate-warning').forEach(el => {
+        el.classList.remove('visible');
+      });
+    }
+    
+    function checkDuplicate() {
+      const wordGr = document.getElementById('editWordGr').value.trim();
+      const wordRu = document.getElementById('editWordRu').value.trim();
+      
+      if (wordGr && allData) {
+        const exists = allData.words.some(w => 
+          w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
+          (editingId === null || w.id !== editingId)
+        );
+        document.getElementById('duplicateWordGr').classList.toggle('visible', exists);
+      }
+      
+      if (wordRu && allData) {
+        const exists = allData.words.some(w => 
+          w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
+          (editingId === null || w.id !== editingId)
+        );
+        document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
+      }
+    }
+    
+    // ========== АВТОРИЗАЦИЯ ==========
+    
+    async function login() {
+      const password = document.getElementById('loginPassword').value.trim();
+      if (!password) {
+        document.getElementById('loginMessage').innerHTML = '<div class="error">❌ Введите пароль</div>';
+        return;
+      }
+      
+      document.getElementById('loginMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Проверка...</div>';
+      
+      try {
+        const result = await callGAS('checkPassword', { password: password });
+        if (result.result) {
+          isEditor = true;
+          localStorage.setItem('dictionary_editor', 'true');
+          closeModal('loginModal');
+          updateEditorUI();
+          performSearch();
+        } else {
+          document.getElementById('loginMessage').innerHTML = '<div class="error">❌ Неверный пароль</div>';
+          document.getElementById('loginPassword').value = '';
+          document.getElementById('loginPassword').focus();
+        }
+      } catch (error) {
+        document.getElementById('loginMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    function logout() {
+      syncDataToServer();
+      isEditor = false;
+      localStorage.removeItem('dictionary_editor');
+      closeModal('logoutModal');
+      updateEditorUI();
+      performSearch();
+    }
+    
+    async function syncDataToServer() {
+      try {
+        await callGAS('updateVersion');
+        showToast('✅ Данные синхронизированы');
+      } catch (error) {
+        console.error('Ошибка синхронизации:', error);
+      }
+    }
+    
+    // ========== ПОИСК ==========
+    
+    function setupEventListeners() {
+      // ПК версия
+      document.querySelectorAll('#modeSelector button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentMode = this.dataset.mode;
+        });
+      });
+      
+      // Мобильная версия
+      document.querySelectorAll('#modeSelectorMobile button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('#modeSelectorMobile button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentMode = this.dataset.mode;
+          // Синхронизируем с ПК версией
+          document.querySelectorAll('#modeSelector button').forEach(b => b.classList.remove('active'));
+          const pcBtn = document.querySelector(`#modeSelector button[data-mode="${this.dataset.mode}"]`);
+          if (pcBtn) pcBtn.classList.add('active');
+        });
+      });
+      
+      document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          performSearch();
+        }
+      });
+      
+      document.getElementById('searchInput').addEventListener('input', function() {
+        const clearBtn = document.getElementById('clearBtn');
+        if (this.value.length > 0) {
+          clearBtn.classList.add('visible');
+        } else {
+          clearBtn.classList.remove('visible');
+        }
+      });
+      
+      // Обработчик для анимированной кнопки поиска
+      document.getElementById('searchBtn').addEventListener('click', function() {
+        if (isSearching) {
+          // Отмена поиска (крестик)
+          toggleSearchButton('cancel');
+          // Очищаем поле поиска
+          document.getElementById('searchInput').value = '';
+          document.getElementById('clearBtn').classList.remove('visible');
+          showInitialMessage();
+          return;
+        }
+        
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) {
+          if (!selectedTheme && !selectedPos) {
+            showToast('Введите слово для поиска', true);
+            return;
+          }
+        }
+        
+        toggleSearchButton('searching');
+        performSearch();
+      });
+    }
+    
+    function performSearch() {
+      document.getElementById('themeDropdown').classList.remove('active');
+      themeDropdownVisible = false;
+      document.getElementById('posDropdown').classList.remove('active');
+      posDropdownVisible = false;
+      
+      if (isSearchingNow) return;
+      
+      const query = document.getElementById('searchInput').value.trim();
+      const theme = selectedTheme;
+      const pos = selectedPos;
+      
+      if (!query && !theme && !pos) {
+        showInitialMessage();
+        toggleSearchButton('cancel');
+        return;
+      }
+      
+      isShowingAll = false;
+      isSearchingNow = true;
+      
+      document.getElementById('resultsContainer').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <br>Поиск...
+        </div>
+      `;
+      
+      if (allData && allData.words) {
+        setTimeout(() => {
+          const results = searchInCache(query, currentMode, theme, pos);
+          handleResults(results);
+          isSearchingNow = false;
+          toggleSearchButton('done');
+        }, 300);
+      } else {
+        loadData().then(() => {
+          const results = searchInCache(query, currentMode, theme, pos);
+          handleResults(results);
+          isSearchingNow = false;
+          toggleSearchButton('done');
+        }).catch(error => {
+          handleError(error);
+          isSearchingNow = false;
+          toggleSearchButton('cancel');
+        });
+      }
+    }
+    
+    function searchInCache(query, searchMode, theme, pos) {
+      const queryLower = query.toLowerCase().trim();
+      const themeLower = theme ? theme.toLowerCase().trim() : '';
+      const posLower = pos ? pos.toLowerCase().trim() : '';
+      
+      let searchInGreek = searchMode === 'greek';
+      let searchInRussian = searchMode === 'russian';
+      
+      if (searchMode === 'auto' && queryLower) {
+        const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
+        searchInGreek = greekRegex.test(queryLower);
+        searchInRussian = !searchInGreek;
+      }
+      
+      let results = allData.words || [];
+      
+      if (themeLower) {
+        results = results.filter(w => 
+          w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
+        );
+      }
+      
+      if (posLower) {
+        results = results.filter(w => 
+          w.posGr && w.posGr.toLowerCase().includes(posLower)
+        );
+      }
+      
+      if (queryLower) {
+        if (searchInGreek) {
+          results = results.filter(w => 
+            (w.wordGr && w.wordGr.toLowerCase().includes(queryLower)) || 
+            (w.themeGr && w.themeGr.toLowerCase().includes(queryLower)) ||
+            (w.posGr && w.posGr.toLowerCase().includes(queryLower))
+          );
+        } else if (searchInRussian) {
+          results = results.filter(w => 
+            (w.wordRu && w.wordRu.toLowerCase().includes(queryLower)) || 
+            (w.themeRu && w.themeRu.toLowerCase().includes(queryLower)) ||
+            (w.posRu && w.posRu.toLowerCase().includes(queryLower))
+          );
+        }
+      }
+      
+      return {
+        results: results,
+        total: results.length,
+        searchMode: searchInGreek ? 'greek' : 'russian',
+        version: allData.version
+      };
+    }
+    
+    function handleResults(data) {
+  if (data.error) {
+    document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ ${data.error}</div>`;
+    toggleSearchButton('cancel');
+    return;
+  }
+  
+  if (!data.results || data.results.length === 0) {
+    const modeText = data.searchMode === 'greek' ? 'греческом' : 'русском';
+    let filters = '';
+    if (selectedTheme) {
+      const themeRu = allThemes.find(t => t.gr === selectedTheme);
+      filters += ` Тема: ${themeRu ? themeRu.ru : selectedTheme}`;
+    }
+    if (selectedPos) {
+      const posRu = allPos.find(p => p.gr === selectedPos);
+      filters += ` Часть речи: ${posRu ? posRu.ru : selectedPos}`;
+    }
+    document.getElementById('resultsContainer').innerHTML = `
+      <div class="no-results">
+        🔍 Ничего не найдено<br>
+        <small>Поиск в ${modeText} языке${filters}</small>
+      </div>
+    `;
+    toggleSearchButton('done');
+    return;
+  }
+  
+  const isMobile = window.innerWidth < 768;
+  let html = '';
+  
+  if (isMobile) {
+    html = `<div class="results">`;
+    data.results.forEach(item => {
+      html += createResultItem(item);
+    });
+    html += `</div>`;
+  } else {
+    html = `<div class="results-grid">`;
+    data.results.forEach(item => {
+      html += createResultItem(item);
+    });
+    html += `</div>`;
+  }
+  
+  let filters = '';
+  if (selectedTheme) {
+    const themeRu = allThemes.find(t => t.gr === selectedTheme);
+    filters += ` Тема: ${themeRu ? themeRu.ru : selectedTheme}`;
+  }
+  if (selectedPos) {
+    const posRu = allPos.find(p => p.gr === selectedPos);
+    filters += ` Часть речи: ${posRu ? posRu.ru : selectedPos}`;
+  }
+  
+  // Формируем строку с темой и частью речи на русском
+  let themeDisplay = '';
+  if (selectedTheme) {
+    const themeRu = allThemes.find(t => t.gr === selectedTheme);
+    themeDisplay = `📂 ${selectedTheme} / ${themeRu ? themeRu.ru : selectedTheme}`;
+  } else if (selectedPos) {
+    const posRu = allPos.find(p => p.gr === selectedPos);
+    themeDisplay = `📚 ${selectedPos} / ${posRu ? posRu.ru : selectedPos}`;
+  }
+  
+  const infoHtml = `
+    <div class="result-info">
+      ${themeDisplay ? themeDisplay + '<br>' : ''}
+      Найдено ${data.results.length}
+      ${filters}
+    </div>
+    ${html}
+  `;
+  
+  document.getElementById('resultsContainer').innerHTML = infoHtml;
+}
+    
+    function createResultItem(item) {
+      const isMobile = window.innerWidth < 768;
+      
+      let actionsHtml = '';
+      if (isEditor) {
+        actionsHtml = `
+          <div class="actions">
+            <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
+              <svg><use href="#icon-edit"/></svg> Редактировать
+            </button>
+            <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
+              <svg><use href="#icon-delete"/></svg> Удалить
+            </button>
+          </div>
+        `;
+      }
+      
+      if (isMobile) {
+        return `
+          <div class="result-item" data-id="${item.id}">
+            <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
+            <div class="word-row">
+              <div class="word-cell word-cell-left">
+                <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
+                <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+              </div>
+            </div>
+            <div class="word-row">
+              <div class="word-cell word-cell-center">
+                <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
+                <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+              </div>
+            </div>
+            ${actionsHtml}
+          </div>
+        `;
+      }
+      
+      return `
+        <div class="result-item" data-id="${item.id}">
+          <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
+          <div class="word-row">
+            <div class="word-cell word-cell-left">
+              <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
+              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+            </div>
+            <div class="word-cell word-cell-center">
+              <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
+              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+            </div>
+          </div>
+          ${actionsHtml}
+        </div>
+      `;
+    }
+    
+    function escapeHTML(str) {
+      return str.replace(/['"\\]/g, '\\$&');
+    }
+    
+    function handleError(error) {
+      document.getElementById('resultsContainer').innerHTML = `<div class="error">❌ Ошибка: ${error.message || error}</div>`;
+      console.error('Ошибка:', error);
+    }
+    
+    // ========== КОПИРОВАНИЕ ==========
+    function copyText(text, button) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showCopySuccess(button);
+          showToast('✓ Скопировано: ' + text);
+        }).catch(() => {
+          fallbackCopy(text, button);
+        });
+      } else {
+        fallbackCopy(text, button);
+      }
+    }
+    
+    function fallbackCopy(text, button) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showCopySuccess(button);
+        showToast('✓ Скопировано: ' + text);
+      } catch (err) {
+        console.error('Ошибка копирования:', err);
+      }
+      document.body.removeChild(textarea);
+    }
+    
+    function showCopySuccess(button) {
+      const originalText = button.textContent;
+      button.textContent = '✓';
+      button.classList.add('copied');
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('copied');
+      }, 2000);
+    }
+    
+    // ========== ОПЕРАЦИИ С ДАННЫМИ ==========
+    
+    async function saveWord() {
+      const wordGr = document.getElementById('editWordGr').value.trim();
+      const wordRu = document.getElementById('editWordRu').value.trim();
+      const themeGr = document.getElementById('editThemeGr').value.trim();
+      const posGr = document.getElementById('editPosGr').value.trim();
+      
+      if (!wordGr || !wordRu) {
+        document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово должно быть заполнено</div>';
+        return;
+      }
+      
+      document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      
+      try {
+        const action = editingId === null ? 'addWord' : 'editWord';
+        const params = editingId === null 
+          ? { wordGr, wordRu, themeGr, posGr }
+          : { id: editingId, wordGr, wordRu, themeGr, posGr };
+        
+        const result = await callGAS(action, params);
+        
+        if (result.success) {
+          document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
+          
+          if (editingId === null) {
+            const newWord = {
+              id: allData.words.length + 1,
+              wordGr: wordGr,
+              wordRu: wordRu,
+              themeGr: themeGr || '',
+              themeRu: themeGr || '',
+              posGr: posGr || '',
+              posRu: posGr || ''
+            };
+            allData.words.push(newWord);
+            allData.total = allData.words.length;
+            if (themeGr && !allThemes.some(t => t.gr === themeGr)) {
+              allThemes.push({ gr: themeGr, ru: themeGr });
+            }
+            if (posGr && !allPos.some(p => p.gr === posGr)) {
+              allPos.push({ gr: posGr, ru: posGr });
+            }
+          } else {
+            const index = allData.words.findIndex(w => w.id === editingId);
+            if (index !== -1) {
+              allData.words[index].wordGr = wordGr;
+              allData.words[index].wordRu = wordRu;
+              allData.words[index].themeGr = themeGr || '';
+              allData.words[index].themeRu = themeGr || '';
+              allData.words[index].posGr = posGr || '';
+              allData.words[index].posRu = posGr || '';
+            }
+          }
+          
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          setTimeout(() => {
+            closeModal('editModal');
+            performSearch();
+          }, 1500);
+        } else {
+          document.getElementById('editMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+        }
+      } catch (error) {
+        document.getElementById('editMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    async function confirmDelete() {
+      if (!deleteTarget) return;
+      
+      try {
+        if (deleteType === 'theme') {
+          const themeGr = deleteTarget.gr;
+          const wordsWithTheme = allData.words.filter(w => w.themeGr === themeGr);
+          if (wordsWithTheme.length > 0) {
+            document.getElementById('deleteMessage').innerHTML = 
+              `<div class="error">❌ Нельзя удалить тему, она используется в ${wordsWithTheme.length} словах</div>`;
+            return;
+          }
+          
+          const result = await callGAS('deleteTheme', { gr: themeGr });
+          if (result.error) {
+            throw new Error(result.error);
+          }
+          
+          closeModal('deleteModal');
+          allThemes = allThemes.filter(t => t.gr !== themeGr);
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          showToast('✅ Тема удалена');
+          if (document.getElementById('themeSection').classList.contains('active')) {
+            showAllThemes();
+          }
+          performSearch();
+          deleteTarget = null;
+          deleteType = 'word';
+          return;
+        }
+        
+        if (deleteType === 'pos') {
+          const posGr = deleteTarget.gr;
+          const wordsWithPos = allData.words.filter(w => w.posGr === posGr);
+          if (wordsWithPos.length > 0) {
+            document.getElementById('deleteMessage').innerHTML = 
+              `<div class="error">❌ Нельзя удалить часть речи, она используется в ${wordsWithPos.length} словах</div>`;
+            return;
+          }
+          
+          const result = await callGAS('deletePos', { gr: posGr });
+          if (result.error) {
+            throw new Error(result.error);
+          }
+          
+          closeModal('deleteModal');
+          allPos = allPos.filter(p => p.gr !== posGr);
+          try {
+            localStorage.setItem('dictionary_data', JSON.stringify(allData));
+          } catch (e) {}
+          
+          showToast('✅ Часть речи удалена');
+          if (document.getElementById('posSection').classList.contains('active')) {
+            showAllPos();
+          }
+          performSearch();
+          deleteTarget = null;
+          deleteType = 'word';
+          return;
+        }
+        
+        const result = await callGAS('deleteWord', { id: deleteTarget });
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        
+        closeModal('deleteModal');
+        allData.words = allData.words.filter(w => w.id !== deleteTarget);
+        allData.total = allData.words.length;
+        try {
+          localStorage.setItem('dictionary_data', JSON.stringify(allData));
+        } catch (e) {}
+        
+        showToast('✅ Слово удалено');
+        performSearch();
+        deleteTarget = null;
+        deleteType = 'word';
+        
+      } catch (error) {
+        document.getElementById('deleteMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    async function changePassword() {
+      const oldPassword = document.getElementById('oldPassword').value.trim();
+      const newPassword = document.getElementById('newPassword').value.trim();
+      
+      if (!oldPassword || !newPassword) {
+        document.getElementById('adminMessage').innerHTML = '<div class="error">❌ Заполните все поля</div>';
+        return;
+      }
+      
+      if (newPassword.length < 4) {
+        document.getElementById('adminMessage').innerHTML = '<div class="error">❌ Пароль должен быть минимум 4 символа</div>';
+        return;
+      }
+      
+      document.getElementById('adminMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Смена пароля...</div>';
+      
+      try {
+        const result = await callGAS('changePassword', { oldPassword, newPassword });
+        if (result.success) {
+          document.getElementById('adminMessage').innerHTML = '<div class="success">✅ Пароль успешно изменён!</div>';
+          setTimeout(() => {
+            closeModal('adminModal');
+          }, 1500);
+        } else {
+          document.getElementById('adminMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+        }
+      } catch (error) {
+        document.getElementById('adminMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+      }
+    }
+    
+    // ========== КНОПКА "НАВЕРХ" ==========
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+    
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+    
+    document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('themeDropdown');
+  const posDropdown = document.getElementById('posDropdown');
+  
+  const isThemeClick = event.target.closest('.theme-input-wrapper') || 
+                       event.target.closest('#themeToggleBtn') || 
+                       event.target.closest('#themeToggleBtnMobile') ||
+                       event.target.closest('.theme-actions') ||
+                       event.target.closest('.theme-clear-input-btn'); // ← ДОБАВИТЬ
+  
+  const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
+                     event.target.closest('#posToggleBtn') || 
+                     event.target.closest('#posToggleBtnMobile') ||
+                     event.target.closest('.pos-actions') ||
+                     event.target.closest('.pos-clear-input-btn'); // ← ДОБАВИТЬ
+  
+  if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
+    dropdown.classList.remove('active');
+    themeDropdownVisible = false;
+  }
+  
+  if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
+    posDropdown.classList.remove('active');
+    posDropdownVisible = false;
+  }
+});
+    
+    window.addEventListener('load', function() {
+      setTimeout(() => document.getElementById('searchInput').focus(), 300);
+    });
+  </script>
+</body>
+</html>
