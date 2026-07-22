@@ -647,37 +647,10 @@ h1:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
   position: relative;
-}
-
-/* Скрываем скроллбар */
-.theme-dropdown .theme-item::-webkit-scrollbar {
-  height: 0;
-  width: 0;
-  background: transparent;
-}
-
-.theme-dropdown .theme-item {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.theme-dropdown .theme-item:hover {
-  background: #fef9e7;
-  transform: translateX(4px);
-}
-
-.theme-dropdown .theme-item:active {
-  background: #fdebd0;
-}
-
-.theme-dropdown .theme-item:last-child {
-  border-bottom: none;
+  min-height: 48px;
 }
 
 .theme-dropdown .theme-item .theme-gr,
@@ -686,18 +659,21 @@ h1:active {
   color: #2c3e50;
   flex-shrink: 0;
   white-space: nowrap;
-  padding-right: 12px; /* добавить отступ справа */
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40%;
 }
 
 .theme-dropdown .theme-item .theme-actions {
   display: none;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   margin-left: auto;
   position: sticky;
   right: 0;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0 8px 0 16px;
+  padding: 0 4px 0 12px;
   z-index: 2;
   backdrop-filter: blur(4px);
 }
@@ -707,22 +683,22 @@ h1:active {
 }
 
 .theme-dropdown .theme-item .theme-actions button {
-  padding: 8px 12px; /* увеличил padding */
+  padding: 6px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px; /* увеличил шрифт */
+  font-size: 14px;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px; /* минимальная ширина */
-  min-height: 36px; /* минимальная высота */
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .theme-dropdown .theme-item .theme-actions button svg {
-  width: 20px; /* увеличил иконку */
-  height: 20px;
+  width: 18px;
+  height: 18px;
   stroke: white;
   stroke-width: 2;
   fill: none;
@@ -830,36 +806,10 @@ h1:active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
   position: relative;
-}
-
-.part-of-speech-dropdown .pos-item::-webkit-scrollbar {
-  height: 0;
-  width: 0;
-  background: transparent;
-}
-
-.part-of-speech-dropdown .pos-item {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.part-of-speech-dropdown .pos-item:hover {
-  background: #f4ecf7;
-  transform: translateX(4px);
-}
-
-.part-of-speech-dropdown .pos-item:active {
-  background: #e8daef;
-}
-
-.part-of-speech-dropdown .pos-item:last-child {
-  border-bottom: none;
+  min-height: 48px;
 }
 
 .part-of-speech-dropdown .pos-item .pos-gr,
@@ -868,18 +818,21 @@ h1:active {
   color: #2c3e50;
   flex-shrink: 0;
   white-space: nowrap;
-  padding-right: 12px; /* добавить отступ справа */
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40%;
 }
-    
+
 .part-of-speech-dropdown .pos-item .pos-actions {
   display: none;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   margin-left: auto;
   position: sticky;
   right: 0;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0 8px 0 16px;
+  padding: 0 4px 0 12px;
   z-index: 2;
   backdrop-filter: blur(4px);
 }
@@ -889,7 +842,7 @@ h1:active {
 }
 
 .part-of-speech-dropdown .pos-item .pos-actions button {
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -898,13 +851,13 @@ h1:active {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .part-of-speech-dropdown .pos-item .pos-actions button svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   stroke: white;
   stroke-width: 2;
   fill: none;
@@ -1981,23 +1934,23 @@ h1:active {
     position: sticky;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
-    padding: 0 8px 0 20px; /* больше отступ слева */
-    gap: 10px;
+    padding: 0 4px 0 12px;
+    gap: 6px;
     z-index: 2;
     backdrop-filter: blur(4px);
     box-shadow: -8px 0 12px rgba(255, 255, 255, 0.8);
   }
   
   .theme-dropdown .theme-item .theme-actions button {
-    padding: 10px 14px;
-    font-size: 16px;
-    min-width: 44px;
-    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 14px;
+    min-width: 36px;
+    min-height: 36px;
   }
   
   .theme-dropdown .theme-item .theme-actions button svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   .part-of-speech-dropdown .pos-item .pos-actions {
@@ -2005,23 +1958,23 @@ h1:active {
     position: sticky;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
-    padding: 0 8px 0 20px;
-    gap: 10px;
+    padding: 0 4px 0 12px;
+    gap: 6px;
     z-index: 2;
     backdrop-filter: blur(4px);
     box-shadow: -8px 0 12px rgba(255, 255, 255, 0.8);
   }
 
   .part-of-speech-dropdown .pos-item .pos-actions button {
-    padding: 10px 14px;
-    font-size: 16px;
-    min-width: 44px;
-    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 14px;
+    min-width: 36px;
+    min-height: 36px;
   }
   
   .part-of-speech-dropdown .pos-item .pos-actions button svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   .modal .form-actions {
@@ -2162,10 +2115,12 @@ h1:active {
       </symbol>
       
       <symbol id="flag-ru" viewBox="0 0 24 16">
-  <rect width="24" height="16" fill="white"/>
-  <rect y="0" width="24" height="5.33" fill="#0039a6"/>
-  <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
-</symbol>
+        <!-- Белый, синий, красный сверху вниз -->
+        <rect width="24" height="16" fill="white"/>
+        <rect y="0" width="24" height="5.33" fill="white"/>
+        <rect y="5.33" width="24" height="5.33" fill="#0039a6"/>
+        <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+      </symbol>
       
       <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -2243,7 +2198,8 @@ h1:active {
             <button id="modeRussian" data-mode="russian">
               <svg class="flag-icon" viewBox="0 0 24 16">
                 <rect width="24" height="16" fill="white"/>
-                <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+                <rect y="0" width="24" height="5.33" fill="white"/>
+                <rect y="5.33" width="24" height="5.33" fill="#0039a6"/>
                 <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
               </svg>
             </button>
@@ -2285,7 +2241,8 @@ h1:active {
           <button id="modeRussianMobile" data-mode="russian">
             <svg class="flag-icon" viewBox="0 0 24 16">
               <rect width="24" height="16" fill="white"/>
-              <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+              <rect y="0" width="24" height="5.33" fill="white"/>
+              <rect y="5.33" width="24" height="5.33" fill="#0039a6"/>
               <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
             </svg>
           </button>
@@ -2980,16 +2937,16 @@ h1:active {
     }
     
     function clearThemeInput(event) {
-  event.stopPropagation();
-  document.getElementById('themeInput').value = '';
-  document.getElementById('themeClearInputBtn').classList.remove('visible');
-  selectedTheme = '';
-  // Показываем все темы, НЕ закрывая список
-  showAllThemes();
-  document.getElementById('themeInput').focus();
-  // Выполняем поиск с пустой темой
-  performSearch();
-}
+      event.stopPropagation();
+      document.getElementById('themeInput').value = '';
+      document.getElementById('themeClearInputBtn').classList.remove('visible');
+      selectedTheme = '';
+      // Показываем все темы, НЕ закрывая список
+      showAllThemes();
+      document.getElementById('themeInput').focus();
+      // Выполняем поиск с пустой темой
+      performSearch();
+    }
     
     // ========== УПРАВЛЕНИЕ ЧАСТЯМИ РЕЧИ ==========
     function togglePosSection() {
@@ -3101,16 +3058,16 @@ h1:active {
     }
     
     function clearPosInput(event) {
-  event.stopPropagation();
-  document.getElementById('posInput').value = '';
-  document.getElementById('posClearInputBtn').classList.remove('visible');
-  selectedPos = '';
-  // Показываем все части речи, НЕ закрывая список
-  showAllPos();
-  document.getElementById('posInput').focus();
-  // Выполняем поиск с пустой частью речи
-  performSearch();
-}
+      event.stopPropagation();
+      document.getElementById('posInput').value = '';
+      document.getElementById('posClearInputBtn').classList.remove('visible');
+      selectedPos = '';
+      // Показываем все части речи, НЕ закрывая список
+      showAllPos();
+      document.getElementById('posInput').focus();
+      // Выполняем поиск с пустой частью речи
+      performSearch();
+    }
     
     // ========== УПРАВЛЕНИЕ СОСТОЯНИЕМ РЕДАКТОРА ==========
     
@@ -4263,31 +4220,31 @@ h1:active {
     }
     
     document.addEventListener('click', function(event) {
-  const dropdown = document.getElementById('themeDropdown');
-  const posDropdown = document.getElementById('posDropdown');
-  
-  const isThemeClick = event.target.closest('.theme-input-wrapper') || 
-                       event.target.closest('#themeToggleBtn') || 
-                       event.target.closest('#themeToggleBtnMobile') ||
-                       event.target.closest('.theme-actions') ||
-                       event.target.closest('.theme-clear-input-btn'); // ← ДОБАВИТЬ
-  
-  const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
-                     event.target.closest('#posToggleBtn') || 
-                     event.target.closest('#posToggleBtnMobile') ||
-                     event.target.closest('.pos-actions') ||
-                     event.target.closest('.pos-clear-input-btn'); // ← ДОБАВИТЬ
-  
-  if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
-    dropdown.classList.remove('active');
-    themeDropdownVisible = false;
-  }
-  
-  if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
-    posDropdown.classList.remove('active');
-    posDropdownVisible = false;
-  }
-});
+      const dropdown = document.getElementById('themeDropdown');
+      const posDropdown = document.getElementById('posDropdown');
+      
+      const isThemeClick = event.target.closest('.theme-input-wrapper') || 
+                           event.target.closest('#themeToggleBtn') || 
+                           event.target.closest('#themeToggleBtnMobile') ||
+                           event.target.closest('.theme-actions') ||
+                           event.target.closest('.theme-clear-input-btn');
+      
+      const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
+                         event.target.closest('#posToggleBtn') || 
+                         event.target.closest('#posToggleBtnMobile') ||
+                         event.target.closest('.pos-actions') ||
+                         event.target.closest('.pos-clear-input-btn');
+      
+      if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
+        dropdown.classList.remove('active');
+        themeDropdownVisible = false;
+      }
+      
+      if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
+        posDropdown.classList.remove('active');
+        posDropdownVisible = false;
+      }
+    });
     
     window.addEventListener('load', function() {
       setTimeout(() => document.getElementById('searchInput').focus(), 300);
