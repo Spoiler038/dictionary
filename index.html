@@ -636,61 +636,68 @@
     }
 
     .theme-dropdown .theme-item {
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: nowrap;
-      position: relative;
-      min-height: 44px;
-    }
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  position: relative;
+  min-height: 44px;
+  overflow-x: auto; /* горизонтальный скролл */
+  overflow-y: hidden;
+  scrollbar-width: none; /* скрываем скроллбар в Firefox */
+  -ms-overflow-style: none; /* скрываем в IE/Edge */
+}
+    .theme-dropdown .theme-item::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
 
     .theme-dropdown .theme-item .theme-gr,
-    .theme-dropdown .theme-item .theme-ru {
-      font-weight: 600;
-      color: #2c3e50;
-      flex-shrink: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 38%;
-      padding-right: 4px;
-    }
+.theme-dropdown .theme-item .theme-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  flex-shrink: 0; /* не сжимаем */
+  white-space: nowrap;
+  padding-right: 8px;
+}
 
     .theme-dropdown .theme-item .theme-actions {
-      display: none;
-      gap: 4px;
-      flex-shrink: 0;
-      margin-left: auto;
-      position: sticky;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 0 2px 0 8px;
-      z-index: 2;
-      backdrop-filter: blur(4px);
-    }
+  display: none;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 2px 0 12px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  flex-direction: column; /* кнопки друг под другом */
+}
 
     .theme-dropdown .theme-item .theme-actions.visible {
       display: flex;
     }
 
     .theme-dropdown .theme-item .theme-actions button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 28px;
-      min-height: 28px;
-    }
+  padding: 4px 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+}
 
     .theme-dropdown .theme-item .theme-actions button svg {
       width: 16px;
@@ -795,69 +802,77 @@
     }
 
     .part-of-speech-dropdown .pos-item {
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: nowrap;
-      position: relative;
-      min-height: 44px;
-    }
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  position: relative;
+  min-height: 44px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.part-of-speech-dropdown .pos-item::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
 
     .part-of-speech-dropdown .pos-item .pos-gr,
-    .part-of-speech-dropdown .pos-item .pos-ru {
-      font-weight: 600;
-      color: #2c3e50;
-      flex-shrink: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 38%;
-      padding-right: 4px;
-    }
+.part-of-speech-dropdown .pos-item .pos-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-right: 8px;
+}
 
-    .part-of-speech-dropdown .pos-item .pos-actions {
-      display: none;
-      gap: 4px;
-      flex-shrink: 0;
-      margin-left: auto;
-      position: sticky;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 0 2px 0 8px;
-      z-index: 2;
-      backdrop-filter: blur(4px);
-    }
+.part-of-speech-dropdown .pos-item .pos-actions {
+  display: none;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 2px 0 12px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  flex-direction: column;
+}
 
-    .part-of-speech-dropdown .pos-item .pos-actions.visible {
-      display: flex;
-    }
+.part-of-speech-dropdown .pos-item .pos-actions.visible {
+  display: flex;
+}
 
-    .part-of-speech-dropdown .pos-item .pos-actions button {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 28px;
-      min-height: 28px;
-    }
+.part-of-speech-dropdown .pos-item .pos-actions button {
+  padding: 4px 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+}
 
-    .part-of-speech-dropdown .pos-item .pos-actions button svg {
-      width: 16px;
-      height: 16px;
-      stroke: white;
-      stroke-width: 2;
-      fill: none;
-    }
+.part-of-speech-dropdown .pos-item .pos-actions button svg {
+  width: 14px;
+  height: 14px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
 
     .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn {
       background: #f39c12;
@@ -1922,52 +1937,54 @@
       }
 
       .theme-dropdown .theme-item .theme-actions {
-        display: flex !important;
-        position: sticky;
-        right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 0 2px 0 8px;
-        gap: 4px;
-        z-index: 2;
-        backdrop-filter: blur(4px);
-        box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
-      }
-      
-      .theme-dropdown .theme-item .theme-actions button {
-        padding: 6px 8px;
-        font-size: 12px;
-        min-width: 30px;
-        min-height: 30px;
-      }
-      
-      .theme-dropdown .theme-item .theme-actions button svg {
-        width: 14px;
-        height: 14px;
-      }
+    display: flex !important;
+    position: sticky;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 2px 0 12px;
+    gap: 3px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
+    flex-direction: column;
+  }
+  
+  .theme-dropdown .theme-item .theme-actions button {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-width: 24px;
+    min-height: 24px;
+  }
+  
+  .theme-dropdown .theme-item .theme-actions button svg {
+    width: 14px;
+    height: 14px;
+  }
 
-      .part-of-speech-dropdown .pos-item .pos-actions {
-        display: flex !important;
-        position: sticky;
-        right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 0 2px 0 8px;
-        gap: 4px;
-        z-index: 2;
-        backdrop-filter: blur(4px);
-        box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
-      }
+  .part-of-speech-dropdown .pos-item .pos-actions {
+    display: flex !important;
+    position: sticky;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 2px 0 12px;
+    gap: 3px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
+    flex-direction: column;
+  }
 
-      .part-of-speech-dropdown .pos-item .pos-actions button {
-        padding: 6px 8px;
-        font-size: 12px;
-        min-width: 30px;
-        min-height: 30px;
-      }
-      
-      .part-of-speech-dropdown .pos-item .pos-actions button svg {
-        width: 14px;
-        height: 14px;
-      }
+  .part-of-speech-dropdown .pos-item .pos-actions button {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-width: 24px;
+    min-height: 24px;
+  }
+  
+  .part-of-speech-dropdown .pos-item .pos-actions button svg {
+    width: 14px;
+    height: 14px;
+  }
 
       .modal .form-actions {
         flex-direction: row !important;
@@ -2876,16 +2893,42 @@
       performSearch();
     }
     
-    function clearThemeInput(event) {
-      event.stopPropagation();
-      document.getElementById('themeInput').value = '';
-      document.getElementById('themeClearInputBtn').classList.remove('visible');
-      selectedTheme = '';
-      // Не закрываем список, а показываем все темы
-      showAllThemes();
-      document.getElementById('themeInput').focus();
-      performSearch();
-    }
+    
+  event.stopPropagation();
+  document.getElementById('themeInput').value = '';
+  document.getElementById('themeClearInputBtn').classList.remove('visible');
+  selectedTheme = '';
+  
+  // Показываем все темы, НЕ закрывая список
+  const dropdown = document.getElementById('themeDropdown');
+  const isEditorMode = isEditor;
+  
+  if (allThemes.length === 0) {
+    dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+  } else {
+    dropdown.innerHTML = allThemes.map(t => `
+      <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+        <span class="theme-gr">${t.gr}</span>
+        <span class="theme-ru">${t.ru}</span>
+        ${isEditorMode ? `<div class="theme-actions visible">
+          <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <svg><use href="#icon-edit"/></svg>
+          </button>
+          <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeleteThemeModal('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
+            <svg><use href="#icon-delete"/></svg>
+          </button>
+        </div>` : ''}
+      </div>
+    `).join('');
+  }
+  
+  dropdown.classList.add('active');
+  themeDropdownVisible = true;
+  document.getElementById('themeInput').focus();
+  
+  // Выполняем поиск с пустой темой, но НЕ закрываем список
+  performSearchSilent();
+}
     
     function togglePosSection() {
       const section = document.getElementById('posSection');
@@ -2995,16 +3038,58 @@
       performSearch();
     }
     
-    function clearPosInput(event) {
-      event.stopPropagation();
-      document.getElementById('posInput').value = '';
-      document.getElementById('posClearInputBtn').classList.remove('visible');
-      selectedPos = '';
-      // Не закрываем список, а показываем все части речи
-      showAllPos();
-      document.getElementById('posInput').focus();
-      performSearch();
-    }
+    
+  event.stopPropagation();
+  document.getElementById('posInput').value = '';
+  document.getElementById('posClearInputBtn').classList.remove('visible');
+  selectedPos = '';
+  
+  // Показываем все части речи, НЕ закрывая список
+  const dropdown = document.getElementById('posDropdown');
+  const isEditorMode = isEditor;
+  
+  if (allPos.length === 0) {
+    dropdown.innerHTML = '<div class="pos-item" style="color: #95a5a6; cursor: default;">Нет частей речи</div>';
+  } else {
+    dropdown.innerHTML = allPos.map(p => `
+      <div class="pos-item" onclick="selectPos('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+        <span class="pos-gr">${p.gr}</span>
+        <span class="pos-ru">${p.ru}</span>
+        ${isEditorMode ? `<div class="pos-actions visible">
+          <button class="icon-btn icon-edit" onclick="event.stopPropagation(); openEditPosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+            <svg><use href="#icon-edit"/></svg>
+          </button>
+          <button class="icon-btn icon-delete" onclick="event.stopPropagation(); openDeletePosModal('${p.gr.replace(/'/g, "\\'")}', '${p.ru.replace(/'/g, "\\'")}')">
+            <svg><use href="#icon-delete"/></svg>
+          </button>
+        </div>` : ''}
+      </div>
+    `).join('');
+  }
+  
+  dropdown.classList.add('active');
+  posDropdownVisible = true;
+  document.getElementById('posInput').focus();
+  
+  // Выполняем поиск с пустой частью речи, но НЕ закрываем список
+  performSearchSilent();
+}
+
+    function performSearchSilent() {
+  const query = document.getElementById('searchInput').value.trim();
+  const theme = selectedTheme;
+  const pos = selectedPos;
+  
+  if (!query && !theme && !pos) {
+    showInitialMessage();
+    return;
+  }
+  
+  if (allData && allData.words) {
+    const results = searchInCache(query, currentMode, theme, pos);
+    handleResults(results);
+  }
+}
     
     function handleTitleClick() {
       if (!isEditor) {
