@@ -680,29 +680,24 @@ h1:active {
   border-bottom: none;
 }
 
-.theme-dropdown .theme-item .theme-gr {
+.theme-dropdown .theme-item .theme-gr,
+.theme-dropdown .theme-item .theme-ru {
   font-weight: 600;
   color: #2c3e50;
   flex-shrink: 0;
   white-space: nowrap;
-}
-
-.theme-dropdown .theme-item .theme-ru {
-  color: #7f8c8d;
-  flex-shrink: 0;
-  text-align: left;
-  white-space: nowrap;
+  padding-right: 12px; /* добавить отступ справа */
 }
 
 .theme-dropdown .theme-item .theme-actions {
   display: none;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
   margin-left: auto;
   position: sticky;
   right: 0;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0 8px 0 12px;
+  padding: 0 8px 0 16px;
   z-index: 2;
   backdrop-filter: blur(4px);
 }
@@ -712,20 +707,22 @@ h1:active {
 }
 
 .theme-dropdown .theme-item .theme-actions button {
-  padding: 4px 8px;
+  padding: 8px 12px; /* увеличил padding */
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px; /* увеличил шрифт */
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 36px; /* минимальная ширина */
+  min-height: 36px; /* минимальная высота */
 }
 
 .theme-dropdown .theme-item .theme-actions button svg {
-  width: 16px;
-  height: 16px;
+  width: 20px; /* увеличил иконку */
+  height: 20px;
   stroke: white;
   stroke-width: 2;
   fill: none;
@@ -865,29 +862,24 @@ h1:active {
   border-bottom: none;
 }
 
-.part-of-speech-dropdown .pos-item .pos-gr {
+.part-of-speech-dropdown .pos-item .pos-gr,
+.part-of-speech-dropdown .pos-item .pos-ru {
   font-weight: 600;
   color: #2c3e50;
   flex-shrink: 0;
   white-space: nowrap;
+  padding-right: 12px; /* добавить отступ справа */
 }
-
-.part-of-speech-dropdown .pos-item .pos-ru {
-  color: #7f8c8d;
-  flex-shrink: 0;
-  text-align: left;
-  white-space: nowrap;
-}
-
+    
 .part-of-speech-dropdown .pos-item .pos-actions {
   display: none;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
   margin-left: auto;
   position: sticky;
   right: 0;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0 8px 0 12px;
+  padding: 0 8px 0 16px;
   z-index: 2;
   backdrop-filter: blur(4px);
 }
@@ -897,20 +889,22 @@ h1:active {
 }
 
 .part-of-speech-dropdown .pos-item .pos-actions button {
-  padding: 4px 8px;
+  padding: 8px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
 }
 
 .part-of-speech-dropdown .pos-item .pos-actions button svg {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   stroke: white;
   stroke-width: 2;
   fill: none;
@@ -1987,41 +1981,47 @@ h1:active {
     position: sticky;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
-    padding-left: 8px;
+    padding: 0 8px 0 20px; /* больше отступ слева */
+    gap: 10px;
     z-index: 2;
     backdrop-filter: blur(4px);
     box-shadow: -8px 0 12px rgba(255, 255, 255, 0.8);
   }
   
   .theme-dropdown .theme-item .theme-actions button {
-    padding: 6px 10px;
-    font-size: 14px;
+    padding: 10px 14px;
+    font-size: 16px;
+    min-width: 44px;
+    min-height: 44px;
   }
   
   .theme-dropdown .theme-item .theme-actions button svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
   }
-  
+
   .part-of-speech-dropdown .pos-item .pos-actions {
     display: flex !important;
     position: sticky;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
-    padding-left: 8px;
+    padding: 0 8px 0 20px;
+    gap: 10px;
     z-index: 2;
     backdrop-filter: blur(4px);
     box-shadow: -8px 0 12px rgba(255, 255, 255, 0.8);
   }
-  
+
   .part-of-speech-dropdown .pos-item .pos-actions button {
-    padding: 6px 10px;
-    font-size: 14px;
+    padding: 10px 14px;
+    font-size: 16px;
+    min-width: 44px;
+    min-height: 44px;
   }
   
   .part-of-speech-dropdown .pos-item .pos-actions button svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
   }
 
   .modal .form-actions {
@@ -2162,10 +2162,10 @@ h1:active {
       </symbol>
       
       <symbol id="flag-ru" viewBox="0 0 24 16">
-        <rect width="24" height="16" fill="white"/>
-        <rect y="0" width="24" height="5.33" fill="#0039a6"/>
-        <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
-      </symbol>
+  <rect width="24" height="16" fill="white"/>
+  <rect y="0" width="24" height="5.33" fill="#0039a6"/>
+  <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+</symbol>
       
       <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -4263,30 +4263,31 @@ h1:active {
     }
     
     document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('themeDropdown');
-      const posDropdown = document.getElementById('posDropdown');
-      
-      const isThemeClick = event.target.closest('.theme-input-wrapper') || 
-                           event.target.closest('#themeToggleBtn') || 
-                           event.target.closest('#themeToggleBtnMobile') ||
-                           event.target.closest('.theme-actions');
-      
-      const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
-                         event.target.closest('#posToggleBtn') || 
-                         event.target.closest('#posToggleBtnMobile') ||
-                         event.target.closest('.pos-actions') ||
-                         event.target.closest('.pos-clear-input-btn');
-      
-      if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
-        dropdown.classList.remove('active');
-        themeDropdownVisible = false;
-      }
-      
-      if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
-        posDropdown.classList.remove('active');
-        posDropdownVisible = false;
-      }
-    });
+  const dropdown = document.getElementById('themeDropdown');
+  const posDropdown = document.getElementById('posDropdown');
+  
+  const isThemeClick = event.target.closest('.theme-input-wrapper') || 
+                       event.target.closest('#themeToggleBtn') || 
+                       event.target.closest('#themeToggleBtnMobile') ||
+                       event.target.closest('.theme-actions') ||
+                       event.target.closest('.theme-clear-input-btn'); // ← ДОБАВИТЬ
+  
+  const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
+                     event.target.closest('#posToggleBtn') || 
+                     event.target.closest('#posToggleBtnMobile') ||
+                     event.target.closest('.pos-actions') ||
+                     event.target.closest('.pos-clear-input-btn'); // ← ДОБАВИТЬ
+  
+  if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
+    dropdown.classList.remove('active');
+    themeDropdownVisible = false;
+  }
+  
+  if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
+    posDropdown.classList.remove('active');
+    posDropdownVisible = false;
+  }
+});
     
     window.addEventListener('load', function() {
       setTimeout(() => document.getElementById('searchInput').focus(), 300);
