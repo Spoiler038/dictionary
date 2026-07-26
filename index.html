@@ -636,22 +636,18 @@
     }
 
     .theme-dropdown .theme-item {
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
-      position: relative;
-      min-height: 44px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  position: relative;
+  min-height: 44px;
+}
 
     .theme-dropdown .theme-item::-webkit-scrollbar {
       height: 0;
@@ -660,60 +656,100 @@
     }
 
     .theme-dropdown .theme-item .theme-text-wrapper {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-      padding-right: 80px;
-      white-space: nowrap;
-    }
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  padding-right: 90px; /* отступ под кнопки */
+}
 
-    .theme-dropdown .theme-item .theme-gr,
-    .theme-dropdown .theme-item .theme-ru {
+.theme-dropdown .theme-item .theme-gr::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+    
+    .theme-dropdown .theme-item .theme-gr {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 45%;
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+
+    .theme-dropdown .theme-item .theme-ru::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
+    .theme-dropdown .theme-item .theme-gr
       font-weight: 600;
       color: #2c3e50;
       flex-shrink: 0;
       white-space: nowrap;
     }
 
+    .theme-dropdown .theme-item .theme-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 45%;
+  flex-shrink: 0;
+  padding: 2px 0;
+  text-align: center;
+  margin: 0 auto;
+}
+
     .theme-dropdown .theme-item .theme-actions {
-      display: none;
-      gap: 4px;
-      flex-shrink: 0;
-      margin-left: auto;
-      position: sticky;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 0 2px 0 8px;
-      z-index: 2;
-      backdrop-filter: blur(4px);
-      flex-direction: row;
-    }
+  display: none;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 2px 0 8px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  flex-direction: row;
+}
 
     .theme-dropdown .theme-item .theme-actions.visible {
       display: flex;
     }
 
     .theme-dropdown .theme-item .theme-actions button {
-      padding: 4px 6px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 24px;
-      min-height: 24px;
-    }
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
 
     .theme-dropdown .theme-item .theme-actions button svg {
-      width: 14px;
-      height: 14px;
-      stroke: white;
-      stroke-width: 2;
-      fill: none;
-    }
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
 
     .theme-dropdown .theme-item .theme-actions .theme-edit-btn {
       background: #f39c12;
@@ -810,22 +846,18 @@
     }
 
     .part-of-speech-dropdown .pos-item {
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
-      position: relative;
-      min-height: 44px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  position: relative;
+  min-height: 44px;
+}
 
     .part-of-speech-dropdown .pos-item::-webkit-scrollbar {
       height: 0;
@@ -834,60 +866,93 @@
     }
 
     .part-of-speech-dropdown .pos-item .pos-text-wrapper {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-      padding-right: 80px;
-      white-space: nowrap;
-    }
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  padding-right: 90px;
+}
 
-    .part-of-speech-dropdown .pos-item .pos-gr,
+    .part-of-speech-dropdown .pos-item .pos-gr {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 45%;
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+
+    .part-of-speech-dropdown .pos-item .pos-gr::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
     .part-of-speech-dropdown .pos-item .pos-ru {
-      font-weight: 600;
-      color: #2c3e50;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 45%;
+  flex-shrink: 0;
+  padding: 2px 0;
+  text-align: center;
+  margin: 0 auto;
+}
+
+    .part-of-speech-dropdown .pos-item .pos-ru::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
 
     .part-of-speech-dropdown .pos-item .pos-actions {
-      display: none;
-      gap: 4px;
-      flex-shrink: 0;
-      margin-left: auto;
-      position: sticky;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 0 2px 0 8px;
-      z-index: 2;
-      backdrop-filter: blur(4px);
-      flex-direction: row;
-    }
+  display: none;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: sticky;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0 2px 0 8px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  flex-direction: row;
+}
 
     .part-of-speech-dropdown .pos-item .pos-actions.visible {
       display: flex;
     }
 
     .part-of-speech-dropdown .pos-item .pos-actions button {
-      padding: 4px 6px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 24px;
-      min-height: 24px;
-    }
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
 
-    .part-of-speech-dropdown .pos-item .pos-actions button svg {
-      width: 14px;
-      height: 14px;
-      stroke: white;
-      stroke-width: 2;
-      fill: none;
-    }
+.part-of-speech-dropdown .pos-item .pos-actions button svg {
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+}
 
     .part-of-speech-dropdown .pos-item .pos-actions .pos-edit-btn {
       background: #f39c12;
@@ -1950,55 +2015,56 @@
         display: none !important;
       }
 
-      .theme-dropdown .theme-item .theme-actions {
-        display: flex !important;
-        position: sticky;
-        right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 0 2px 0 8px;
-        gap: 3px;
-        z-index: 2;
-        backdrop-filter: blur(4px);
-        box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
-        flex-direction: row;
-      }
-      
-      .theme-dropdown .theme-item .theme-actions button {
-        padding: 4px 6px;
-        font-size: 11px;
-        min-width: 24px;
-        min-height: 24px;
-      }
-      
-      .theme-dropdown .theme-item .theme-actions button svg {
-        width: 14px;
-        height: 14px;
-      }
+  
+  .theme-dropdown .theme-item .theme-actions {
+    display: flex !important;
+    position: sticky;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 2px 0 8px;
+    gap: 4px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
+    flex-direction: row;
+  }
+  
+  .theme-dropdown .theme-item .theme-actions button {
+    padding: 6px 10px;
+    font-size: 14px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  .theme-dropdown .theme-item .theme-actions button svg {
+    width: 18px;
+    height: 18px;
+  }
 
-      .part-of-speech-dropdown .pos-item .pos-actions {
-        display: flex !important;
-        position: sticky;
-        right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 0 2px 0 8px;
-        gap: 3px;
-        z-index: 2;
-        backdrop-filter: blur(4px);
-        box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
-        flex-direction: row;
-      }
+  .part-of-speech-dropdown .pos-item .pos-actions {
+    display: flex !important;
+    position: sticky;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 2px 0 8px;
+    gap: 4px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    box-shadow: -4px 0 8px rgba(255, 255, 255, 0.8);
+    flex-direction: row;
+  }
 
-      .part-of-speech-dropdown .pos-item .pos-actions button {
-        padding: 4px 6px;
-        font-size: 11px;
-        min-width: 24px;
-        min-height: 24px;
-      }
-      
-      .part-of-speech-dropdown .pos-item .pos-actions button svg {
-        width: 14px;
-        height: 14px;
-      }
+  .part-of-speech-dropdown .pos-item .pos-actions button {
+    padding: 6px 10px;
+    font-size: 14px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  .part-of-speech-dropdown .pos-item .pos-actions button svg {
+    width: 18px;
+    height: 18px;
+  }
 
       .modal .form-actions {
         flex-direction: row !important;
