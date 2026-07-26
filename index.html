@@ -2883,7 +2883,7 @@ h1:active {
       const isEditorMode = isEditor;
       
       if (allThemes.length === 0) {
-        dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default;">Нет тем</div>';
+        dropdown.innerHTML = '<div class="theme-item" style="color: #95a5a6; cursor: default; padding: 2 px">Нет тем</div>';
       } else {
         dropdown.innerHTML = allThemes.map(t => `
           <div class="theme-item" onclick="selectTheme('${t.gr.replace(/'/g, "\\'")}', '${t.ru.replace(/'/g, "\\'")}')">
