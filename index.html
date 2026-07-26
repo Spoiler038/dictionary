@@ -2153,6 +2153,34 @@ h1:active {
 .icon-btn.icon-delete:hover svg {
   stroke: #e74c3c;
 }
+
+/* Добавьте в конец CSS */
+html, body {
+  overscroll-behavior: none !important;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px; /* оставляем существующий padding */
+}
+
+/* Делаем sticky только для верхней части */
+.search-section {
+  position: sticky !important;
+  top: 0;
+  background: white;
+  z-index: 10;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+/* Результаты занимают оставшееся место */
+#resultsContainer {
+  flex: 1;
+}
+    
   </style>
 </head>
 <body>
