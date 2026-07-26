@@ -2167,7 +2167,22 @@ h1:active {
   stroke: #e74c3c;
 }
 
-   
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  stroke: #555;
+  stroke-width: 2;
+  fill: none;
+  transition: stroke 0.2s;
+}
+
+.password-toggle:hover .eye-icon {
+  stroke: #2c3e50;
+}
+
+.password-toggle .eye-icon use {
+  stroke: currentColor;
+}   
   </style>
 </head>
 <body>
@@ -2196,6 +2211,16 @@ h1:active {
         <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
         <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
       </symbol>
+
+      <symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+  <circle cx="12" cy="12" r="3"/>
+</symbol>
+
+<symbol id="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+  <line x1="1" y1="1" x2="23" y2="23"/>
+</symbol>
       
       <symbol id="flag-ru" viewBox="0 0 24 16">
         <rect width="24" height="16" fill="white"/>
@@ -2371,7 +2396,11 @@ h1:active {
         <label>Введите пароль редактора</label>
         <div class="password-input">
           <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter') login()">
-          <button class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
+          <button class="password-toggle" onclick="togglePassword('loginPassword')">
+  <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24">
+    <use href="#icon-eye"/>
+  </svg>
+</button>
         </div>
       </div>
       
@@ -2501,7 +2530,11 @@ h1:active {
         <label>Текущий пароль</label>
         <div class="password-input">
           <input type="password" id="oldPassword" placeholder="Введите текущий пароль">
-          <button class="password-toggle" onclick="togglePassword('oldPassword')">👁️</button>
+          <button class="password-toggle" onclick="togglePassword('oldPassword')">
+  <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24">
+    <use href="#icon-eye"/>
+  </svg>
+</button>
         </div>
       </div>
       
@@ -2509,7 +2542,11 @@ h1:active {
         <label>Новый пароль (мин. 4 символа)</label>
         <div class="password-input">
           <input type="password" id="newPassword" placeholder="Введите новый пароль">
-          <button class="password-toggle" onclick="togglePassword('newPassword')">👁️</button>
+          <button class="password-toggle" onclick="togglePassword('newPassword')">
+  <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24">
+    <use href="#icon-eye"/>
+  </svg>
+</button>
         </div>
       </div>
       
@@ -4284,13 +4321,18 @@ h1:active {
     }
     
     function togglePassword(inputId) {
-      const input = document.getElementById(inputId);
-      if (input.type === 'password') {
-        input.type = 'text';
-      } else {
-        input.type = 'password';
-      }
-    }
+  const input = document.getElementById(inputId);
+  const btn = input.parentElement.querySelector('.password-toggle');
+  const icon = btn.querySelector('.eye-icon use');
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.setAttribute('href', '#icon-eye-off');
+  } else {
+    input.type = 'password';
+    icon.setAttribute('href', '#icon-eye');
+  }
+}
     
     document.addEventListener('click', function(event) {
       const dropdown = document.getElementById('themeDropdown');
