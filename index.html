@@ -1180,6 +1180,7 @@ h1:active {
 
 .progress-container.active {
   display: block;
+  animation: fadeInProgress 0.3s ease;
 }
 
 .progress-bar {
@@ -1191,7 +1192,7 @@ h1:active {
   margin: 10px 0;
 }
 
-.progress-bar .progress-fill {
+.progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #3498db, #2ecc71);
   border-radius: 4px;
@@ -2285,6 +2286,28 @@ a,
 .modal-icon svg use {
   stroke: currentColor;
 }
+
+    /* Плавная анимация прогресс-бара */
+.progress-fill {
+  transition: width 0.3s ease-out;
+}
+
+    @keyframes fadeInProgress {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Пульсирующий эффект при загрузке */
+.progress-container.active .progress-fill {
+  background: linear-gradient(90deg, #3498db, #2ecc71, #3498db);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
   </style>
 </head>
 <body>
@@ -2720,6 +2743,8 @@ a,
     let isShowingAll = false;
     let isSearching = false;
     let searchTimeout = null;
+    let progressStartTime = 0;
+    let progressAnimationId = null;
     
     const searchBtn = document.getElementById('searchBtn');
     
@@ -2793,22 +2818,7 @@ a,
         toast.classList.remove('show');
       }, 2000);
     }
-    
-    function showProgress(percent) {
-      const container = document.getElementById('progressContainer');
-      const fill = document.getElementById('progressFill');
-      const text = document.getElementById('progressPercent');
-      
-      container.classList.add('active');
-      fill.style.width = percent + '%';
-      text.textContent = percent;
-      
-      if (percent >= 100) {
-        setTimeout(() => {
-          container.classList.remove('active');
-        }, 500);
-      }
-    }
+  
     
     function toggleBodyScroll(disable) {
       if (disable) {
@@ -2819,111 +2829,190 @@ a,
     }
     
     async function loadData() {
-      if (isLoading) return;
-      isLoading = true;
-      
-      document.getElementById('resultsContainer').innerHTML = `
-        <div class="loading">
-          <div class="spinner"></div>
-          <br>Загрузка данных...
-        </div>
-      `;
-      
-      try {
-        const meta = await callGAS('getAll');
-        if (meta.error) {
-          throw new Error(meta.error);
-        }
-        
-        currentVersion = meta.version;
-        allThemes = meta.themes || [];
-        allPos = meta.pos || [];
-        document.getElementById('versionBadge').textContent = 'v' + currentVersion;
-        
-        const totalPages = meta.totalPages || 0;
-        const totalWords = meta.total || 0;
-        
-        if (totalWords === 0) {
-          allData = { words: [], themes: allThemes, pos: allPos, version: currentVersion, total: 0 };
-          isLoading = false;
-          showInitialMessage();
-          return;
-        }
-        
-        let loadedPages = 0;
-        const pagePromises = [];
-        
-        for (let page = 1; page <= totalPages; page++) {
-          const promise = loadPage(page, PAGE_SIZE).then(data => {
-            loadedPages++;
-            const progress = Math.round((loadedPages / totalPages) * 100);
-            showProgress(progress);
-            return data;
-          });
-          pagePromises.push(promise);
-        }
-        
-        const pagesData = await Promise.all(pagePromises);
-        
-        let allWords = [];
-        pagesData.forEach(pageData => {
-          if (pageData.words) {
-            allWords = allWords.concat(pageData.words);
-          }
-        });
-        
-        allData = {
-          words: allWords,
-          themes: allThemes,
-          pos: allPos,
-          version: currentVersion,
-          total: totalWords,
-          totalPages: totalPages
-        };
-        
-        try {
-          localStorage.setItem('dictionary_data', JSON.stringify(allData));
-          localStorage.setItem('dictionary_version', currentVersion);
-        } catch (e) {}
-        
-        isLoading = false;
-        showInitialMessage();
-        return allData;
-        
-      } catch (error) {
-        isLoading = false;
-        console.error('Ошибка загрузки данных:', error);
-        
-        try {
-          const cached = localStorage.getItem('dictionary_data');
-          if (cached) {
-            allData = JSON.parse(cached);
-            allThemes = allData.themes || [];
-            allPos = allData.pos || [];
-            currentVersion = allData.version || '0';
-            document.getElementById('versionBadge').textContent = 'v' + currentVersion;
-            showInitialMessage();
-            return allData;
-          }
-        } catch (e) {}
-        
-        throw error;
-      }
+  if (isLoading) return;
+  isLoading = true;
+  
+  document.getElementById('resultsContainer').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <br>Загрузка данных...
+    </div>
+  `;
+  
+  // Запоминаем время начала загрузки
+  progressStartTime = Date.now();
+  
+  try {
+    // 1. Получаем метаданные
+    const meta = await callGAS('getAll');
+    if (meta.error) {
+      throw new Error(meta.error);
     }
     
-    function loadPage(page, pageSize) {
-      return new Promise((resolve, reject) => {
-        callGAS('getPage', { page: page, pageSize: pageSize })
-          .then(data => {
-            if (data.error) {
-              reject(new Error(data.error));
-            } else {
-              resolve(data);
-            }
-          })
-          .catch(reject);
-      });
+    currentVersion = meta.version;
+    allThemes = meta.themes || [];
+    allPos = meta.pos || [];
+    document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+    
+    const totalPages = meta.totalPages || 0;
+    const totalWords = meta.total || 0;
+    
+    if (totalWords === 0) {
+      allData = { words: [], themes: allThemes, pos: allPos, version: currentVersion, total: 0 };
+      isLoading = false;
+      showInitialMessage();
+      hideProgressWithDelay();
+      return;
     }
+    
+    // 2. Загружаем все страницы с реальным прогрессом
+    let loadedWords = 0;
+    let allWords = [];
+    const pagePromises = [];
+    
+    // Показываем начальный прогресс 5%
+    showProgress(5);
+    
+    for (let page = 1; page <= totalPages; page++) {
+      const promise = loadPage(page, PAGE_SIZE).then(data => {
+        if (data.words && data.words.length > 0) {
+          loadedWords += data.words.length;
+          // Реальный прогресс от 5% до 95%
+          const progress = Math.round(5 + (loadedWords / totalWords) * 90);
+          showProgress(Math.min(progress, 95));
+          return data;
+        }
+        return data;
+      });
+      pagePromises.push(promise);
+    }
+    
+    const pagesData = await Promise.all(pagePromises);
+    
+    pagesData.forEach(pageData => {
+      if (pageData.words) {
+        allWords = allWords.concat(pageData.words);
+      }
+    });
+    
+    allData = {
+      words: allWords,
+      themes: allThemes,
+      pos: allPos,
+      version: currentVersion,
+      total: totalWords,
+      totalPages: totalPages
+    };
+    
+    try {
+      localStorage.setItem('dictionary_data', JSON.stringify(allData));
+      localStorage.setItem('dictionary_version', currentVersion);
+    } catch (e) {}
+    
+    isLoading = false;
+    
+    // Показываем 100% с задержкой
+    showProgress(100);
+    
+    // Скрываем прогресс с задержкой (минимум 1.5 секунды)
+    setTimeout(() => {
+      hideProgressWithDelay();
+    }, 500);
+    
+    showInitialMessage();
+    return allData;
+    
+  } catch (error) {
+    isLoading = false;
+    console.error('Ошибка загрузки данных:', error);
+    hideProgressWithDelay();
+    
+    try {
+      const cached = localStorage.getItem('dictionary_data');
+      if (cached) {
+        allData = JSON.parse(cached);
+        allThemes = allData.themes || [];
+        allPos = allData.pos || [];
+        currentVersion = allData.version || '0';
+        document.getElementById('versionBadge').textContent = 'v' + currentVersion;
+        showInitialMessage();
+        return allData;
+      }
+    } catch (e) {}
+    
+    throw error;
+  }
+}
+
+function loadPage(page, pageSize) {
+  return new Promise((resolve, reject) => {
+    callGAS('getPage', { page: page, pageSize: pageSize })
+      .then(data => {
+        if (data.error) {
+          reject(new Error(data.error));
+        } else {
+          resolve(data);
+        }
+      })
+      .catch(reject);
+  });
+}
+
+    function showProgress(percent) {
+  const container = document.getElementById('progressContainer');
+  const fill = document.getElementById('progressFill');
+  const text = document.getElementById('progressPercent');
+  
+  container.classList.add('active');
+  
+  // Плавная анимация заполнения
+  const currentWidth = parseFloat(fill.style.width) || 0;
+  if (percent > currentWidth) {
+    // Анимируем заполнение
+    animateProgress(currentWidth, percent, 300);
+  } else {
+    fill.style.width = percent + '%';
+  }
+  
+  text.textContent = percent;
+}
+
+function animateProgress(from, to, duration) {
+  const fill = document.getElementById('progressFill');
+  const startTime = performance.now();
+  
+  function updateProgress(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    // Плавная функция easeOut
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const currentValue = from + (to - from) * eased;
+    
+    fill.style.width = currentValue + '%';
+    
+    if (progress < 1) {
+      requestAnimationFrame(updateProgress);
+    }
+  }
+  
+  requestAnimationFrame(updateProgress);
+}
+
+function hideProgressWithDelay() {
+  const container = document.getElementById('progressContainer');
+  const elapsed = Date.now() - progressStartTime;
+  const minDisplayTime = 1500; // минимум 1.5 секунды
+  
+  if (elapsed < minDisplayTime) {
+    // Если прошло меньше 1.5 секунд, ждем
+    setTimeout(() => {
+      container.classList.remove('active');
+    }, minDisplayTime - elapsed);
+  } else {
+    container.classList.remove('active');
+  }
+}    
     
     async function checkVersion() {
       try {
