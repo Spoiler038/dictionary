@@ -2170,6 +2170,17 @@ h1:active {
 .password-toggle .eye-icon use {
   stroke: currentColor;
 }   
+
+    .modal-icon svg {
+  display: block;
+  margin: 0 auto;
+  width: 64px;
+  height: 64px;
+}
+
+.modal-icon svg use {
+  stroke: currentColor;
+}
   </style>
 </head>
 <body>
@@ -2207,6 +2218,13 @@ h1:active {
 <symbol id="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
   <line x1="1" y1="1" x2="23" y2="23"/>
+</symbol>
+
+      <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <polyline points="3 6 5 6 21 6"/>
+  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+  <line x1="10" y1="11" x2="10" y2="17"/>
+  <line x1="14" y1="11" x2="14" y2="17"/>
 </symbol>
       
       <symbol id="flag-ru" viewBox="0 0 24 16">
@@ -2489,22 +2507,29 @@ h1:active {
   </div>
   
   <div id="deleteModal" class="modal">
-    <div class="modal-content">
-      <button class="close" onclick="closeModal('deleteModal')">&times;</button>
-      <div class="modal-icon">🗑️</div>
-      <h2>Удаление</h2>
-      <div id="deleteMessage" class="modal-message"></div>
-      <p style="text-align: center; color: #555; margin-bottom: 20px;">
-        Вы уверены, что хотите удалить это?<br>
-        <small style="color: #95a5a6;">Это действие нельзя отменить</small>
-      </p>
-      
-      <div class="form-actions">
-        <button class="btn-secondary" onclick="closeModal('deleteModal')">Отмена</button>
-        <button class="btn-danger-modal" onclick="confirmDelete()">🗑️ Удалить</button>
-      </div>
+  <div class="modal-content">
+    <button class="close" onclick="closeModal('deleteModal')">&times;</button>
+    <div class="modal-icon">
+  <svg width="64" height="64" viewBox="0 0 24 24" stroke="#e74c3c" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    <line x1="10" y1="11" x2="10" y2="17"/>
+    <line x1="14" y1="11" x2="14" y2="17"/>
+  </svg>
+</div>
+    <h2>Удаление</h2>
+    <div id="deleteMessage" class="modal-message"></div>
+    <p style="text-align: center; color: #555; margin-bottom: 20px;">
+      Вы уверены, что хотите удалить это?<br>
+      <small style="color: #95a5a6;">Это действие нельзя отменить</small>
+    </p>
+    
+    <div class="form-actions">
+      <button class="btn-secondary" onclick="closeModal('deleteModal')">Отмена</button>
+      <button class="btn-danger-modal" onclick="confirmDelete()">🗑️ Удалить</button>
     </div>
   </div>
+</div>
   
   <div id="adminModal" class="modal">
     <div class="modal-content">
