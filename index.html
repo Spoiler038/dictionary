@@ -2526,7 +2526,12 @@ h1:active {
     
     <div class="form-actions">
       <button class="btn-secondary" onclick="closeModal('deleteModal')">Отмена</button>
-      <button class="btn-danger-modal" onclick="confirmDelete()">🗑️ Удалить</button>
+      <button class="btn-danger-modal" onclick="confirmDelete()">
+        <svg width="18" height="18" viewBox="0 0 24 24" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+          <use href="#icon-trash"/>
+        </svg>
+        Удалить
+      </button>
     </div>
   </div>
 </div>
