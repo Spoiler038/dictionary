@@ -1192,7 +1192,7 @@ h1:active {
   margin: 10px 0;
 }
 
-.progress-bar {
+.progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #3498db, #2ecc71);
   border-radius: 4px;
@@ -2287,12 +2287,12 @@ a,
   stroke: currentColor;
 }
 
-    /* Плавная анимация прогресс-бара */
+/* Плавная анимация прогресс-бара */
 .progress-fill {
   transition: width 0.3s ease-out;
 }
 
-    @keyframes fadeInProgress {
+@keyframes fadeInProgress {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
@@ -2976,7 +2976,7 @@ function loadPage(page, pageSize) {
   
   text.textContent = percent;
 }
-
+    
 function animateProgress(from, to, duration) {
   const fill = document.getElementById('progressFill');
   const startTime = performance.now();
@@ -3012,7 +3012,7 @@ function hideProgressWithDelay() {
   } else {
     container.classList.remove('active');
   }
-}    
+}   
     
     async function checkVersion() {
       try {
