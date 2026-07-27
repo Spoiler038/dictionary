@@ -658,7 +658,7 @@ h1:active {
   min-width: 0;
   align-items: center;
   padding-right: 2px;
-  justify-content: space-between; /* слова по краям */
+  justify-content: space-between;
 }
 
 .theme-dropdown .theme-item .theme-gr {
@@ -1574,6 +1574,110 @@ h1:active {
   border-bottom: none;
 }
 
+/* ===== ОТКЛЮЧЕНИЕ ВЫДЕЛЕНИЯ НА ТЕЛЕФОНАХ ===== */
+/* Убираем подсветку при касании на всех кликабельных элементах */
+button,
+a,
+[onclick],
+.theme-item,
+.pos-item,
+.result-item,
+.header-buttons button,
+.controls-row button,
+.mode-selector button,
+.theme-actions button,
+.pos-actions button,
+.search-btn,
+.theme-toggle-btn,
+.part-of-speech-toggle-btn,
+.add-theme-btn,
+.add-pos-btn,
+.btn-logout,
+.btn-show-all,
+.active-btn,
+.icon-btn,
+.close,
+.password-toggle {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Убираем фоновое выделение при активном состоянии на телефонах */
+.theme-item:active,
+.pos-item:active,
+.result-item:active,
+.header-buttons button:active,
+.controls-row button:active,
+.mode-selector button:active,
+.theme-toggle-btn:active,
+.part-of-speech-toggle-btn:active {
+  background: transparent !important;
+}
+
+/* Для кнопок в выпадающих списках - сохраняем цвет при нажатии */
+.theme-actions button:active,
+.pos-actions button:active {
+  background: #f39c12 !important;
+}
+
+.theme-actions .theme-delete-btn:active,
+.pos-actions .pos-delete-btn:active {
+  background: #e74c3c !important;
+}
+
+/* Кнопки в шапке */
+.header-buttons button:active {
+  background: transparent !important;
+  transform: scale(0.95);
+}
+
+.header-buttons button.active-btn:active {
+  background: #3498db !important;
+}
+
+/* Кнопка "Найти" */
+.search-btn:active {
+  background: #2980b9 !important;
+  transform: scale(0.95);
+}
+
+/* Отключаем выделение на мобильных устройствах */
+@media (max-width: 767px) {
+  /* Убираем фон при нажатии на элементы списков */
+  .theme-item:active,
+  .pos-item:active,
+  .result-item:active {
+    background: transparent !important;
+  }
+  
+  /* Кнопки управления в выпадающих списках */
+  .theme-actions button:active,
+  .pos-actions button:active {
+    background: #f39c12 !important;
+  }
+  
+  .theme-actions .theme-delete-btn:active,
+  .pos-actions .pos-delete-btn:active {
+    background: #e74c3c !important;
+  }
+  
+  /* Кнопки в шапке */
+  .header-buttons button:active {
+    background: transparent !important;
+  }
+  
+  .header-buttons button.active-btn:active {
+    background: #3498db !important;
+  }
+  
+  /* Кнопка "Найти" */
+  .search-btn:active {
+    background: #2980b9 !important;
+  }
+}
+
 @media (min-width: 768px) {
   #app {
     padding: 30px;
@@ -2171,7 +2275,7 @@ h1:active {
   stroke: currentColor;
 }   
 
-    .modal-icon svg {
+.modal-icon svg {
   display: block;
   margin: 0 auto;
   width: 64px;
