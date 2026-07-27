@@ -1,7 +1,7 @@
 {
-  "name": "Греческо-русский словарь",
+  "name": "Греческо- русский словарь",
   "short_name": "Словарь",
-  "description": "Словарь греческого языка с русским переводом",
+  "description": "Словарь греческо- русских слов",
   "start_url": "https://spoiler038.github.io/dictionary/index.html",
   "scope": "https://spoiler038.github.io/dictionary/",
   "display": "standalone",
