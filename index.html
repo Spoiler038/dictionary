@@ -3209,7 +3209,7 @@ h1:active {
       const container = document.getElementById('headerButtons');
       if (isEditor) {
         container.innerHTML = `
-          <span class="editor-badge">✏️ РЕДАКТОР</span>
+          <span class="editor-badge">📝 РЕДАКТОР</span>
           <button onclick="openAdminModal()">🔑 Пароль</button>
           <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
           <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
@@ -3339,8 +3339,8 @@ h1:active {
         openLoginModal();
         return;
       }
-      document.getElementById('modalTitle').textContent = '✏️ Редактировать слово';
-      document.getElementById('editIcon').textContent = '✏️';
+      document.getElementById('modalTitle').textContent = 'Редактировать слово';
+      document.getElementById('editIcon').textContent = '📝';
       document.getElementById('editWordGr').value = wordGr;
       document.getElementById('editWordRu').value = wordRu;
       document.getElementById('editThemeGr').value = themeGr;
@@ -3383,7 +3383,7 @@ h1:active {
     function openEditThemeModal(gr, ru) {
       if (!isEditor) return;
       themeEditingTarget = { gr: gr, ru: ru };
-      document.getElementById('themeEditTitle').textContent = '✏️ Редактировать тему';
+      document.getElementById('themeEditTitle').textContent = '📝 Редактировать тему';
       document.getElementById('themeEditIcon').textContent = '📂';
       document.getElementById('editThemeGrOnly').value = gr;
       document.getElementById('editThemeRuOnly').value = ru;
@@ -3501,7 +3501,7 @@ h1:active {
     function openEditPosModal(gr, ru) {
       if (!isEditor) return;
       posEditingTarget = { gr: gr, ru: ru };
-      document.getElementById('posEditTitle').textContent = '✏️ Редактировать часть речи';
+      document.getElementById('posEditTitle').textContent = '📝 Редактировать часть речи';
       document.getElementById('posEditIcon').textContent = '📚';
       document.getElementById('editPosGrOnly').value = gr;
       document.getElementById('editPosRuOnly').value = ru;
