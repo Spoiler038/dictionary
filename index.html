@@ -4671,28 +4671,58 @@ function uploadTrainingImage() {
 }
 
 function uploadToCloudinary(file, status, input) {
+  // Проверяем настройки
+  console.log('📤 Cloudinary настройки:', CLOUDINARY_CONFIG);
+  
+  if (!CLOUDINARY_CONFIG.cloudName || !CLOUDINARY_CONFIG.uploadPreset) {
+    status.textContent = '❌ Ошибка: не настроен Cloudinary';
+    status.style.color = '#e74c3c';
+    return;
+  }
+  
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
-  formData.append('folder', CLOUDINARY_CONFIG.folder);
+  formData.append('folder', CLOUDINARY_CONFIG.folder || '');
   
   // Добавляем уникальное имя файла
   const uniqueName = Date.now() + '_' + file.name.replace(/\s/g, '_');
   formData.append('public_id', uniqueName);
   
+  // Добавляем tags для поиска
+  formData.append('tags', 'dictionary,word');
+  
+  // Логируем, что отправляем
+  console.log('📤 Отправка в Cloudinary:');
+  console.log('  - cloudName:', CLOUDINARY_CONFIG.cloudName);
+  console.log('  - uploadPreset:', CLOUDINARY_CONFIG.uploadPreset);
+  console.log('  - fileName:', file.name);
+  console.log('  - fileSize:', file.size);
+  
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
+  console.log('  - URL:', url);
   
   fetch(url, {
     method: 'POST',
     body: formData
   })
   .then(response => {
+    console.log('📥 Ответ Cloudinary:', response.status, response.statusText);
+    
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      // Пытаемся получить детали ошибки
+      return response.json().then(data => {
+        console.error('❌ Cloudinary ошибка:', data);
+        throw new Error(data.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+      }).catch(() => {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      });
     }
     return response.json();
   })
   .then(data => {
+    console.log('✅ Cloudinary ответ:', data);
+    
     if (data.error) {
       throw new Error(data.error.message || 'Ошибка загрузки');
     }
@@ -4705,12 +4735,10 @@ function uploadToCloudinary(file, status, input) {
     
     // Показываем превью
     showImagePreview(imageUrl);
-    
-    // Сохраняем ссылку в таблицу при сохранении слова
     showToast('✅ Фото загружено в Cloudinary');
   })
   .catch(error => {
-    console.error('Ошибка загрузки:', error);
+    console.error('❌ Ошибка загрузки:', error);
     status.textContent = `❌ Ошибка: ${error.message}`;
     status.style.color = '#e74c3c';
   });
