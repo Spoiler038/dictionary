@@ -4480,60 +4480,87 @@ function hideProgressWithDelay() {
     }
     
     function createResultItem(item) {
-      const isMobile = window.innerWidth < 768;
-      
-      let actionsHtml = '';
-      if (isEditor) {
-        actionsHtml = `
-          <div class="actions">
-            <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
-              <svg><use href="#icon-edit"/></svg> Редактировать
-            </button>
-            <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
-              <svg><use href="#icon-delete"/></svg> Удалить
-            </button>
+  const isMobile = window.innerWidth < 768;
+  
+  let actionsHtml = '';
+  if (isEditor) {
+    actionsHtml = `
+      <div class="actions">
+        <button class="btn-edit" onclick="event.stopPropagation(); openEditModal(${item.id}, '${escapeHTML(item.wordGr)}', '${escapeHTML(item.wordRu)}', '${escapeHTML(item.themeGr)}', '${escapeHTML(item.posGr || '')}')">
+          <svg><use href="#icon-edit"/></svg> Редактировать
+        </button>
+        <button class="btn-delete" onclick="event.stopPropagation(); openDeleteModal(${item.id}, 'word')">
+          <svg><use href="#icon-delete"/></svg> Удалить
+        </button>
+      </div>
+    `;
+  }
+  
+  // Формируем строку темы и части речи
+  let themeDisplay = '';
+  if (item.themeGr && item.themeRu) {
+    themeDisplay = `${item.themeGr} / ${item.themeRu}`;
+  } else if (item.themeGr) {
+    themeDisplay = item.themeGr;
+  }
+  
+  let posDisplay = '';
+  if (item.posGr && item.posRu) {
+    posDisplay = `${item.posGr} / ${item.posRu}`;
+  } else if (item.posGr) {
+    posDisplay = item.posGr;
+  }
+  
+  // Собираем строку с темой и частью речи
+  let themeLine = '';
+  if (themeDisplay && posDisplay) {
+    themeLine = `📂 ${themeDisplay} | ${posDisplay}`;
+  } else if (themeDisplay) {
+    themeLine = `📂 ${themeDisplay}`;
+  } else if (posDisplay) {
+    themeLine = `📂 ${posDisplay}`;
+  } else {
+    themeLine = '📂';
+  }
+  
+  if (isMobile) {
+    return `
+      <div class="result-item" data-id="${item.id}">
+        <div class="theme">${themeLine}</div>
+        <div class="word-row">
+          <div class="word-cell word-cell-left">
+            <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
+            <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
           </div>
-        `;
-      }
-      
-      if (isMobile) {
-        return `
-          <div class="result-item" data-id="${item.id}">
-            <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
-            <div class="word-row">
-              <div class="word-cell word-cell-left">
-                <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
-                <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
-              </div>
-            </div>
-            <div class="word-row">
-              <div class="word-cell word-cell-center">
-                <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
-                <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
-              </div>
-            </div>
-            ${actionsHtml}
-          </div>
-        `;
-      }
-      
-      return `
-        <div class="result-item" data-id="${item.id}">
-          <div class="theme">📂 ${item.themeGr}${item.themeRu ? ' / ' + item.themeRu : ''}${item.posGr ? ' | ' + item.posGr : ''}</div>
-          <div class="word-row">
-            <div class="word-cell word-cell-left">
-              <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
-              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
-            </div>
-            <div class="word-cell word-cell-center">
-              <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
-              <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
-            </div>
-          </div>
-          ${actionsHtml}
         </div>
-      `;
-    }
+        <div class="word-row">
+          <div class="word-cell word-cell-center">
+            <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
+            <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+          </div>
+        </div>
+        ${actionsHtml}
+      </div>
+    `;
+  }
+  
+  return `
+    <div class="result-item" data-id="${item.id}">
+      <div class="theme">${themeLine}</div>
+      <div class="word-row">
+        <div class="word-cell word-cell-left">
+          <span class="word-gr"><svg class="flag-icon"><use href="#flag-gr"/></svg> ${item.wordGr}</span>
+          <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordGr)}', this)" title="Копировать">📋</button>
+        </div>
+        <div class="word-cell word-cell-center">
+          <span class="word-ru"><svg class="flag-icon"><use href="#flag-ru"/></svg> ${item.wordRu}</span>
+          <button class="copy-btn" onclick="event.stopPropagation(); copyText('${escapeHTML(item.wordRu)}', this)" title="Копировать">📋</button>
+        </div>
+      </div>
+      ${actionsHtml}
+    </div>
+  `;
+}
     
     function escapeHTML(str) {
       return str.replace(/['"\\]/g, '\\$&');
