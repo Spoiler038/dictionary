@@ -2338,6 +2338,17 @@ a,
 .part-of-speech-dropdown::-webkit-scrollbar-thumb:hover {
   background: #b0b0b0;
 }
+
+#trainingCorrectBtn:active,
+#trainingWrongBtn:active {
+  transform: scale(0.95);
+}
+
+#trainingCorrectBtn:hover,
+#trainingWrongBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
   </style>
 </head>
 <body>
@@ -2542,6 +2553,126 @@ a,
       <div class="no-results">Введите слово для поиска или выберите тему</div>
     </div>
   </div>
+
+<!-- ===== СТРАНИЦА ТРЕНИРОВКИ ===== -->
+<div id="trainingPage" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 200; overflow-y: auto; padding: 20px; box-sizing: border-box;">
+
+  <!-- Шапка тренировки -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 2px solid #f0f0f0; margin-bottom: 15px;">
+    <button onclick="exitTraining()" style="background: none; border: none; font-size: 24px; cursor: pointer; padding: 8px;">←</button>
+    <h2 style="margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      Тренировка
+    </h2>
+    <button onclick="openResetTrainingModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; padding: 8px;">🔄</button>
+  </div>
+
+  <!-- КНОПКА ТРЕНИРОВКА (над Темы) -->
+  <div style="margin-bottom: 10px;">
+    <button onclick="startTraining()" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; border-radius: 20px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+      Начать тренировку
+    </button>
+  </div>
+
+  <!-- Фильтры (копия существующих) -->
+  <div style="margin-bottom: 15px;">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+      <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📂 Темы</button>
+      <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📚 Части речи</button>
+      <div class="mode-selector" style="display: flex; gap: 6px; flex: 1; justify-content: center; min-width: 150px;">
+        <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <line x1="12" y1="5" x2="12" y2="7"/>
+            <line x1="12" y1="17" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="7" y2="12"/>
+            <line x1="17" y1="12" x2="19" y2="12"/>
+            <line x1="7.05" y1="7.05" x2="8.46" y2="8.46"/>
+            <line x1="15.54" y1="15.54" x2="16.95" y2="16.95"/>
+            <line x1="7.05" y1="16.95" x2="8.46" y2="15.54"/>
+            <line x1="15.54" y1="8.46" x2="16.95" y2="7.05"/>
+          </svg>
+        </button>
+        <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+            <rect width="24" height="16" fill="#0d5eaf"/>
+            <rect y="0" width="24" height="2" fill="white"/>
+            <rect y="4" width="24" height="2" fill="white"/>
+            <rect y="8" width="24" height="2" fill="white"/>
+            <rect y="12" width="24" height="2" fill="white"/>
+            <rect x="0" y="0" width="8" height="6" fill="white"/>
+            <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+            <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+          </svg>
+        </button>
+        <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+            <rect width="24" height="16" fill="white"/>
+            <rect y="0" width="24" height="5.33" fill="white"/>
+            <rect y="5.33" width="24" height="5.33" fill="#0039a6"/>
+            <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Выпадающие списки -->
+    <div id="trainingThemeDropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto; border: 2px solid #f39c12; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+    <div id="trainingPosDropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto; border: 2px solid #8e44ad; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+  </div>
+
+  <!-- Информация о фильтре -->
+  <div style="font-size: 13px; color: #95a5a6; margin-bottom: 10px; text-align: center;" id="trainingFilterInfo">Все слова · 0 слов с фото</div>
+
+  <!-- Карточка -->
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; min-height: 60vh;">
+    <!-- Фото -->
+    <div style="width: 100%; max-width: 400px; aspect-ratio: 1/1; background: #f0f0f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; position: relative;">
+      <img id="trainingImage" src="" alt="Фото" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+      <div id="trainingPlaceholder" style="font-size: 48px; color: #ccc;">🖼️</div>
+      <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px;">📷</span>
+    </div>
+
+    <!-- Слово -->
+    <div id="trainingWord" onclick="flipTrainingCard()" style="margin-top: 20px; font-size: 28px; font-weight: 700; color: #2c3e50; text-align: center; padding: 15px 30px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor: pointer; min-height: 70px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; max-width: 90%; width: 100%;">
+      Загрузка...
+      <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>
+    </div>
+
+    <!-- Кнопки самоконтроля -->
+    <div style="display: flex; gap: 20px; margin-top: 15px;">
+      <button id="trainingCorrectBtn" onclick="markTrainingCorrect()" style="padding: 12px 30px; background: #27ae60; color: white; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; opacity: 0.6; pointer-events: none;">
+        ✅ Правильно
+      </button>
+      <button id="trainingWrongBtn" onclick="markTrainingWrong()" style="padding: 12px 30px; background: #e74c3c; color: white; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; opacity: 0.6; pointer-events: none;">
+        ❌ Неправильно
+      </button>
+    </div>
+
+    <!-- Навигация -->
+    <div style="display: flex; align-items: center; gap: 20px; margin-top: 15px; width: 100%; max-width: 400px; justify-content: center;">
+      <button id="trainingPrevBtn" onclick="prevTrainingCard()" style="padding: 12px 20px; background: #3498db; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 20px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">◀</button>
+      <span id="trainingCounter" style="font-size: 16px; color: #7f8c8d; min-width: 80px; text-align: center;">0/0</span>
+      <button id="trainingRepeatBtn" onclick="toggleTrainingRepeat()" style="padding: 8px 16px; background: transparent; border: 2px solid #95a5a6; border-radius: 20px; cursor: pointer; font-size: 14px; color: #7f8c8d; transition: all 0.3s; white-space: nowrap;">🔁 Повтор</button>
+      <button id="trainingNextBtn" onclick="nextTrainingCard()" style="padding: 12px 20px; background: #3498db; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 20px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">▶</button>
+    </div>
+
+    <!-- Прогресс -->
+    <div style="margin-top: 10px; font-size: 13px; color: #95a5a6; text-align: center; width: 100%;" id="trainingProgressInfo">
+      Прогресс: 0% · Правильно: 0/0
+    </div>
+  </div>
+</div>  
   
   <div class="toast" id="toast"></div>
   
@@ -2602,6 +2733,11 @@ a,
         <label>Часть речи</label>
         <input type="text" id="editPosGr" placeholder="π.χ. Ουσιαστικό (необязательно)" oninput="filterPosDatalist()" onfocus="filterPosDatalist()" autocomplete="off">
         <div class="pos-datalist" id="posDatalist"></div>
+      </div>
+
+      <div class="form-group" style="position: relative;">
+        <label>Ссылка на фото (Cloudinary)</label>
+        <input type="text" id="editImageUrl" placeholder="https://res.cloudinary.com/.../image.jpg (необязательно)">
       </div>
       
       <div class="form-actions">
@@ -3578,6 +3714,7 @@ function hideProgressWithDelay() {
       document.getElementById('editWordRu').value = '';
       document.getElementById('editThemeGr').value = '';
       document.getElementById('editPosGr').value = '';
+      document.getElementById('editImageUrl').value = '';
       document.getElementById('editMessage').innerHTML = '';
       document.getElementById('themeDatalist').classList.remove('active');
       document.getElementById('posDatalist').classList.remove('active');
@@ -3587,26 +3724,27 @@ function hideProgressWithDelay() {
       document.getElementById('saveBtn').onclick = saveWord;
     }
     
-    function openEditModal(id, wordGr, wordRu, themeGr, posGr) {
-      if (!isEditor) {
-        openLoginModal();
-        return;
-      }
-      document.getElementById('modalTitle').textContent = 'Редактировать слово';
-      document.getElementById('editIcon').textContent = '📝';
-      document.getElementById('editWordGr').value = wordGr;
-      document.getElementById('editWordRu').value = wordRu;
-      document.getElementById('editThemeGr').value = themeGr;
-      document.getElementById('editPosGr').value = posGr || '';
-      document.getElementById('editMessage').innerHTML = '';
-      document.getElementById('themeDatalist').classList.remove('active');
-      document.getElementById('posDatalist').classList.remove('active');
-      editingId = id;
-      hideAllWarnings();
-      checkDuplicate();
-      openModal('editModal');
-      document.getElementById('saveBtn').onclick = saveWord;
-    }
+    function openEditModal(id, wordGr, wordRu, themeGr, posGr, imageUrl) {
+  if (!isEditor) {
+    openLoginModal();
+    return;
+  }
+  document.getElementById('modalTitle').textContent = 'Редактировать слово';
+  document.getElementById('editIcon').textContent = '📝';
+  document.getElementById('editWordGr').value = wordGr;
+  document.getElementById('editWordRu').value = wordRu;
+  document.getElementById('editThemeGr').value = themeGr;
+  document.getElementById('editPosGr').value = posGr || '';
+  document.getElementById('editImageUrl').value = imageUrl || ''; // НОВОЕ
+  document.getElementById('editMessage').innerHTML = '';
+  document.getElementById('themeDatalist').classList.remove('active');
+  document.getElementById('posDatalist').classList.remove('active');
+  editingId = id;
+  hideAllWarnings();
+  checkDuplicate();
+  openModal('editModal');
+  document.getElementById('saveBtn').onclick = saveWord;
+}
     
     function openDeleteModal(id, type) {
       if (!isEditor) return;
@@ -4373,6 +4511,7 @@ function hideProgressWithDelay() {
   const wordRu = document.getElementById('editWordRu').value.trim();
   const themeGr = document.getElementById('editThemeGr').value.trim();
   const posGr = document.getElementById('editPosGr').value.trim();
+  const imageUrl = document.getElementById('editImageUrl').value.trim(); // НОВОЕ
   const saveBtn = document.getElementById('saveBtn');
   
   if (!wordGr || !wordRu) {
@@ -4413,7 +4552,8 @@ function hideProgressWithDelay() {
         originalWord.wordGr !== wordGr ||
         originalWord.wordRu !== wordRu ||
         originalWord.themeGr !== themeGr ||
-        (originalWord.posGr || '') !== posGr;
+        (originalWord.posGr || '') !== posGr ||
+        (originalWord.imageUrl || '') !== imageUrl; // НОВОЕ
       
       if (!isChanged) {
         document.getElementById('editMessage').innerHTML = '<div class="success">ℹ️ Изменений не было</div>';
@@ -4425,7 +4565,7 @@ function hideProgressWithDelay() {
     }
   }
   
-  // ===== БЛОКИРУЕМ КНОПКУ =====
+  // Блокируем кнопку
   saveBtn.disabled = true;
   saveBtn.innerHTML = '⏳ Сохранение...';
   document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
@@ -4433,8 +4573,8 @@ function hideProgressWithDelay() {
   try {
     const action = editingId === null ? 'addWord' : 'editWord';
     const params = editingId === null 
-      ? { wordGr, wordRu, themeGr, posGr }
-      : { id: editingId, wordGr, wordRu, themeGr, posGr };
+      ? { wordGr, wordRu, themeGr, posGr, imageUrl } // НОВОЕ
+      : { id: editingId, wordGr, wordRu, themeGr, posGr, imageUrl }; // НОВОЕ
     
     const result = await callGAS(action, params);
     
@@ -4450,7 +4590,8 @@ function hideProgressWithDelay() {
           themeGr: themeGr || '',
           themeRu: themeGr || '',
           posGr: posGr || '',
-          posRu: posGr || ''
+          posRu: posGr || '',
+          imageUrl: imageUrl || '' // НОВОЕ
         };
         allData.words.push(newWord);
         allData.total = allData.words.length;
@@ -4469,6 +4610,7 @@ function hideProgressWithDelay() {
           allData.words[index].themeRu = themeGr || '';
           allData.words[index].posGr = posGr || '';
           allData.words[index].posRu = posGr || '';
+          allData.words[index].imageUrl = imageUrl || ''; // НОВОЕ
         }
       }
       
@@ -4479,7 +4621,6 @@ function hideProgressWithDelay() {
       setTimeout(() => {
         closeModal('editModal');
         performSearch();
-        // Восстанавливаем кнопку
         saveBtn.innerHTML = '💾 Сохранить';
         saveBtn.disabled = false;
       }, 1500);
@@ -4673,5 +4814,379 @@ function hideProgressWithDelay() {
       .catch(err => console.log('SW error:', err));
   }
 </script>
+<script>
+// ========== РЕЖИМ ТРЕНИРОВКИ ==========
+let trainingWords = [];
+let trainingCurrentIndex = 0;
+let trainingMode = 'auto';
+let trainingTheme = '';
+let trainingPos = '';
+let trainingRepeat = false;
+let trainingAnswered = {}; // { wordId: 'correct' | 'wrong' | null }
+let trainingStats = { correct: 0, wrong: 0, total: 0 };
+let trainingIsFlipped = false;
+
+// ========== ОТКРЫТИЕ/ЗАКРЫТИЕ ТРЕНИРОВКИ ==========
+function startTraining() {
+  // Фильтруем слова с фото
+  const wordsWithImages = allData.words.filter(w => w.imageUrl && w.imageUrl.trim() !== '');
+  
+  if (wordsWithImages.length === 0) {
+    showToast('❌ Нет слов с фотографиями для тренировки');
+    return;
+  }
+  
+  trainingWords = shuffleArray([...wordsWithImages]);
+  trainingCurrentIndex = 0;
+  trainingAnswered = {};
+  trainingStats = { correct: 0, wrong: 0, total: 0 };
+  trainingIsFlipped = false;
+  
+  // Показываем страницу тренировки
+  document.getElementById('trainingPage').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+  
+  // Заполняем выпадающие списки
+  populateTrainingDropdowns();
+  
+  // Показываем первую карточку
+  showTrainingCard();
+}
+
+function exitTraining() {
+  document.getElementById('trainingPage').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  showToast('👋 Возврат в словарь');
+}
+
+// ========== ПЕРЕМЕШИВАНИЕ ==========
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// ========== ФИЛЬТРЫ ТРЕНИРОВКИ ==========
+function populateTrainingDropdowns() {
+  // Темы
+  const themeDropdown = document.getElementById('trainingThemeDropdown');
+  themeDropdown.innerHTML = `
+    <div class="dropdown-item" onclick="selectTrainingFilter('theme', '')">📂 Все темы</div>
+    ${allThemes.map(t => `
+      <div class="dropdown-item" onclick="selectTrainingFilter('theme', '${t.gr}')">${t.gr} — ${t.ru}</div>
+    `).join('')}
+  `;
+  
+  // Части речи
+  const posDropdown = document.getElementById('trainingPosDropdown');
+  posDropdown.innerHTML = `
+    <div class="dropdown-item" onclick="selectTrainingFilter('pos', '')">📚 Все части речи</div>
+    ${allPos.map(p => `
+      <div class="dropdown-item" onclick="selectTrainingFilter('pos', '${p.gr}')">${p.gr} — ${p.ru}</div>
+    `).join('')}
+  `;
+}
+
+function toggleTrainingTheme() {
+  const dropdown = document.getElementById('trainingThemeDropdown');
+  const posDropdown = document.getElementById('trainingPosDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  posDropdown.style.display = 'none';
+}
+
+function toggleTrainingPos() {
+  const dropdown = document.getElementById('trainingPosDropdown');
+  const themeDropdown = document.getElementById('trainingThemeDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  themeDropdown.style.display = 'none';
+}
+
+function selectTrainingFilter(type, value) {
+  if (type === 'theme') {
+    trainingTheme = value;
+    document.getElementById('trainingThemeDropdown').style.display = 'none';
+  } else {
+    trainingPos = value;
+    document.getElementById('trainingPosDropdown').style.display = 'none';
+  }
+  applyTrainingFilters();
+}
+
+function setTrainingMode(mode) {
+  trainingMode = mode;
+  document.querySelectorAll('#trainingPage .mode-selector button').forEach(b => b.classList.remove('active'));
+  if (mode === 'auto') document.getElementById('trainingModeAuto').classList.add('active');
+  else if (mode === 'greek') document.getElementById('trainingModeGreek').classList.add('active');
+  else if (mode === 'russian') document.getElementById('trainingModeRussian').classList.add('active');
+  applyTrainingFilters();
+}
+
+function applyTrainingFilters() {
+  let filtered = allData.words.filter(w => w.imageUrl && w.imageUrl.trim() !== '');
+  
+  if (trainingTheme) {
+    filtered = filtered.filter(w => w.themeGr === trainingTheme);
+  }
+  
+  if (trainingPos) {
+    filtered = filtered.filter(w => w.posGr === trainingPos);
+  }
+  
+  trainingWords = shuffleArray([...filtered]);
+  trainingCurrentIndex = 0;
+  trainingAnswered = {};
+  trainingStats = { correct: 0, wrong: 0, total: 0 };
+  
+  document.getElementById('trainingFilterInfo').textContent = 
+    `${filtered.length} слов с фото`;
+  
+  if (trainingWords.length === 0) {
+    document.getElementById('trainingWord').innerHTML = '😕 Нет слов с фото';
+    document.getElementById('trainingImage').style.display = 'none';
+    document.getElementById('trainingPlaceholder').style.display = 'block';
+    document.getElementById('trainingPlaceholder').textContent = '📭';
+    document.getElementById('trainingCounter').textContent = '0/0';
+    document.getElementById('trainingProgressInfo').textContent = 'Нет слов для тренировки';
+    document.getElementById('trainingPrevBtn').disabled = true;
+    document.getElementById('trainingNextBtn').disabled = true;
+    document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
+    document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
+    document.getElementById('trainingWrongBtn').style.opacity = '0.6';
+    document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+    return;
+  }
+  
+  showTrainingCard();
+}
+
+// ========== ОТОБРАЖЕНИЕ КАРТОЧКИ ==========
+function showTrainingCard() {
+  if (trainingWords.length === 0) return;
+  
+  const word = trainingWords[trainingCurrentIndex];
+  if (!word) return;
+  
+  const wordEl = document.getElementById('trainingWord');
+  const img = document.getElementById('trainingImage');
+  const placeholder = document.getElementById('trainingPlaceholder');
+  
+  // Определяем язык для отображения (с учетом режима)
+  let displayWord, translationWord;
+  
+  if (trainingMode === 'greek') {
+    displayWord = word.wordGr;
+    translationWord = word.wordRu;
+  } else if (trainingMode === 'russian') {
+    displayWord = word.wordRu;
+    translationWord = word.wordGr;
+  } else { // auto
+    // Используем "память": если слово уже показывалось на греческом, показываем на русском
+    const lastLang = localStorage.getItem('training_last_lang_' + word.id);
+    if (lastLang === 'gr') {
+      displayWord = word.wordRu;
+      translationWord = word.wordGr;
+      localStorage.setItem('training_last_lang_' + word.id, 'ru');
+    } else {
+      displayWord = word.wordGr;
+      translationWord = word.wordRu;
+      localStorage.setItem('training_last_lang_' + word.id, 'gr');
+    }
+  }
+  
+  wordEl.innerHTML = `${displayWord} <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>`;
+  wordEl.dataset.translation = translationWord;
+  wordEl.dataset.original = displayWord;
+  trainingIsFlipped = false;
+  
+  // Фото
+  if (word.imageUrl && word.imageUrl.trim() !== '') {
+    img.src = word.imageUrl;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+    placeholder.textContent = '🖼️';
+  }
+  
+  // Обновляем счетчик
+  document.getElementById('trainingCounter').textContent = 
+    `${trainingCurrentIndex + 1}/${trainingWords.length}`;
+  
+  // Обновляем кнопки навигации
+  document.getElementById('trainingPrevBtn').disabled = trainingCurrentIndex === 0;
+  document.getElementById('trainingNextBtn').disabled = trainingCurrentIndex === trainingWords.length - 1;
+  
+  // Обновляем кнопки самоконтроля
+  const answered = trainingAnswered[word.id];
+  const correctBtn = document.getElementById('trainingCorrectBtn');
+  const wrongBtn = document.getElementById('trainingWrongBtn');
+  
+  if (answered) {
+    correctBtn.style.opacity = '0.4';
+    correctBtn.style.pointerEvents = 'none';
+    wrongBtn.style.opacity = '0.4';
+    wrongBtn.style.pointerEvents = 'none';
+    if (answered === 'correct') {
+      correctBtn.style.opacity = '1';
+      correctBtn.style.background = '#27ae60';
+    } else {
+      wrongBtn.style.opacity = '1';
+      wrongBtn.style.background = '#e74c3c';
+    }
+  } else {
+    correctBtn.style.opacity = '1';
+    correctBtn.style.pointerEvents = 'auto';
+    correctBtn.style.background = '#27ae60';
+    wrongBtn.style.opacity = '1';
+    wrongBtn.style.pointerEvents = 'auto';
+    wrongBtn.style.background = '#e74c3c';
+  }
+  
+  updateTrainingProgress();
+}
+
+// ========== ПЕРЕВОРОТ КАРТОЧКИ ==========
+function flipTrainingCard() {
+  const wordEl = document.getElementById('trainingWord');
+  const currentText = wordEl.textContent.replace('👆 нажмите', '').replace('👆 обратно', '').trim();
+  const translation = wordEl.dataset.translation;
+  
+  if (trainingIsFlipped) {
+    const original = wordEl.dataset.original;
+    wordEl.innerHTML = `${original} <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>`;
+    trainingIsFlipped = false;
+  } else {
+    wordEl.innerHTML = `${translation} <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 обратно</span>`;
+    trainingIsFlipped = true;
+  }
+}
+
+// ========== САМОКОНТРОЛЬ ==========
+function markTrainingCorrect() {
+  const word = trainingWords[trainingCurrentIndex];
+  if (!word || trainingAnswered[word.id]) return;
+  
+  trainingAnswered[word.id] = 'correct';
+  trainingStats.correct++;
+  trainingStats.total++;
+  
+  showTrainingCard();
+  showToast('✅ Правильно!');
+  autoAdvance();
+}
+
+function markTrainingWrong() {
+  const word = trainingWords[trainingCurrentIndex];
+  if (!word || trainingAnswered[word.id]) return;
+  
+  trainingAnswered[word.id] = 'wrong';
+  trainingStats.wrong++;
+  trainingStats.total++;
+  
+  showTrainingCard();
+  showToast('❌ Неправильно! Правильный ответ: ' + 
+    (trainingMode === 'greek' ? word.wordRu : 
+     trainingMode === 'russian' ? word.wordGr : 
+     word.wordRu + ' / ' + word.wordGr));
+  autoAdvance();
+}
+
+function autoAdvance() {
+  // Автоматически переходим к следующей карточке через 2 секунды
+  setTimeout(() => {
+    if (trainingCurrentIndex < trainingWords.length - 1) {
+      trainingCurrentIndex++;
+      showTrainingCard();
+    } else {
+      // Проверяем, все ли слова отвечены
+      const allAnswered = trainingWords.every(w => trainingAnswered[w.id]);
+      if (allAnswered) {
+        document.getElementById('trainingWord').innerHTML = '🎉 Тренировка завершена!';
+        document.getElementById('trainingPrevBtn').disabled = true;
+        document.getElementById('trainingNextBtn').disabled = true;
+        document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
+        document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
+        document.getElementById('trainingWrongBtn').style.opacity = '0.6';
+        document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+      } else {
+        // Есть неотвеченные слова - перемешиваем и начинаем заново
+        const unanswered = trainingWords.filter(w => !trainingAnswered[w.id]);
+        const answeredList = trainingWords.filter(w => trainingAnswered[w.id]);
+        trainingWords = shuffleArray([...unanswered, ...answeredList]);
+        trainingCurrentIndex = 0;
+        showTrainingCard();
+        showToast('🔄 Остались неотвеченные слова');
+      }
+    }
+  }, 1500);
+}
+
+// ========== НАВИГАЦИЯ ==========
+function nextTrainingCard() {
+  if (trainingCurrentIndex < trainingWords.length - 1) {
+    trainingCurrentIndex++;
+    showTrainingCard();
+  }
+}
+
+function prevTrainingCard() {
+  if (trainingCurrentIndex > 0) {
+    trainingCurrentIndex--;
+    showTrainingCard();
+  }
+}
+
+function toggleTrainingRepeat() {
+  trainingRepeat = !trainingRepeat;
+  const btn = document.getElementById('trainingRepeatBtn');
+  if (trainingRepeat) {
+    btn.style.borderColor = '#27ae60';
+    btn.style.color = '#27ae60';
+    btn.style.background = 'rgba(39, 174, 96, 0.1)';
+    btn.textContent = '🔁 Повтор (вкл)';
+  } else {
+    btn.style.borderColor = '#95a5a6';
+    btn.style.color = '#7f8c8d';
+    btn.style.background = 'transparent';
+    btn.textContent = '🔁 Повтор';
+  }
+}
+
+// ========== ПРОГРЕСС ==========
+function updateTrainingProgress() {
+  const total = trainingWords.length;
+  const answered = Object.keys(trainingAnswered).length;
+  const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
+  
+  document.getElementById('trainingProgressInfo').textContent = 
+    `Прогресс: ${percent}% · Правильно: ${trainingStats.correct}/${trainingStats.total}`;
+}
+
+// ========== СБРОС ТРЕНИРОВКИ ==========
+function openResetTrainingModal() {
+  if (!confirm('Сбросить прогресс тренировки? Слова будут перемешаны заново.')) return;
+  
+  trainingWords = shuffleArray([...trainingWords]);
+  trainingCurrentIndex = 0;
+  trainingAnswered = {};
+  trainingStats = { correct: 0, wrong: 0, total: 0 };
+  showTrainingCard();
+  showToast('🔄 Прогресс сброшен');
+}
+
+// ========== ЗАКРЫТИЕ ВЫПАДАЮЩИХ СПИСКОВ ==========
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#trainingPage .theme-toggle-btn') && 
+      !e.target.closest('#trainingThemeDropdown') &&
+      !e.target.closest('#trainingPage .pos-toggle-btn') &&
+      !e.target.closest('#trainingPosDropdown')) {
+    document.getElementById('trainingThemeDropdown').style.display = 'none';
+    document.getElementById('trainingPosDropdown').style.display = 'none';
+  }
+});
+ </script>
 </body>
 </html>
