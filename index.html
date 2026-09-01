@@ -3781,10 +3781,20 @@ function hideProgressWithDelay() {
       if (messageEl) messageEl.innerHTML = '';
     }
     
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-      toggleBodyScroll(false);
+    // ========== ЗАКРЫТИЕ МОДАЛКИ ==========
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  toggleBodyScroll(false);
+  
+  if (id === 'editModal') {
+    clearImagePreview();
+    const status = document.getElementById('imageUploadStatus');
+    if (status) {
+      status.textContent = '';
+      status.style.color = '#95a5a6';
     }
+  }
+}
     
     function openLoginModal() {
       document.getElementById('loginPassword').value = '';
@@ -3808,41 +3818,66 @@ function hideProgressWithDelay() {
     }
     
     function openAddModal() {
-      if (!isEditor) {
-        openLoginModal();
-        return;
-      }
-      document.getElementById('modalTitle').textContent = '➕ Добавить слово';
-      document.getElementById('editIcon').textContent = '➕';
-      document.getElementById('editWordGr').value = '';
-      document.getElementById('editWordRu').value = '';
-      document.getElementById('editThemeGr').value = '';
-      document.getElementById('editPosGr').value = '';
-      document.getElementById('editImageUrl').value = '';
-      document.getElementById('editMessage').innerHTML = '';
-      document.getElementById('themeDatalist').classList.remove('active');
-      document.getElementById('posDatalist').classList.remove('active');
-      editingId = null;
-      hideAllWarnings();
-      openModal('editModal');
-      document.getElementById('saveBtn').onclick = saveWord;
-    }
+  if (!isEditor) {
+    openLoginModal();
+    return;
+  }
+  
+  clearImagePreview();
+  
+  document.getElementById('modalTitle').textContent = '➕ Добавить слово';
+  document.getElementById('editIcon').textContent = '➕';
+  document.getElementById('editWordGr').value = '';
+  document.getElementById('editWordRu').value = '';
+  document.getElementById('editThemeGr').value = '';
+  document.getElementById('editPosGr').value = '';
+  document.getElementById('editImageUrl').value = '';
+  document.getElementById('editMessage').innerHTML = '';
+  document.getElementById('themeDatalist').classList.remove('active');
+  document.getElementById('posDatalist').classList.remove('active');
+  
+  const status = document.getElementById('imageUploadStatus');
+  if (status) {
+    status.textContent = '';
+    status.style.color = '#95a5a6';
+  }
+  
+  editingId = null;
+  hideAllWarnings();
+  openModal('editModal');
+  document.getElementById('saveBtn').onclick = saveWord;
+}
     
     function openEditModal(id, wordGr, wordRu, themeGr, posGr, imageUrl) {
   if (!isEditor) {
     openLoginModal();
     return;
   }
+  
+  clearImagePreview();
+  
   document.getElementById('modalTitle').textContent = 'Редактировать слово';
   document.getElementById('editIcon').textContent = '📝';
   document.getElementById('editWordGr').value = wordGr;
   document.getElementById('editWordRu').value = wordRu;
   document.getElementById('editThemeGr').value = themeGr;
   document.getElementById('editPosGr').value = posGr || '';
-  document.getElementById('editImageUrl').value = imageUrl || ''; // НОВОЕ
+  document.getElementById('editImageUrl').value = imageUrl || '';
   document.getElementById('editMessage').innerHTML = '';
   document.getElementById('themeDatalist').classList.remove('active');
   document.getElementById('posDatalist').classList.remove('active');
+  
+  // ✅ ПОКАЗЫВАЕМ ПРЕВЬЮ, ЕСЛИ ЕСТЬ ФОТО
+  if (imageUrl) {
+    showImagePreview(imageUrl);
+  }
+  
+  const status = document.getElementById('imageUploadStatus');
+  if (status) {
+    status.textContent = imageUrl ? '✅ Фото загружено' : '';
+    status.style.color = imageUrl ? '#27ae60' : '#95a5a6';
+  }
+  
   editingId = id;
   hideAllWarnings();
   checkDuplicate();
@@ -4745,18 +4780,28 @@ function uploadToCloudinary(file, status, input) {
 }
 
 function showImagePreview(url) {
-  // Проверяем, есть ли уже превью
+  // Удаляем старое превью
   let preview = document.getElementById('imagePreview');
-  if (!preview) {
-    preview = document.createElement('div');
-    preview.id = 'imagePreview';
-    preview.style.cssText = 'margin-top: 8px; border-radius: 8px; overflow: hidden; max-width: 150px;';
-    
-    const statusContainer = document.getElementById('imageUploadStatus');
-    statusContainer.parentNode.insertBefore(preview, statusContainer.nextSibling);
+  if (preview) {
+    preview.remove();
   }
   
+  // Создаем новое
+  preview = document.createElement('div');
+  preview.id = 'imagePreview';
+  preview.style.cssText = 'margin-top: 8px; border-radius: 8px; overflow: hidden; max-width: 150px;';
+  
+  const statusContainer = document.getElementById('imageUploadStatus');
+  statusContainer.parentNode.insertBefore(preview, statusContainer.nextSibling);
+  
   preview.innerHTML = `<img src="${url}" alt="Превью" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #27ae60;">`;
+}
+    
+    function clearImagePreview() {
+  const preview = document.getElementById('imagePreview');
+  if (preview) {
+    preview.remove();
+  }
 }
     
     async function saveWord() {
