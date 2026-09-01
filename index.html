@@ -4343,13 +4343,14 @@ function hideProgressWithDelay() {
   const wordRu = document.getElementById('editWordRu').value.trim();
   const themeGr = document.getElementById('editThemeGr').value.trim();
   const posGr = document.getElementById('editPosGr').value.trim();
+  const saveBtn = document.getElementById('saveBtn');
   
   if (!wordGr || !wordRu) {
     document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово должно быть заполнено</div>';
     return;
   }
   
-  // Проверка на дубликаты (учитывая editingId)
+  // Проверка на дубликаты
   if (allData && allData.words) {
     const duplicateGr = allData.words.some(w => 
       w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
@@ -4374,7 +4375,7 @@ function hideProgressWithDelay() {
     }
   }
   
-  // ===== ПРОВЕРКА: БЫЛИ ЛИ ИЗМЕНЕНИЯ =====
+  // Проверка: были ли изменения
   if (editingId !== null && allData) {
     const originalWord = allData.words.find(w => w.id === editingId);
     if (originalWord) {
@@ -4385,7 +4386,6 @@ function hideProgressWithDelay() {
         (originalWord.posGr || '') !== posGr;
       
       if (!isChanged) {
-        // Нет изменений - показываем сообщение и закрываем без сохранения
         document.getElementById('editMessage').innerHTML = '<div class="success">ℹ️ Изменений не было</div>';
         setTimeout(() => {
           closeModal('editModal');
@@ -4395,7 +4395,9 @@ function hideProgressWithDelay() {
     }
   }
   
-  // ===== ЕСТЬ ИЗМЕНЕНИЯ - СОХРАНЯЕМ =====
+  // ===== БЛОКИРУЕМ КНОПКУ =====
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '⏳ Сохранение...';
   document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
   
   try {
@@ -4408,9 +4410,9 @@ function hideProgressWithDelay() {
     
     if (result.success) {
       document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
+      saveBtn.innerHTML = '✅ Сохранено!';
       
       if (editingId === null) {
-        // Добавление нового слова
         const newWord = {
           id: allData.words.length + 1,
           wordGr: wordGr,
@@ -4429,7 +4431,6 @@ function hideProgressWithDelay() {
           allPos.push({ gr: posGr, ru: posGr });
         }
       } else {
-        // Редактирование существующего слова
         const index = allData.words.findIndex(w => w.id === editingId);
         if (index !== -1) {
           allData.words[index].wordGr = wordGr;
@@ -4448,12 +4449,21 @@ function hideProgressWithDelay() {
       setTimeout(() => {
         closeModal('editModal');
         performSearch();
+        // Восстанавливаем кнопку
+        saveBtn.innerHTML = '💾 Сохранить';
+        saveBtn.disabled = false;
       }, 1500);
+      
     } else {
       document.getElementById('editMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
+      saveBtn.innerHTML = '💾 Сохранить';
+      saveBtn.disabled = false;
     }
+    
   } catch (error) {
     document.getElementById('editMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+    saveBtn.innerHTML = '💾 Сохранить';
+    saveBtn.disabled = false;
   }
 }
     
