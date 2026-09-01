@@ -3000,6 +3000,13 @@ a,
     let searchTimeout = null;
     let progressStartTime = 0;
     let progressAnimationId = null;
+
+    // ========== НАСТРОЙКИ CLOUDINARY ==========
+const CLOUDINARY_CONFIG = {
+  cloudName: 'dczxaodya', // ВАШ CLOUD NAME
+  uploadPreset: 'dictionary_app', // НАЗВАНИЕ ПРЕСЕТА
+  folder: 'dictionary' // ПАПКА ДЛЯ ФОТО
+};
     
     const searchBtn = document.getElementById('searchBtn');
     
@@ -4629,34 +4636,113 @@ function hideProgressWithDelay() {
       }, 2000);
     }
 
-    function uploadTrainingImage() {
+    // ========== ЗАГРУЗКА ФОТО НА CLOUDINARY ==========
+function uploadTrainingImage() {
   const status = document.getElementById('imageUploadStatus');
-  status.textContent = '⏳ Выберите файл...';
+  const input = document.getElementById('editImageUrl');
   
-  // Создаем скрытый input для выбора файла
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
   
-  input.onchange = function(e) {
+  fileInput.onchange = function(e) {
     const file = e.target.files[0];
     if (!file) {
       status.textContent = '❌ Файл не выбран';
       return;
     }
     
-    status.textContent = `📤 Загрузка ${file.name}...`;
+    if (file.size > 5 * 1024 * 1024) {
+      status.textContent = '❌ Файл слишком большой (макс. 5MB)';
+      return;
+    }
     
-    // TODO: Здесь будет загрузка на Cloudinary
-    // Пока просто имитируем
-    setTimeout(() => {
-      const fakeUrl = `https://res.cloudinary.com/demo/image/upload/${Date.now()}.jpg`;
-      document.getElementById('editImageUrl').value = fakeUrl;
-      status.textContent = '✅ Фото загружено! Ссылка добавлена';
-    }, 1500);
+    status.textContent = '⏳ Загрузка...';
+    
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const base64 = ev.target.result;
+      
+      callGAS('uploadImage', {
+        imageData: base64,
+        fileName: file.name
+      }).then(result => {
+        if (result.success) {
+          input.value = result.url;
+          status.textContent = '✅ Фото загружено!';
+          showImagePreview(result.url);
+        } else {
+          status.textContent = '❌ ' + (result.error || 'Ошибка загрузки');
+        }
+      }).catch(err => {
+        status.textContent = '❌ Ошибка: ' + err.message;
+      });
+    };
+    reader.readAsDataURL(file);
   };
   
-  input.click();
+  fileInput.click();
+}
+
+function uploadToCloudinary(file, status, input) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+  formData.append('folder', CLOUDINARY_CONFIG.folder);
+  
+  // Добавляем уникальное имя файла
+  const uniqueName = Date.now() + '_' + file.name.replace(/\s/g, '_');
+  formData.append('public_id', uniqueName);
+  
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
+  
+  fetch(url, {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.error) {
+      throw new Error(data.error.message || 'Ошибка загрузки');
+    }
+    
+    // Успешно загружено
+    const imageUrl = data.secure_url || data.url;
+    input.value = imageUrl;
+    status.textContent = '✅ Фото загружено!';
+    status.style.color = '#27ae60';
+    
+    // Показываем превью
+    showImagePreview(imageUrl);
+    
+    // Сохраняем ссылку в таблицу при сохранении слова
+    showToast('✅ Фото загружено в Cloudinary');
+  })
+  .catch(error => {
+    console.error('Ошибка загрузки:', error);
+    status.textContent = `❌ Ошибка: ${error.message}`;
+    status.style.color = '#e74c3c';
+  });
+}
+
+function showImagePreview(url) {
+  // Проверяем, есть ли уже превью
+  let preview = document.getElementById('imagePreview');
+  if (!preview) {
+    preview = document.createElement('div');
+    preview.id = 'imagePreview';
+    preview.style.cssText = 'margin-top: 8px; border-radius: 8px; overflow: hidden; max-width: 150px;';
+    
+    const statusContainer = document.getElementById('imageUploadStatus');
+    statusContainer.parentNode.insertBefore(preview, statusContainer.nextSibling);
+  }
+  
+  preview.innerHTML = `<img src="${url}" alt="Превью" style="width: 100%; height: auto; border-radius: 8px; border: 2px solid #27ae60;">`;
 }
     
     async function saveWord() {
