@@ -3057,9 +3057,9 @@ const CLOUDINARY_CONFIG = {
         };
         
         const timeout = setTimeout(() => {
-          delete window[callback];
-          reject(new Error('Превышено время ожидания ответа'));
-        }, 30000);
+  delete window[callback];
+  reject(new Error('Превышено время ожидания ответа'));
+}, 60000);  // ← 60000 = 60 секунд
         
         const originalCallback = window[callback];
         window[callback] = function(data) {
