@@ -3626,24 +3626,6 @@ function hideProgressWithDelay() {
         });
       }
     }
-
-    
-    function updateAddButtons() {
-      const themeBtn = document.getElementById('addThemeBtn');
-      const posBtn = document.getElementById('addPosBtn');
-      const themeBtnMobile = document.getElementById('addThemeBtnMobile');
-      const posBtnMobile = document.getElementById('addPosBtnMobile');
-      
-      if (isEditor) {
-        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
-          if (el) { el.classList.add('visible'); el.style.display = 'flex'; }
-        });
-      } else {
-        [themeBtn, posBtn, themeBtnMobile, posBtnMobile].forEach(el => {
-          if (el) { el.classList.remove('visible'); el.style.display = 'none'; }
-        });
-      }
-    }
     
     function updateEditorUI() {
       document.querySelectorAll('.result-item .actions').forEach(el => {
