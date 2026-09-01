@@ -2975,6 +2975,12 @@ a,
   </div>
   
   <script>
+    // ========== НАСТРОЙКИ CLOUDINARY ==========
+const CLOUDINARY_CONFIG = {
+  cloudName: 'dczxaodya', // ВАШ CLOUD NAME
+  uploadPreset: 'dictionary_app', // НАЗВАНИЕ ПРЕСЕТА
+  folder: 'dictionary' // ПАПКА ДЛЯ ФОТО
+};
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwsF633XdFiInhTqFLNUp3Q98sp6Z7AXlVeyvKhr8xaR3yKw2FRdVLBoH0k8R3eLHiapQ/exec';
     const PAGE_SIZE = 30;
     
@@ -3001,12 +3007,7 @@ a,
     let progressStartTime = 0;
     let progressAnimationId = null;
 
-    // ========== НАСТРОЙКИ CLOUDINARY ==========
-const CLOUDINARY_CONFIG = {
-  cloudName: 'dczxaodya', // ВАШ CLOUD NAME
-  uploadPreset: 'dictionary_app', // НАЗВАНИЕ ПРЕСЕТА
-  folder: 'dictionary' // ПАПКА ДЛЯ ФОТО
-};
+     
     
     const searchBtn = document.getElementById('searchBtn');
     
@@ -4649,36 +4650,21 @@ function uploadTrainingImage() {
     const file = e.target.files[0];
     if (!file) {
       status.textContent = '❌ Файл не выбран';
+      status.style.color = '#e74c3c';
       return;
     }
     
     if (file.size > 5 * 1024 * 1024) {
       status.textContent = '❌ Файл слишком большой (макс. 5MB)';
+      status.style.color = '#e74c3c';
       return;
     }
     
-    status.textContent = '⏳ Загрузка...';
+    status.textContent = '⏳ Загрузка на Cloudinary...';
+    status.style.color = '#f39c12';
     
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const base64 = ev.target.result;
-      
-      callGAS('uploadImage', {
-        imageData: base64,
-        fileName: file.name
-      }).then(result => {
-        if (result.success) {
-          input.value = result.url;
-          status.textContent = '✅ Фото загружено!';
-          showImagePreview(result.url);
-        } else {
-          status.textContent = '❌ ' + (result.error || 'Ошибка загрузки');
-        }
-      }).catch(err => {
-        status.textContent = '❌ Ошибка: ' + err.message;
-      });
-    };
-    reader.readAsDataURL(file);
+    // Загружаем на Cloudinary
+    uploadToCloudinary(file, status, input);
   };
   
   fileInput.click();
@@ -4750,7 +4736,7 @@ function showImagePreview(url) {
   const wordRu = document.getElementById('editWordRu').value.trim();
   const themeGr = document.getElementById('editThemeGr').value.trim();
   const posGr = document.getElementById('editPosGr').value.trim();
-  const imageUrl = document.getElementById('editImageUrl').value.trim(); // НОВОЕ
+  const imageUrl = document.getElementById('editImageUrl').value.trim();
   const saveBtn = document.getElementById('saveBtn');
   
   if (!wordGr || !wordRu) {
