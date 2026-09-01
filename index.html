@@ -4339,74 +4339,123 @@ function hideProgressWithDelay() {
     }
     
     async function saveWord() {
-      const wordGr = document.getElementById('editWordGr').value.trim();
-      const wordRu = document.getElementById('editWordRu').value.trim();
-      const themeGr = document.getElementById('editThemeGr').value.trim();
-      const posGr = document.getElementById('editPosGr').value.trim();
+  const wordGr = document.getElementById('editWordGr').value.trim();
+  const wordRu = document.getElementById('editWordRu').value.trim();
+  const themeGr = document.getElementById('editThemeGr').value.trim();
+  const posGr = document.getElementById('editPosGr').value.trim();
+  
+  if (!wordGr || !wordRu) {
+    document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово должно быть заполнено</div>';
+    return;
+  }
+  
+  // Проверка на дубликаты (учитывая editingId)
+  if (allData && allData.words) {
+    const duplicateGr = allData.words.some(w => 
+      w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
+      (editingId === null || w.id !== editingId)
+    );
+    
+    const duplicateRu = allData.words.some(w => 
+      w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
+      (editingId === null || w.id !== editingId)
+    );
+    
+    if (duplicateGr) {
+      document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово (греческий) уже существует!</div>';
+      document.getElementById('duplicateWordGr').classList.add('visible');
+      return;
+    }
+    
+    if (duplicateRu) {
+      document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово (русский) уже существует!</div>';
+      document.getElementById('duplicateWordRu').classList.add('visible');
+      return;
+    }
+  }
+  
+  // ===== ПРОВЕРКА: БЫЛИ ЛИ ИЗМЕНЕНИЯ =====
+  if (editingId !== null && allData) {
+    const originalWord = allData.words.find(w => w.id === editingId);
+    if (originalWord) {
+      const isChanged = 
+        originalWord.wordGr !== wordGr ||
+        originalWord.wordRu !== wordRu ||
+        originalWord.themeGr !== themeGr ||
+        (originalWord.posGr || '') !== posGr;
       
-      if (!wordGr || !wordRu) {
-        document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово должно быть заполнено</div>';
+      if (!isChanged) {
+        // Нет изменений - показываем сообщение и закрываем без сохранения
+        document.getElementById('editMessage').innerHTML = '<div class="success">ℹ️ Изменений не было</div>';
+        setTimeout(() => {
+          closeModal('editModal');
+        }, 1000);
         return;
       }
+    }
+  }
+  
+  // ===== ЕСТЬ ИЗМЕНЕНИЯ - СОХРАНЯЕМ =====
+  document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+  
+  try {
+    const action = editingId === null ? 'addWord' : 'editWord';
+    const params = editingId === null 
+      ? { wordGr, wordRu, themeGr, posGr }
+      : { id: editingId, wordGr, wordRu, themeGr, posGr };
+    
+    const result = await callGAS(action, params);
+    
+    if (result.success) {
+      document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
       
-      document.getElementById('editMessage').innerHTML = '<div class="loading"><div class="spinner"></div><br>Сохранение...</div>';
+      if (editingId === null) {
+        // Добавление нового слова
+        const newWord = {
+          id: allData.words.length + 1,
+          wordGr: wordGr,
+          wordRu: wordRu,
+          themeGr: themeGr || '',
+          themeRu: themeGr || '',
+          posGr: posGr || '',
+          posRu: posGr || ''
+        };
+        allData.words.push(newWord);
+        allData.total = allData.words.length;
+        if (themeGr && !allThemes.some(t => t.gr === themeGr)) {
+          allThemes.push({ gr: themeGr, ru: themeGr });
+        }
+        if (posGr && !allPos.some(p => p.gr === posGr)) {
+          allPos.push({ gr: posGr, ru: posGr });
+        }
+      } else {
+        // Редактирование существующего слова
+        const index = allData.words.findIndex(w => w.id === editingId);
+        if (index !== -1) {
+          allData.words[index].wordGr = wordGr;
+          allData.words[index].wordRu = wordRu;
+          allData.words[index].themeGr = themeGr || '';
+          allData.words[index].themeRu = themeGr || '';
+          allData.words[index].posGr = posGr || '';
+          allData.words[index].posRu = posGr || '';
+        }
+      }
       
       try {
-        const action = editingId === null ? 'addWord' : 'editWord';
-        const params = editingId === null 
-          ? { wordGr, wordRu, themeGr, posGr }
-          : { id: editingId, wordGr, wordRu, themeGr, posGr };
-        
-        const result = await callGAS(action, params);
-        
-        if (result.success) {
-          document.getElementById('editMessage').innerHTML = '<div class="success">✅ Слово успешно сохранено!</div>';
-          
-          if (editingId === null) {
-            const newWord = {
-              id: allData.words.length + 1,
-              wordGr: wordGr,
-              wordRu: wordRu,
-              themeGr: themeGr || '',
-              themeRu: themeGr || '',
-              posGr: posGr || '',
-              posRu: posGr || ''
-            };
-            allData.words.push(newWord);
-            allData.total = allData.words.length;
-            if (themeGr && !allThemes.some(t => t.gr === themeGr)) {
-              allThemes.push({ gr: themeGr, ru: themeGr });
-            }
-            if (posGr && !allPos.some(p => p.gr === posGr)) {
-              allPos.push({ gr: posGr, ru: posGr });
-            }
-          } else {
-            const index = allData.words.findIndex(w => w.id === editingId);
-            if (index !== -1) {
-              allData.words[index].wordGr = wordGr;
-              allData.words[index].wordRu = wordRu;
-              allData.words[index].themeGr = themeGr || '';
-              allData.words[index].themeRu = themeGr || '';
-              allData.words[index].posGr = posGr || '';
-              allData.words[index].posRu = posGr || '';
-            }
-          }
-          
-          try {
-            localStorage.setItem('dictionary_data', JSON.stringify(allData));
-          } catch (e) {}
-          
-          setTimeout(() => {
-            closeModal('editModal');
-            performSearch();
-          }, 1500);
-        } else {
-          document.getElementById('editMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
-        }
-      } catch (error) {
-        document.getElementById('editMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
-      }
+        localStorage.setItem('dictionary_data', JSON.stringify(allData));
+      } catch (e) {}
+      
+      setTimeout(() => {
+        closeModal('editModal');
+        performSearch();
+      }, 1500);
+    } else {
+      document.getElementById('editMessage').innerHTML = `<div class="error">❌ ${result.error}</div>`;
     }
+  } catch (error) {
+    document.getElementById('editMessage').innerHTML = `<div class="error">❌ Ошибка: ${error.message}</div>`;
+  }
+}
     
     async function confirmDelete() {
       if (!deleteTarget) return;
