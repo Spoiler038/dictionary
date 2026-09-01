@@ -3932,25 +3932,27 @@ function hideProgressWithDelay() {
     }
     
     function checkDuplicate() {
-      const wordGr = document.getElementById('editWordGr').value.trim();
-      const wordRu = document.getElementById('editWordRu').value.trim();
-      
-      if (wordGr && allData) {
-        const exists = allData.words.some(w => 
-          w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
-          (editingId === null || w.id !== editingId)
-        );
-        document.getElementById('duplicateWordGr').classList.toggle('visible', exists);
-      }
-      
-      if (wordRu && allData) {
-        const exists = allData.words.some(w => 
-          w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
-          (editingId === null || w.id !== editingId)
-        );
-        document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
-      }
-    }
+  const wordGr = document.getElementById('editWordGr').value.trim();
+  const wordRu = document.getElementById('editWordRu').value.trim();
+  
+  if (wordGr && allData) {
+    // Проверяем только если это НЕ редактирование (editingId === null)
+    // ИЛИ если это редактирование, но слово отличается от текущего
+    const exists = allData.words.some(w => 
+      w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase() && 
+      (editingId === null || w.id !== editingId)
+    );
+    document.getElementById('duplicateWordGr').classList.toggle('visible', exists);
+  }
+  
+  if (wordRu && allData) {
+    const exists = allData.words.some(w => 
+      w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase() && 
+      (editingId === null || w.id !== editingId)
+    );
+    document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
+  }
+}
     
     async function login() {
       const password = document.getElementById('loginPassword').value.trim();
