@@ -2308,6 +2308,36 @@ a,
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+    .theme-dropdown,
+.part-of-speech-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: #d0d0d0 transparent;
+}
+
+/* Для Webkit (Chrome, Safari, Edge) */
+.theme-dropdown::-webkit-scrollbar,
+.part-of-speech-dropdown::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.theme-dropdown::-webkit-scrollbar-track,
+.part-of-speech-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0 8px 8px 0;
+}
+
+.theme-dropdown::-webkit-scrollbar-thumb,
+.part-of-speech-dropdown::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+.theme-dropdown::-webkit-scrollbar-thumb:hover,
+.part-of-speech-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
   </style>
 </head>
 <body>
