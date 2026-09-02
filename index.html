@@ -2658,7 +2658,7 @@ a,
 
   <!-- Фильтры (копия существующих) -->
   <div style="margin-bottom: 15px;">
-    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center;">
       <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📂 Темы</button>
       <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📚 Части речи</button>
       <div class="mode-selector" style="display: flex; gap: 6px; flex: 1; justify-content: center; min-width: 150px;">
@@ -2703,9 +2703,6 @@ a,
     <div id="trainingThemeDropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto; border: 2px solid #f39c12; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
     <div id="trainingPosDropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto; border: 2px solid #8e44ad; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
   </div>
-
-  <!-- Информация о фильтре -->
-  <div style="font-size: 13px; color: #95a5a6; margin-bottom: 10px; text-align: center;" id="trainingFilterInfo">Все слова · 0 слов с фото</div>
 
   <!-- Карточка -->
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; min-height: 60vh;">
@@ -5227,8 +5224,6 @@ function applyTrainingFilters() {
   trainingAnswered = {};
   trainingStats = { correct: 0, wrong: 0, total: 0 };
   
-  document.getElementById('trainingFilterInfo').textContent = 
-    `${filtered.length} слов с фото`;
   
   if (trainingWords.length === 0) {
     document.getElementById('trainingWord').innerHTML = '😕 Нет слов с фото';
