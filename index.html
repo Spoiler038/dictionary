@@ -2662,6 +2662,18 @@ a,
       <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📂 Темы</button>
       <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📚 Части речи</button>
       <div class="mode-selector" style="display: flex; gap: 6px; flex: 1; justify-content: center; min-width: 150px;">
+        <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+            <rect width="24" height="16" fill="#0d5eaf"/>
+            <rect y="0" width="24" height="2" fill="white"/>
+            <rect y="4" width="24" height="2" fill="white"/>
+            <rect y="8" width="24" height="2" fill="white"/>
+            <rect y="12" width="24" height="2" fill="white"/>
+            <rect x="0" y="0" width="8" height="6" fill="white"/>
+            <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+            <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+          </svg>
+        </button>
         <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
@@ -2675,19 +2687,7 @@ a,
             <line x1="7.05" y1="16.95" x2="8.46" y2="15.54"/>
             <line x1="15.54" y1="8.46" x2="16.95" y2="7.05"/>
           </svg>
-        </button>
-        <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
-          <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
-            <rect width="24" height="16" fill="#0d5eaf"/>
-            <rect y="0" width="24" height="2" fill="white"/>
-            <rect y="4" width="24" height="2" fill="white"/>
-            <rect y="8" width="24" height="2" fill="white"/>
-            <rect y="12" width="24" height="2" fill="white"/>
-            <rect x="0" y="0" width="8" height="6" fill="white"/>
-            <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
-            <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
-          </svg>
-        </button>
+        </button> 
         <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
           <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
             <rect width="24" height="16" fill="white"/>
