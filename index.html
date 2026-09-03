@@ -2517,7 +2517,7 @@ a,
 .training-word-change {
   animation: wordChange 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
-/* ===== КНОПКА "НАЗАД" (работает на всех устройствах) ===== */
+/* ===== КНОПКА "НАЗАД" (единый стиль) ===== */
 .btn-back {
   background: #f0f0f0;
   border: none;
@@ -2531,10 +2531,6 @@ a,
   transition: all 0.2s;
   padding: 0;
   flex-shrink: 0;
-  min-width: 44px;
-  min-height: 44px;
-  z-index: 10;
-  position: relative;
 }
 
 .btn-back:hover {
@@ -2556,28 +2552,18 @@ a,
   display: block;
 }
 
-/* Для мобильных устройств — чуть меньше */
+/* Для мобильных устройств */
 @media (max-width: 767px) {
   .btn-back {
     width: 40px;
     height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    background: #f0f0f0;
-    border: 2px solid #ddd;
   }
   
   .btn-back svg {
     width: 20px;
     height: 20px;
-    stroke: #333;
-  }
-  
-  .btn-back:hover {
-    background: #e0e0e0;
   }
 }
-
  </style>
 </head>
 <body>
@@ -5362,20 +5348,30 @@ function populateTrainingDropdowns() {
   // Темы
   const themeDropdown = document.getElementById('trainingThemeDropdown');
   themeDropdown.innerHTML = `
-    <div class="dropdown-item" onclick="selectTrainingFilter('theme', '')">📂 Все темы</div>
-    ${allThemes.map(t => `
-      <div class="dropdown-item" onclick="selectTrainingFilter('theme', '${t.gr}')">${t.gr} — ${t.ru}</div>
-    `).join('')}
-  `;
+  <div class="theme-item" onclick="selectTrainingFilter('theme', '')" style="justify-content: center;">📂 Все темы</div>
+  ${allThemes.map(t => `
+    <div class="theme-item" onclick="selectTrainingFilter('theme', '${t.gr}')">
+      <div class="theme-text-wrapper">
+        <span class="theme-gr">${t.gr}</span>
+        <span class="theme-ru">${t.ru}</span>
+      </div>
+    </div>
+  `).join('')}
+`;
   
   // Части речи
   const posDropdown = document.getElementById('trainingPosDropdown');
   posDropdown.innerHTML = `
-    <div class="dropdown-item" onclick="selectTrainingFilter('pos', '')">📚 Все части речи</div>
-    ${allPos.map(p => `
-      <div class="dropdown-item" onclick="selectTrainingFilter('pos', '${p.gr}')">${p.gr} — ${p.ru}</div>
-    `).join('')}
-  `;
+  <div class="pos-item" onclick="selectTrainingFilter('pos', '')" style="justify-content: center;">📚 Все части речи</div>
+  ${allPos.map(p => `
+    <div class="pos-item" onclick="selectTrainingFilter('pos', '${p.gr}')">
+      <div class="pos-text-wrapper">
+        <span class="pos-gr">${p.gr}</span>
+        <span class="pos-ru">${p.ru}</span>
+      </div>
+    </div>
+  `).join('')}
+`;
 }
 
 function toggleTrainingTheme() {
