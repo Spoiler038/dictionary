@@ -5589,7 +5589,7 @@ function markTrainingWrong() {
   trainingStats.total++;
   
   showTrainingCard();
-  showToast('❌ Неправильно! Правильный ответ: ' + 
+  showToast('✖️ Неправильно! Правильный ответ: ' + 
     (trainingMode === 'greek' ? word.wordRu : 
      trainingMode === 'russian' ? word.wordGr : 
      word.wordRu + ' / ' + word.wordGr));
@@ -5662,13 +5662,13 @@ function toggleTrainingRepeat() {
     btn.style.color = '#27ae60';
     btn.style.background = 'rgba(39, 174, 96, 0.15)';
     btn.textContent = '🔁 Повтор (вкл) ';
-    showToast('🔁 Режим повтора включён');
+    showToast('🔁 Повтор слов включен');
   } else {
     btn.style.borderColor = '#95a5a6';
     btn.style.color = '#7f8c8d';
     btn.style.background = 'transparent';
     btn.textContent = '🔁 Повтор (выкл)';
-    showToast('🔁 Режим повтора выключен');
+    showToast('🔁 Повтор слов выключен');
   }
   }
   
