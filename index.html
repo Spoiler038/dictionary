@@ -5602,16 +5602,32 @@ function autoAdvance() {
       trainingCurrentIndex++;
       showTrainingCard();
     } else {
+      // Все слова в текущем цикле показаны
       const allAnswered = trainingWords.every(w => trainingAnswered[w.id]);
+      
       if (allAnswered) {
-        document.getElementById('trainingWord').innerHTML = '🎉 Тренировка завершена!';
-        document.getElementById('trainingPrevBtn').disabled = true;
-        document.getElementById('trainingNextBtn').disabled = true;
-        document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
-        document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
-        document.getElementById('trainingWrongBtn').style.opacity = '0.6';
-        document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+        // Все слова отвечены
+        if (trainingRepeat) {
+          // 🔁 РЕЖИМ ПОВТОРА ВКЛЮЧЁН: перемешиваем и начинаем заново
+          trainingWords = shuffleArray([...trainingWords]);
+          trainingCurrentIndex = 0;
+          trainingAnswered = {};
+          trainingStats = { correct: 0, wrong: 0, total: 0 };
+          showTrainingCard();
+          showToast('🔄 Повтор: новый круг!');
+        } else {
+          // 🎉 Тренировка завершена
+          document.getElementById('trainingWord').innerHTML = '🎉 Тренировка завершена!';
+          document.getElementById('trainingPrevBtn').disabled = true;
+          document.getElementById('trainingNextBtn').disabled = true;
+          document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
+          document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
+          document.getElementById('trainingWrongBtn').style.opacity = '0.6';
+          document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+          showToast('🎉 Тренировка завершена!');
+        }
       } else {
+        // Есть неотвеченные слова — перемешиваем и продолжаем
         const unanswered = trainingWords.filter(w => !trainingAnswered[w.id]);
         const answeredList = trainingWords.filter(w => trainingAnswered[w.id]);
         trainingWords = shuffleArray([...unanswered, ...answeredList]);
@@ -5621,7 +5637,7 @@ function autoAdvance() {
       }
     }
   }, 1500);
-}
+  }
   
 // ========== НАВИГАЦИЯ ==========
 function nextTrainingCard() {
@@ -5644,16 +5660,18 @@ function toggleTrainingRepeat() {
   if (trainingRepeat) {
     btn.style.borderColor = '#27ae60';
     btn.style.color = '#27ae60';
-    btn.style.background = 'rgba(39, 174, 96, 0.1)';
-    btn.textContent = '🔁 Повтор (вкл)';
+    btn.style.background = 'rgba(39, 174, 96, 0.15)';
+    btn.textContent = '🔁 Повтор (вкл) ';
+    showToast('🔁 Режим повтора включён');
   } else {
     btn.style.borderColor = '#95a5a6';
     btn.style.color = '#7f8c8d';
     btn.style.background = 'transparent';
-    btn.textContent = '🔁 Повтор';
+    btn.textContent = '🔁 Повтор (выкл)';
+    showToast('🔁 Режим повтора выключен');
   }
-}
-
+  }
+  
 // ========== ПРОГРЕСС ==========
 function updateTrainingProgress() {
   const total = trainingWords.length;
