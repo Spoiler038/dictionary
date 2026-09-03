@@ -5597,6 +5597,7 @@ function markTrainingWrong() {
 }
 
 function autoAdvance() {
+function autoAdvance() {
   setTimeout(() => {
     if (trainingCurrentIndex < trainingWords.length - 1) {
       trainingCurrentIndex++;
@@ -5633,11 +5634,11 @@ function autoAdvance() {
         trainingWords = shuffleArray([...unanswered, ...answeredList]);
         trainingCurrentIndex = 0;
         showTrainingCard();
-        showToast('🔄 Остались неотвеченные слова');
+        showToast('🔄 Остались неотвеченные слова');  // ← здесь был пропущен showToast
       }
     }
   }, 1500);
-  }
+}
   
 // ========== НАВИГАЦИЯ ==========
 function nextTrainingCard() {
@@ -5661,7 +5662,7 @@ function toggleTrainingRepeat() {
     btn.style.borderColor = '#27ae60';
     btn.style.color = '#27ae60';
     btn.style.background = 'rgba(39, 174, 96, 0.15)';
-    btn.textContent = '🔁 Повтор (вкл) ';
+    btn.textContent = '🔁 Повтор (вкл)';
     showToast('🔁 Повтор слов включен');
   } else {
     btn.style.borderColor = '#95a5a6';
@@ -5670,7 +5671,7 @@ function toggleTrainingRepeat() {
     btn.textContent = '🔁 Повтор (выкл)';
     showToast('🔁 Повтор слов выключен');
   }
-  }
+}
   
 // ========== ПРОГРЕСС ==========
 function updateTrainingProgress() {
