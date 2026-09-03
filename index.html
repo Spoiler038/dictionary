@@ -5597,7 +5597,6 @@ function markTrainingWrong() {
 }
 
 function autoAdvance() {
-function autoAdvance() {
   setTimeout(() => {
     if (trainingCurrentIndex < trainingWords.length - 1) {
       trainingCurrentIndex++;
@@ -5634,7 +5633,7 @@ function autoAdvance() {
         trainingWords = shuffleArray([...unanswered, ...answeredList]);
         trainingCurrentIndex = 0;
         showTrainingCard();
-        showToast('🔄 Остались неотвеченные слова');  // ← здесь был пропущен showToast
+        showToast('🔄 Остались неотвеченные слова');
       }
     }
   }, 1500);
