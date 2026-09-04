@@ -2564,19 +2564,21 @@ a,
     height: 20px;
   }
 }
-    /* ===== ВЫПАДАЮЩИЕ СПИСКИ В ТРЕНИРОВКЕ ===== */
+/* ===== ВЫПАДАЮЩИЕ СПИСКИ В ТРЕНИРОВКЕ (абсолютное позиционирование) ===== */
 #trainingThemeDropdown,
 #trainingPosDropdown {
   width: 100%;
+  max-width: 400px;
   max-height: 150px;
   overflow-y: auto;
   overflow-x: hidden;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   animation: slideDown 0.2s ease;
   scrollbar-width: thin;
   scrollbar-color: #d0d0d0 transparent;
+  margin: 0 auto;
 }
 
 #trainingThemeDropdown {
@@ -2673,6 +2675,32 @@ a,
 
 #trainingPage .mode-selector button.active .auto-icon use {
   stroke: #000000;
+}
+
+    /* ===== АКТИВНАЯ КНОПКА ЯЗЫКА В ТРЕНИРОВКЕ (переопределение) ===== */
+#trainingPage .mode-selector button.active {
+  background: #ddd !important;
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+#trainingPage .mode-selector button.active .flag-icon {
+  opacity: 1;
+}
+
+#trainingPage .mode-selector button.active .auto-icon use {
+  stroke: #000000;
+}
+
+    /* ===== АНИМАЦИЯ ФОТО ПРИ НАЖАТИИ ===== */
+#trainingImageContainer:active {
+  animation: photoTap 0.3s ease;
+}
+
+@keyframes photoTap {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
  </style>
 </head>
@@ -2931,15 +2959,11 @@ a,
     </svg>
   </button>
   
-  <!-- Заголовок (как в словаре) -->
-  <h1 style="margin: 0; font-size: 24px; display: flex; align-items: center; gap: 8px; color: #2c3e50; font-weight: 700;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-      <path d="M2 17l10 5 10-5"/>
-      <path d="M2 12l10 5 10-5"/>
-    </svg>
-    Тренировка
-  </h1>
+  <!-- Заголовок -->
+  <div style="display: flex; align-items: center; gap: 8px; font-size: 24px; font-weight: 700; color: #2c3e50;">
+    <span style="font-size: 28px;">📚</span>
+    <span>Тренировка</span>
+  </div>
   
   <!-- Кнопка сброса -->
   <button onclick="openResetTrainingModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">🔄</button>
@@ -2988,59 +3012,57 @@ a,
       </div>
     </div>
 
-    <!-- Выпадающие списки -->
-<div id="trainingThemeDropdown" class="theme-dropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto;"></div>
-<div id="trainingPosDropdown" class="part-of-speech-dropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto;"></div>
-  </div>
+    <!-- Выпадающие списки (абсолютное позиционирование) -->
+<div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+  <div id="trainingThemeDropdown" class="theme-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; max-height: 150px; overflow-y: auto; margin-top: 4px;"></div>
+  <div id="trainingPosDropdown" class="part-of-speech-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; max-height: 150px; overflow-y: auto; margin-top: 4px;"></div>
+</div>
 
+<!-- Карточка (фиксированная высота, без скролла) -->
 <!-- Карточка -->
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; min-height: 60vh;">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; height: calc(100vh - 180px); min-height: 500px; overflow: hidden;">
   
-  <!-- 3D Карточка -->
-  <div class="training-card-container">
-    <div class="training-card" id="trainingCard">
-      <!-- Передняя сторона (фото) -->
-      <div class="training-card-front">
-        <img id="trainingImage" src="" alt="Фото" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-        <div id="trainingPlaceholder" class="placeholder" style="display: flex; align-items: center; justify-content: center;">🖼️</div>
-        <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; z-index: 2;">📷</span>
+  <!-- Фото (с анимацией при нажатии) -->
+  <div id="trainingImageContainer" onclick="flipTrainingCard()" style="width: 100%; max-width: 350px; aspect-ratio: 1/1; background: #f0f0f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; cursor: pointer; transition: transform 0.2s;">
+    <img id="trainingImage" src="" alt="Фото" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+    <div id="trainingPlaceholder" style="font-size: 48px; color: #ccc; display: flex; align-items: center; justify-content: center;">🖼️</div>
+    <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; z-index: 2;">📷</span>
+  </div>
+
+  <!-- Слово (с 3D flip-анимацией) -->
+  <div id="trainingWord" onclick="flipTrainingCard()" style="margin-top: 16px; font-size: 26px; font-weight: 700; color: #2c3e50; text-align: center; perspective: 600px; cursor: pointer; min-height: 60px; display: flex; align-items: center; justify-content: center; max-width: 90%; width: 100%; flex-shrink: 0;">
+    <div id="trainingWordInner" style="width: 100%; padding: 12px 24px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; position: relative; min-height: 60px; display: flex; align-items: center; justify-content: center;">
+      <div id="trainingWordFront" style="backface-visibility: hidden; width: 100%;">
+        Загрузка...
+        <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>
       </div>
-      <!-- Задняя сторона (перевод) -->
-      <div class="training-card-back" id="trainingCardBack">
-        <span class="back-label">📖 Перевод</span>
-        <span class="back-word" id="trainingBackWord">---</span>
+      <div id="trainingWordBack" style="backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotateX(180deg); display: flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 12px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+        <span id="trainingWordBackText" style="font-size: 26px; font-weight: 700; color: #2c3e50;">---</span>
       </div>
     </div>
   </div>
 
-  <!-- Слово (отдельно, с анимацией смены) -->
-  <div id="trainingWord" onclick="flipTrainingCard()" style="margin-top: 20px; font-size: 28px; font-weight: 700; color: #2c3e50; text-align: center; padding: 15px 30px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor: pointer; min-height: 70px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; max-width: 90%; width: 100%;">
-      Загрузка...
-      <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>
-    </div>
+  <!-- Кнопки самоконтроля (изначально неактивны) -->
+  <div style="display: flex; gap: 16px; margin-top: 12px; flex-shrink: 0;">
+    <button id="trainingCorrectBtn" onclick="markTrainingCorrect()" style="padding: 10px 24px; background: #95a5a6; color: white; border: none; border-radius: 12px; font-size: 16px; cursor: not-allowed; transition: all 0.3s; display: flex; align-items: center; gap: 6px; opacity: 0.5;">
+      ✅ Правильно
+    </button>
+    <button id="trainingWrongBtn" onclick="markTrainingWrong()" style="padding: 10px 24px; background: #95a5a6; color: white; border: none; border-radius: 12px; font-size: 16px; cursor: not-allowed; transition: all 0.3s; display: flex; align-items: center; gap: 6px; opacity: 0.5;">
+      ✖️ Неправильно
+    </button>
+  </div>
 
-    <!-- Кнопки самоконтроля -->
-    <div style="display: flex; gap: 20px; margin-top: 15px;">
-      <button id="trainingCorrectBtn" onclick="markTrainingCorrect()" style="padding: 12px 30px; background: #27ae60; color: white; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; opacity: 0.6; pointer-events: none;">
-        ✅ Правильно
-      </button>
-      <button id="trainingWrongBtn" onclick="markTrainingWrong()" style="padding: 12px 30px; background: #e74c3c; color: white; border: none; border-radius: 12px; font-size: 18px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; opacity: 0.6; pointer-events: none;">
-        ✖️ Неправильно
-      </button>
-    </div>
+  <!-- Навигация -->
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px; width: 100%; max-width: 350px; justify-content: center; flex-shrink: 0;">
+    <button id="trainingPrevBtn" onclick="prevTrainingCard()" style="padding: 10px 14px; background: #3498db; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; flex-shrink: 0;">◀</button>
+    <span id="trainingCounter" style="font-size: 15px; color: #7f8c8d; min-width: 60px; text-align: center; padding: 0 4px;">0/0</span>
+    <button id="trainingRepeatBtn" onclick="toggleTrainingRepeat()" style="padding: 6px 12px; background: transparent; border: 2px solid #95a5a6; border-radius: 20px; cursor: pointer; font-size: 13px; color: #7f8c8d; transition: all 0.3s; white-space: nowrap; flex-shrink: 0;">🔁 Повтор</button>
+    <button id="trainingNextBtn" onclick="nextTrainingCard()" style="padding: 10px 14px; background: #3498db; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; flex-shrink: 0;">▶</button>
+  </div>
 
-    <!-- Навигация -->
-    <div style="display: flex; align-items: center; gap: 12px; margin-top: 15px; width: 100%; max-width: 400px; justify-content: center;">
-      <button id="trainingPrevBtn" onclick="prevTrainingCard()" style="padding: 12px 16px; background: #3498db; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 20px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; flex-shrink: 0;">◀</button>
-      <span id="trainingCounter" style="font-size: 16px; color: #7f8c8d; min-width: 70px; text-align: center; padding: 0 4px;">0/0</span>
-      <button id="trainingRepeatBtn" onclick="toggleTrainingRepeat()" style="padding: 8px 14px; background: transparent; border: 2px solid #95a5a6; border-radius: 20px; cursor: pointer; font-size: 14px; color: #7f8c8d; transition: all 0.3s; white-space: nowrap; flex-shrink: 0;">🔁 Повтор</button>
-      <button id="trainingNextBtn" onclick="nextTrainingCard()" style="padding: 12px 16px; background: #3498db; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 20px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; flex-shrink: 0;">▶</button>
-    </div>
-
-    <!-- Прогресс -->
-    <div style="margin-top: 10px; font-size: 13px; color: #95a5a6; text-align: center; width: 100%; padding: 0 4px;" id="trainingProgressInfo">
-      Прогресс: 0% · Правильно: 0/0
-    </div>
+  <!-- Прогресс -->
+  <div style="margin-top: 8px; font-size: 12px; color: #95a5a6; text-align: center; width: 100%; padding: 0 4px; flex-shrink: 0;" id="trainingProgressInfo">
+    Прогресс: 0% · Правильно: 0/0
   </div>
 </div>
   
@@ -5561,15 +5583,18 @@ function showTrainingCard() {
   const word = trainingWords[trainingCurrentIndex];
   if (!word) return;
   
-  const wordEl = document.getElementById('trainingWord');
+  const wordFront = document.getElementById('trainingWordFront');
+  const wordBackText = document.getElementById('trainingWordBackText');
+  const wordInner = document.getElementById('trainingWordInner');
   const img = document.getElementById('trainingImage');
   const placeholder = document.getElementById('trainingPlaceholder');
-  const backWord = document.getElementById('trainingBackWord');
-  const card = document.getElementById('trainingCard');
   
-  // Сбрасываем переворот при смене карточки
-  card.classList.remove('flipped');
+  // Сбрасываем переворот
+  wordInner.classList.remove('flipped');
   trainingIsFlipped = false;
+  
+  // Делаем кнопки самоконтроля неактивными (перевод не показан)
+  setSelfControlButtons(false);
   
   // Определяем язык для отображения (с учетом режима)
   let displayWord, translationWord;
@@ -5580,10 +5605,8 @@ function showTrainingCard() {
   } else if (trainingMode === 'russian') {
     displayWord = word.wordRu;
     translationWord = word.wordGr;
-  } else { // auto - ПРОИЗВОЛЬНЫЙ ВЫБОР (не чередование)
-    // Случайный выбор: 0 - греческий, 1 - русский
+  } else { // auto - ПРОИЗВОЛЬНЫЙ ВЫБОР
     const randomChoice = Math.random() < 0.5 ? 'gr' : 'ru';
-    
     if (randomChoice === 'gr') {
       displayWord = word.wordGr;
       translationWord = word.wordRu;
@@ -5591,24 +5614,16 @@ function showTrainingCard() {
       displayWord = word.wordRu;
       translationWord = word.wordGr;
     }
-    // Сохраняем для истории (необязательно)
     localStorage.setItem('training_last_lang_' + word.id, randomChoice);
   }
   
-  // Анимация смены слова (выход старого)
-  wordEl.classList.remove('training-word-change', 'training-word-slide-in', 'training-word-slide-out');
+  // Анимация смены слова
+  wordFront.classList.remove('training-word-change');
+  void wordFront.offsetWidth;
   
-  // Принудительное переключение
-  void wordEl.offsetWidth; // рефлоу
-  
-  // Устанавливаем новое слово с анимацией
-  wordEl.innerHTML = `${displayWord} <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>`;
-  wordEl.dataset.translation = translationWord;
-  wordEl.dataset.original = displayWord;
-  wordEl.classList.add('training-word-change');
-  
-  // Устанавливаем перевод на заднюю сторону карточки
-  backWord.textContent = translationWord;
+  wordFront.innerHTML = `${displayWord} <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>`;
+  wordBackText.textContent = translationWord;
+  wordFront.classList.add('training-word-change');
   
   // Фото
   if (word.imageUrl && word.imageUrl.trim() !== '') {
@@ -5629,50 +5644,55 @@ function showTrainingCard() {
   document.getElementById('trainingPrevBtn').disabled = trainingCurrentIndex === 0;
   document.getElementById('trainingNextBtn').disabled = trainingCurrentIndex === trainingWords.length - 1;
   
-  // Обновляем кнопки самоконтроля
-  const answered = trainingAnswered[word.id];
-  const correctBtn = document.getElementById('trainingCorrectBtn');
-  const wrongBtn = document.getElementById('trainingWrongBtn');
-  
-  if (answered) {
-    correctBtn.style.opacity = '0.4';
-    correctBtn.style.pointerEvents = 'none';
-    wrongBtn.style.opacity = '0.4';
-    wrongBtn.style.pointerEvents = 'none';
-    if (answered === 'correct') {
-      correctBtn.style.opacity = '1';
-      correctBtn.style.background = '#27ae60';
-    } else {
-      wrongBtn.style.opacity = '1';
-      wrongBtn.style.background = '#e74c3c';
-    }
-  } else {
-    correctBtn.style.opacity = '1';
-    correctBtn.style.pointerEvents = 'auto';
-    correctBtn.style.background = '#27ae60';
-    wrongBtn.style.opacity = '1';
-    wrongBtn.style.pointerEvents = 'auto';
-    wrongBtn.style.background = '#e74c3c';
-  }
-  
   updateTrainingProgress();
 }
   
-// ========== ПЕРЕВОРОТ КАРТОЧКИ ==========
+// ========== ПЕРЕВОРОТ СЛОВА (вертикальный flip) ==========
 function flipTrainingCard() {
-  const card = document.getElementById('trainingCard');
-  const wordEl = document.getElementById('trainingWord');
+  const wordInner = document.getElementById('trainingWordInner');
   
-  // Переворачиваем карточку
-  card.classList.toggle('flipped');
+  // Переворачиваем слово
+  wordInner.classList.toggle('flipped');
   trainingIsFlipped = !trainingIsFlipped;
   
-  // Меняем подпись на слове
+  // Активируем/деактивируем кнопки самоконтроля в зависимости от состояния
+  setSelfControlButtons(trainingIsFlipped);
+  
+  // Если переворот выполнен (показан перевод) и слово ещё не отвечено
   if (trainingIsFlipped) {
-    wordEl.innerHTML = `<span style="font-size: 14px; color: #95a5a6; font-weight: 400;">👆 обратно</span>`;
+    const word = trainingWords[trainingCurrentIndex];
+    if (word && !trainingAnswered[word.id]) {
+      // Активируем кнопки
+      setSelfControlButtons(true);
+    }
+  }
+}
+
+// ========== УПРАВЛЕНИЕ КНОПКАМИ САМОКОНТРОЛЯ ==========
+function setSelfControlButtons(enabled) {
+  const correctBtn = document.getElementById('trainingCorrectBtn');
+  const wrongBtn = document.getElementById('trainingWrongBtn');
+  
+  if (enabled) {
+    correctBtn.style.background = '#27ae60';
+    correctBtn.style.cursor = 'pointer';
+    correctBtn.style.opacity = '1';
+    correctBtn.style.pointerEvents = 'auto';
+    
+    wrongBtn.style.background = '#e74c3c';
+    wrongBtn.style.cursor = 'pointer';
+    wrongBtn.style.opacity = '1';
+    wrongBtn.style.pointerEvents = 'auto';
   } else {
-    const original = wordEl.dataset.original;
-    wordEl.innerHTML = `${original} <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>`;
+    correctBtn.style.background = '#95a5a6';
+    correctBtn.style.cursor = 'not-allowed';
+    correctBtn.style.opacity = '0.5';
+    correctBtn.style.pointerEvents = 'none';
+    
+    wrongBtn.style.background = '#95a5a6';
+    wrongBtn.style.cursor = 'not-allowed';
+    wrongBtn.style.opacity = '0.5';
+    wrongBtn.style.pointerEvents = 'none';
   }
 }
 
@@ -5684,6 +5704,9 @@ function markTrainingCorrect() {
   trainingAnswered[word.id] = 'correct';
   trainingStats.correct++;
   trainingStats.total++;
+  
+  // Деактивируем кнопки после ответа
+  setSelfControlButtons(false);
   
   showTrainingCard();
   showToast('✅ Правильно!');
@@ -5698,6 +5721,9 @@ function markTrainingWrong() {
   trainingStats.wrong++;
   trainingStats.total++;
   
+  // Деактивируем кнопки после ответа
+  setSelfControlButtons(false);
+  
   showTrainingCard();
   showToast('✖️ Неправильно! Правильный ответ: ' + 
     (trainingMode === 'greek' ? word.wordRu : 
@@ -5705,7 +5731,6 @@ function markTrainingWrong() {
      word.wordRu + ' / ' + word.wordGr));
   autoAdvance();
 }
-
 function autoAdvance() {
   setTimeout(() => {
     if (trainingCurrentIndex < trainingWords.length - 1) {
