@@ -2564,6 +2564,116 @@ a,
     height: 20px;
   }
 }
+    /* ===== ВЫПАДАЮЩИЕ СПИСКИ В ТРЕНИРОВКЕ ===== */
+#trainingThemeDropdown,
+#trainingPosDropdown {
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideDown 0.2s ease;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d0d0 transparent;
+}
+
+#trainingThemeDropdown {
+  border: 2px solid #f39c12;
+}
+
+#trainingPosDropdown {
+  border: 2px solid #8e44ad;
+}
+
+#trainingThemeDropdown .theme-item,
+#trainingPosDropdown .pos-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+#trainingThemeDropdown .theme-item:hover,
+#trainingPosDropdown .pos-item:hover {
+  background: #f0f0f0;
+}
+
+#trainingThemeDropdown .theme-item:last-child,
+#trainingPosDropdown .pos-item:last-child {
+  border-bottom: none;
+}
+
+#trainingThemeDropdown .theme-text-wrapper,
+#trainingPosDropdown .pos-text-wrapper {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#trainingThemeDropdown .theme-gr,
+#trainingPosDropdown .pos-gr {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+}
+
+#trainingThemeDropdown .theme-ru,
+#trainingPosDropdown .pos-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+  text-align: left;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 767px) {
+  #trainingThemeDropdown .theme-item,
+  #trainingPosDropdown .pos-item {
+    padding: 8px 10px;
+    min-height: 40px;
+  }
+  
+  #trainingThemeDropdown .theme-gr,
+  #trainingThemeDropdown .theme-ru,
+  #trainingPosDropdown .pos-gr,
+  #trainingPosDropdown .pos-ru {
+    font-size: 14px;
+  }
+}
+    /* ===== АКТИВНАЯ КНОПКА ЯЗЫКА В ТРЕНИРОВКЕ ===== */
+#trainingPage .mode-selector button.active {
+  background: #ddd;
+  border-color: #000000;
+  color: #000000;
+}
+
+#trainingPage .mode-selector button.active .flag-icon {
+  opacity: 1;
+}
+
+#trainingPage .mode-selector button.active .auto-icon use {
+  stroke: #000000;
+}
  </style>
 </head>
 <body>
