@@ -4207,12 +4207,12 @@ function hideProgressWithDelay() {
     }
     
     function handleTitleClick(e) {
-  if (e) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
-  console.log('Клик по заголовку! Открываем модалку...');
-  openLoginModal();
+    if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    console.log('🔥 Клик по заголовку!');
+    openLoginModal();
 }
     
    function updateHeaderButtons() {
