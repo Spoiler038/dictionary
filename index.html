@@ -3605,12 +3605,12 @@ const CLOUDINARY_CONFIG = {
   
     
     function toggleBodyScroll(disable) {
-      if (disable) {
-        document.body.classList.add('modal-open');
-      } else {
-        document.body.classList.remove('modal-open');
-      }
-    }
+  if (disable) {
+    document.body.classList.add('modal-open');
+  } else {
+    document.body.classList.remove('modal-open');
+  }
+}
     
     async function loadData() {
   if (isLoading) return;
@@ -4207,8 +4207,11 @@ function hideProgressWithDelay() {
     }
     
     function handleTitleClick(e) {
-  if (e) e.stopPropagation();
-  // ВСЕГДА открываем модальное окно входа
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  console.log('Клик по заголовку! Открываем модалку...');
   openLoginModal();
 }
     
@@ -4296,7 +4299,13 @@ function hideProgressWithDelay() {
     }
     
     function openModal(id) {
-  document.getElementById(id).classList.add('active');
+  const modal = document.getElementById(id);
+  if (!modal) {
+    console.error('Модальное окно не найдено:', id);
+    return;
+  }
+  modal.classList.add('active');
+  modal.style.display = 'flex'; // Явно устанавливаем display
   toggleBodyScroll(true);
   const messageEl = document.getElementById(id.replace('Modal', 'Message'));
   if (messageEl) messageEl.innerHTML = '';
@@ -4304,7 +4313,10 @@ function hideProgressWithDelay() {
     
     // ========== ЗАКРЫТИЕ МОДАЛКИ ==========
 function closeModal(id) {
-  document.getElementById(id).classList.remove('active');
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.remove('active');
+  modal.style.display = 'none'; // Явно скрываем
   toggleBodyScroll(false);
   
   if (id === 'editModal') {
@@ -4320,7 +4332,10 @@ function closeModal(id) {
     function openLoginModal() {
   document.getElementById('loginPassword').value = '';
   openModal('loginModal');
-  setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+  setTimeout(() => {
+    const input = document.getElementById('loginPassword');
+    if (input) input.focus();
+  }, 300);
 }
     
     function openLogoutModal() {
