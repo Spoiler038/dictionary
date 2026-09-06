@@ -5591,6 +5591,13 @@ function showImagePreview(url) {
     icon.setAttribute('href', '#icon-eye');
   }
 }
+
+    // ========== ФУНКЦИЯ ВХОДА В РЕДАКТОР ==========
+function openLoginModal() {
+  document.getElementById('loginPassword').value = '';
+  openModal('loginModal');
+  setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+}
     
     document.addEventListener('click', function(event) {
       const dropdown = document.getElementById('themeDropdown');
@@ -5622,6 +5629,7 @@ function showImagePreview(url) {
     window.addEventListener('load', function() {
       setTimeout(() => document.getElementById('searchInput').focus(), 300);
     });
+    
   </script>
   <script>
   if ('serviceWorker' in navigator) {
