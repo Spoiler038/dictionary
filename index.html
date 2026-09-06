@@ -2724,6 +2724,85 @@ a,
     max-width: 500px;
   }
 }
+
+    /* ===== ФИЛЬТРЫ ТРЕНИРОВКИ ===== */
+/* По умолчанию (для телефонов) — кнопки на разных строках */
+#trainingPage .filters-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+#trainingPage .filters-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#trainingPage .filters-row .theme-toggle-btn,
+#trainingPage .filters-row .pos-toggle-btn {
+  flex: 1;
+  max-width: 120px;
+  justify-content: center;
+}
+
+#trainingPage .filters-row .mode-selector {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+  min-width: 150px;
+  max-width: 300px;
+}
+
+#trainingPage .filters-row .mode-selector button {
+  flex: 1;
+  max-width: 80px;
+  justify-content: center;
+}
+
+/* Для ПК — все кнопки в одной строке, но с разным выравниванием */
+@media (min-width: 768px) {
+  #trainingPage .filters-wrapper {
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #trainingPage .filters-row {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  /* Темы и Части речи — прижаты к левому краю */
+  #trainingPage .filters-row-left {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+  }
+  
+  /* Кнопки языков — по центру с учетом ширины левых кнопок */
+  #trainingPage .filters-row-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  #trainingPage .filters-row .theme-toggle-btn,
+  #trainingPage .filters-row .pos-toggle-btn {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+  
+  #trainingPage .filters-row .mode-selector {
+    max-width: 280px;
+    flex: 0 1 auto;
+  }
+}
  </style>
 </head>
 <body>
@@ -2991,17 +3070,17 @@ a,
   <button onclick="openResetTrainingModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">🔄</button>
 </div>
   
- <!-- Фильтры -->
-<div style="margin-bottom: 15px;">
-  <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center;">
-    <!-- Кнопка Темы -->
-    <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; flex: 1; max-width: 120px; justify-content: center;">📂 Темы</button>
-    
-    <!-- Кнопка Части речи -->
-    <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; flex: 1; max-width: 120px; justify-content: center;">📚 Части речи</button>
-    
-    <!-- Кнопки языков -->
-    <div class="mode-selector" style="display: flex; gap: 6px; flex: 1; justify-content: center; min-width: 150px; max-width: 300px;">
+<!-- Фильтры -->
+<div class="filters-wrapper">
+  <!-- Первая строка (телефоны) / левая часть (ПК) -->
+  <div class="filters-row filters-row-left">
+    <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; justify-content: center;">📂 Темы</button>
+    <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; justify-content: center;">📚 Части речи</button>
+  </div>
+  
+  <!-- Вторая строка (телефоны) / центр (ПК) -->
+  <div class="filters-row filters-row-center">
+    <div class="mode-selector" style="display: flex; gap: 6px; justify-content: center; min-width: 150px;">
       <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 80px; display: flex; align-items: center; justify-content: center; gap: 4px;">
         <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
           <rect width="24" height="16" fill="#0d5eaf"/>
@@ -3038,14 +3117,13 @@ a,
       </button>
     </div>
   </div>
-  
-  <!-- Выпадающие списки -->
-  <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
-    <div id="trainingThemeDropdown" class="theme-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; max-height: 250px; overflow-y: auto; margin-top: 4px;"></div>
-    <div id="trainingPosDropdown" class="part-of-speech-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; max-height: 250px; overflow-y: auto; margin-top: 4px;"></div>
-  </div>
 </div>
 
+<!-- Выпадающие списки -->
+<div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
+  <div id="trainingThemeDropdown" class="theme-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; max-height: 250px; overflow-y: auto; margin-top: 4px;"></div>
+  <div id="trainingPosDropdown" class="part-of-speech-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50; max-height: 250px; overflow-y: auto; margin-top: 4px;"></div>
+</div>
 
 <!-- Карточка -->
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; height: calc(100vh - 180px); min-height: 600px; overflow: hidden;">
