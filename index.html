@@ -6122,5 +6122,17 @@ document.addEventListener('click', function(e) {
   }
 });
  </script>
+  <script>
+// ФИНАЛЬНАЯ ВЕРСИЯ - переопределяем handleTitleClick
+// Это гарантирует, что наша функция будет последней
+function handleTitleClick(e) {
+    if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+    console.log('🔥 Клик по заголовку! Открываем модалку...');
+    openLoginModal();
+}
+</script>
 </body>
 </html>
