@@ -2974,7 +2974,7 @@ a,
   </svg>
 
   <div id="app">
-    <h1 id="headerTitle" onclick="handleTitleClick()">
+    <h1 id="headerTitle" onclick="handleTitleClick(event)">
       📖 Словарь
       <span class="version-badge" id="versionBadge">Загрузка...</span>
       <div class="header-buttons" id="headerButtons"></div>
@@ -4205,7 +4205,8 @@ function hideProgressWithDelay() {
       }
     }
     
-    function handleTitleClick() {
+    function handleTitleClick(e) {
+  if (e) e.stopPropagation();
   // Всегда открываем модалку, независимо от режима
   openLoginModal();
 }
