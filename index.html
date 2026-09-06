@@ -2825,6 +2825,29 @@ a,
     min-height: 100vh;
   }
 }
+    /* ===== ШИРИНА КНОПОК ЯЗЫКА В ТРЕНИРОВКЕ (ПК) ===== */
+@media (min-width: 768px) {
+  #trainingPage .filters-row .mode-selector {
+    max-width: 320px;
+    flex: 0 1 auto;
+    gap: 8px;
+  }
+  
+  #trainingPage .filters-row .mode-selector button {
+    max-width: 100px;
+    min-width: 70px;
+    padding: 8px 16px;
+    font-size: 14px;
+    flex: 1;
+    height: 40px;
+  }
+  
+  #trainingPage .filters-row .mode-selector button .flag-icon,
+  #trainingPage .filters-row .mode-selector button .auto-icon {
+    width: 24px;
+    height: 18px;
+  }
+}
  </style>
 </head>
 <body>
@@ -3104,7 +3127,7 @@ a,
   <!-- Вторая строка (телефоны) / центр (ПК) -->
   <div class="filters-row filters-row-center">
     <div class="mode-selector" style="display: flex; gap: 6px; justify-content: center; min-width: 150px;">
-      <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 80px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+      <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 8px 16px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; min-width: 70px; display: flex; align-items: center; justify-content: center; gap: 4px; height: 40px;">
         <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
           <rect width="24" height="16" fill="#0d5eaf"/>
           <rect y="0" width="24" height="2" fill="white"/>
@@ -3116,7 +3139,7 @@ a,
           <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
         </svg>
       </button>
-      <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 80px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+      <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 8px 16px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; min-width: 70px; display: flex; align-items: center; justify-content: center; gap: 4px; height: 40px;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
           <circle cx="12" cy="12" r="3.5"/>
@@ -3130,7 +3153,7 @@ a,
           <line x1="15.54" y1="8.46" x2="16.95" y2="7.05"/>
         </svg>
       </button> 
-      <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 80px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+      <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 8px 16px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; min-width: 70px; display: flex; align-items: center; justify-content: center; gap: 4px; height: 40px;">
         <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
           <rect width="24" height="16" fill="white"/>
           <rect y="0" width="24" height="5.33" fill="white"/>
