@@ -2976,10 +2976,10 @@ a,
 
   <div id="app">
     <h1 id="headerTitle" onclick="handleTitleClick(event)">
-      📖 Словарь
-      <span class="version-badge" id="versionBadge">Загрузка...</span>
-      <div class="header-buttons" id="headerButtons"></div>
-    </h1>
+  📖 Словарь
+  <span class="version-badge" id="versionBadge">Загрузка...</span>
+  <div class="header-buttons" id="headerButtons"></div>
+</h1>
     
     <div class="search-section">
       <div class="search-row">
@@ -4208,7 +4208,7 @@ function hideProgressWithDelay() {
     
     function handleTitleClick(e) {
   if (e) e.stopPropagation();
-  // Всегда открываем модалку, независимо от режима
+  // ВСЕГДА открываем модальное окно входа
   openLoginModal();
 }
     
@@ -4296,11 +4296,11 @@ function hideProgressWithDelay() {
     }
     
     function openModal(id) {
-      document.getElementById(id).classList.add('active');
-      toggleBodyScroll(true);
-      const messageEl = document.getElementById(id.replace('Modal', 'Message'));
-      if (messageEl) messageEl.innerHTML = '';
-    }
+  document.getElementById(id).classList.add('active');
+  toggleBodyScroll(true);
+  const messageEl = document.getElementById(id.replace('Modal', 'Message'));
+  if (messageEl) messageEl.innerHTML = '';
+}
     
     // ========== ЗАКРЫТИЕ МОДАЛКИ ==========
 function closeModal(id) {
@@ -4318,10 +4318,10 @@ function closeModal(id) {
 }
     
     function openLoginModal() {
-      document.getElementById('loginPassword').value = '';
-      openModal('loginModal');
-      setTimeout(() => document.getElementById('loginPassword').focus(), 300);
-    }
+  document.getElementById('loginPassword').value = '';
+  openModal('loginModal');
+  setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+}
     
     function openLogoutModal() {
       openModal('logoutModal');
