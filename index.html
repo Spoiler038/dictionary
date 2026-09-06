@@ -2947,7 +2947,7 @@ a,
   </div>
 
 <!-- ===== СТРАНИЦА ТРЕНИРОВКИ ===== -->
-<div id="trainingPage" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 200; overflow-y: auto; padding: 12px 16px 20px 16px; box-sizing: border-box;">
+<div id="trainingPage" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 200; overflow-y: hidden; padding: 12px 16px 20px 16px; box-sizing: border-box;">
 
   <!-- Шапка тренировки -->
 <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0 12px 0; border-bottom: 2px solid #f0f0f0; margin-bottom: 10px;">
@@ -3020,7 +3020,7 @@ a,
 
 <!-- Карточка (фиксированная высота, без скролла) -->
 <!-- Карточка -->
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; height: calc(100vh - 180px); min-height: 500px; overflow: hidden;">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; height: calc(100vh - 180px); min-height: 600px; overflow: hidden;">
   
   <!-- Фото (с анимацией при нажатии) -->
   <div id="trainingImageContainer" onclick="flipTrainingCard()" style="width: 100%; max-width: 350px; aspect-ratio: 1/1; background: #f0f0f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; cursor: pointer; transition: transform 0.2s;">
@@ -3042,7 +3042,7 @@ a,
     </div>
   </div>
 
-  <!-- Кнопки самоконтроля (изначально неактивны) -->
+  <!-- Кнопки самоконтроля -->
   <div style="display: flex; gap: 16px; margin-top: 12px; flex-shrink: 0;">
     <button id="trainingCorrectBtn" onclick="markTrainingCorrect()" style="padding: 10px 24px; background: #95a5a6; color: white; border: none; border-radius: 12px; font-size: 16px; cursor: not-allowed; transition: all 0.3s; display: flex; align-items: center; gap: 6px; opacity: 0.5;">
       ✅ Правильно
@@ -5647,22 +5647,30 @@ function showTrainingCard() {
   updateTrainingProgress();
 }
   
+
 // ========== ПЕРЕВОРОТ СЛОВА (вертикальный flip) ==========
 function flipTrainingCard() {
   const wordInner = document.getElementById('trainingWordInner');
+  const imgContainer = document.getElementById('trainingImageContainer');
   
   // Переворачиваем слово
   wordInner.classList.toggle('flipped');
   trainingIsFlipped = !trainingIsFlipped;
   
-  // Активируем/деактивируем кнопки самоконтроля в зависимости от состояния
+  // Анимация фото (пульсация)
+  if (imgContainer) {
+    imgContainer.style.animation = 'none';
+    void imgContainer.offsetWidth;
+    imgContainer.style.animation = 'photoTap 0.3s ease';
+  }
+  
+  // Активируем/деактивируем кнопки самоконтроля
   setSelfControlButtons(trainingIsFlipped);
   
   // Если переворот выполнен (показан перевод) и слово ещё не отвечено
   if (trainingIsFlipped) {
     const word = trainingWords[trainingCurrentIndex];
     if (word && !trainingAnswered[word.id]) {
-      // Активируем кнопки
       setSelfControlButtons(true);
     }
   }
