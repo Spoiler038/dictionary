@@ -2677,21 +2677,6 @@ a,
   stroke: #000000;
 }
 
-    /* ===== АКТИВНАЯ КНОПКА ЯЗЫКА В ТРЕНИРОВКЕ (переопределение) ===== */
-#trainingPage .mode-selector button.active {
-  background: #ddd !important;
-  border-color: #000000 !important;
-  color: #000000 !important;
-}
-
-#trainingPage .mode-selector button.active .flag-icon {
-  opacity: 1;
-}
-
-#trainingPage .mode-selector button.active .auto-icon use {
-  stroke: #000000;
-}
-
     /* ===== АНИМАЦИЯ ФОТО ПРИ НАЖАТИИ ===== */
 #trainingImageContainer:active {
   animation: photoTap 0.3s ease;
@@ -2784,6 +2769,12 @@ a,
     display: flex;
     gap: 8px;
   }
+
+  #trainingPage .filters-row .mode-selector button {
+    max-width: 100px;  /* ← было 80px, стало 100px */
+    padding: 8px 16px; /* ← увеличил отступы */
+    font-size: 14px;
+  }
   
   /* Кнопки языков — по центру с учетом ширины левых кнопок */
   #trainingPage .filters-row-center {
@@ -2798,9 +2789,40 @@ a,
     max-width: none;
   }
   
-  #trainingPage .filters-row .mode-selector {
-    max-width: 280px;
+   #trainingPage .filters-row .mode-selector {
+    max-width: 300px;  /* ← было 280px, стало 300px */
     flex: 0 1 auto;
+  }
+}
+    #trainingPage {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  z-index: 200;
+  overflow-y: hidden;
+  padding: 12px 16px 20px 16px;
+  box-sizing: border-box;
+}
+
+/* На ПК — ограничиваем ширину как у словаря */
+@media (min-width: 768px) {
+  #trainingPage {
+    display: none; /* оставляем как есть, но добавляем внутренний контейнер */
+  }
+  
+  #trainingPage .training-content {
+    max-width: 1200px; /* ← как у #app */
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-height: 100vh;
   }
 }
  </style>
@@ -3050,6 +3072,7 @@ a,
 <!-- ===== СТРАНИЦА ТРЕНИРОВКИ ===== -->
 <div id="trainingPage" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 200; overflow-y: hidden; padding: 12px 16px 20px 16px; box-sizing: border-box;">
 
+   <div class="training-content">
   <!-- Шапка тренировки -->
 <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0 12px 0; border-bottom: 2px solid #f0f0f0; margin-bottom: 10px;">
   
@@ -3075,7 +3098,7 @@ a,
   <!-- Первая строка (телефоны) / левая часть (ПК) -->
   <div class="filters-row filters-row-left">
     <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; justify-content: center;">📂 Темы</button>
-    <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; justify-content: center;">📚 Части речи</button>
+    <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; justify-content: center; white-space: nowrap;">📚 Части речи</button>
   </div>
   
   <!-- Вторая строка (телефоны) / центр (ПК) -->
@@ -3171,6 +3194,7 @@ a,
     Прогресс: 0% · Правильно: 0/0
   </div>
 </div>
+    </div>
   
   <div class="toast" id="toast"></div>
   
@@ -4101,10 +4125,9 @@ function hideProgressWithDelay() {
     }
     
     function handleTitleClick() {
-      if (!isEditor) {
-        openLoginModal();
-      }
-    }
+  // Всегда открываем модалку, независимо от режима
+  openLoginModal();
+}
     
    function updateHeaderButtons() {
   const container = document.getElementById('headerButtons');
