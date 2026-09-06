@@ -2848,6 +2848,64 @@ a,
     height: 18px;
   }
 }
+    /* ===== КНОПКИ ЯЗЫКА В ТРЕНИРОВКЕ (КАК В СЛОВАРЕ) ===== */
+#trainingPage .filters-row .mode-selector button {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  background: #fafafa;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  max-width: 120px;
+  min-width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+}
+
+#trainingPage .filters-row .mode-selector button.active {
+  background: #ddd;
+  color: #000000;
+  border-color: #000000;
+}
+
+#trainingPage .filters-row .mode-selector button.active .auto-icon use {
+  stroke: #000000;
+}
+
+    /* ===== ВЫРАВНИВАНИЕ ЯЗЫКОВ В СЛОВАРЕ ===== */
+@media (min-width: 768px) {
+  #app .controls-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  #app .controls-row .training-btn-wrapper {
+    flex: 0 0 auto;
+    min-width: 140px; /* фиксируем ширину кнопки Тренировка */
+  }
+  
+  #app .controls-row .mode-selector {
+    flex: 1;
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    /* Сдвигаем влево на половину ширины кнопки Тренировка */
+    transform: translateX(-70px);
+  }
+  
+  #app .controls-row .mode-selector button {
+    max-width: 120px;
+  }
+}
  </style>
 </head>
 <body>
@@ -4873,57 +4931,56 @@ function closeModal(id) {
       }
     }
     
-    function searchInCache(query, searchMode, theme, pos) {
-      const queryLower = query.toLowerCase().trim();
-      const themeLower = theme ? theme.toLowerCase().trim() : '';
-      const posLower = pos ? pos.toLowerCase().trim() : '';
-      
-      let searchInGreek = searchMode === 'greek';
-      let searchInRussian = searchMode === 'russian';
-      
-      if (searchMode === 'auto' && queryLower) {
-        const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
-        searchInGreek = greekRegex.test(queryLower);
-        searchInRussian = !searchInGreek;
-      }
-      
-      let results = allData.words || [];
-      
-      if (themeLower) {
-        results = results.filter(w => 
-          w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
-        );
-      }
-      
-      if (posLower) {
-        results = results.filter(w => 
-          w.posGr && w.posGr.toLowerCase().includes(posLower)
-        );
-      }
-      
-      if (queryLower) {
-        if (searchInGreek) {
-          results = results.filter(w => 
-            (w.wordGr && w.wordGr.toLowerCase().includes(queryLower)) || 
-            (w.themeGr && w.themeGr.toLowerCase().includes(queryLower)) ||
-            (w.posGr && w.posGr.toLowerCase().includes(queryLower))
-          );
-        } else if (searchInRussian) {
-          results = results.filter(w => 
-            (w.wordRu && w.wordRu.toLowerCase().includes(queryLower)) || 
-            (w.themeRu && w.themeRu.toLowerCase().includes(queryLower)) ||
-            (w.posRu && w.posRu.toLowerCase().includes(queryLower))
-          );
-        }
-      }
-      
-      return {
-        results: results,
-        total: results.length,
-        searchMode: searchInGreek ? 'greek' : 'russian',
-        version: allData.version
-      };
+   function searchInCache(query, searchMode, theme, pos) {
+  const queryLower = query.toLowerCase().trim();
+  const themeLower = theme ? theme.toLowerCase().trim() : '';
+  const posLower = pos ? pos.toLowerCase().trim() : '';
+  
+  let searchInGreek = searchMode === 'greek';
+  let searchInRussian = searchMode === 'russian';
+  
+  if (searchMode === 'auto' && queryLower) {
+    const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
+    searchInGreek = greekRegex.test(queryLower);
+    searchInRussian = !searchInGreek;
+  }
+  
+  let results = allData.words || [];
+  
+  // Фильтр по теме (только если выбрана)
+  if (themeLower) {
+    results = results.filter(w => 
+      w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
+    );
+  }
+  
+  // Фильтр по части речи (только если выбрана)
+  if (posLower) {
+    results = results.filter(w => 
+      w.posGr && w.posGr.toLowerCase().includes(posLower)
+    );
+  }
+  
+  // Поиск по слову (ТОЛЬКО по столбцам wordGr и wordRu)
+  if (queryLower) {
+    if (searchInGreek) {
+      results = results.filter(w => 
+        w.wordGr && w.wordGr.toLowerCase().includes(queryLower)
+      );
+    } else if (searchInRussian) {
+      results = results.filter(w => 
+        w.wordRu && w.wordRu.toLowerCase().includes(queryLower)
+      );
     }
+  }
+  
+  return {
+    results: results,
+    total: results.length,
+    searchMode: searchInGreek ? 'greek' : 'russian',
+    version: allData.version
+  };
+}
     
     function handleResults(data) {
       if (data.error) {
