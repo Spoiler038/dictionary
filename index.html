@@ -5417,36 +5417,89 @@ function showImagePreview(url) {
   }
 }
     
-    document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('themeDropdown');
-      const posDropdown = document.getElementById('posDropdown');
-      
-      const isThemeClick = event.target.closest('.theme-input-wrapper') || 
-                           event.target.closest('#themeToggleBtn') || 
-                           event.target.closest('#themeToggleBtnMobile') ||
-                           event.target.closest('.theme-actions') ||
-                           event.target.closest('.theme-clear-input-btn');
-      
-      const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
-                         event.target.closest('#posToggleBtn') || 
-                         event.target.closest('#posToggleBtnMobile') ||
-                         event.target.closest('.pos-actions') ||
-                         event.target.closest('.pos-clear-input-btn');
-      
-      if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
-        dropdown.classList.remove('active');
-        themeDropdownVisible = false;
-      }
-      
-      if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
-        posDropdown.classList.remove('active');
-        posDropdownVisible = false;
-      }
-    });
+    // ===== ЗАКРЫТИЕ ВЫПАДАЮЩИХ СПИСКОВ И МОДАЛЬНЫХ ОКОН ПРИ КЛИКЕ ВНЕ =====
+document.addEventListener('click', function(event) {
+  // ===== 1. ДЛЯ СЛОВАРЯ =====
+  const dropdown = document.getElementById('themeDropdown');
+  const posDropdown = document.getElementById('posDropdown');
+  
+  const isThemeClick = event.target.closest('.theme-input-wrapper') || 
+                       event.target.closest('#themeToggleBtn') || 
+                       event.target.closest('#themeToggleBtnMobile') ||
+                       event.target.closest('.theme-actions') ||
+                       event.target.closest('.theme-clear-input-btn');
+  
+  const isPosClick = event.target.closest('.part-of-speech-input-wrapper') || 
+                     event.target.closest('#posToggleBtn') || 
+                     event.target.closest('#posToggleBtnMobile') ||
+                     event.target.closest('.pos-actions') ||
+                     event.target.closest('.pos-clear-input-btn');
+  
+  if (!isThemeClick && !event.target.closest('.theme-dropdown')) {
+    if (dropdown) dropdown.classList.remove('active');
+    themeDropdownVisible = false;
+  }
+  
+  if (!isPosClick && !event.target.closest('.part-of-speech-dropdown')) {
+    if (posDropdown) posDropdown.classList.remove('active');
+    posDropdownVisible = false;
+  }
+  
+  // ===== 2. ДЛЯ ТРЕНИРОВКИ =====
+  const trainingThemeDropdown = document.getElementById('trainingThemeDropdown');
+  const trainingPosDropdown = document.getElementById('trainingPosDropdown');
+  
+  const isTrainingThemeBtn = event.target.closest('#trainingPage .theme-toggle-btn');
+  const isTrainingPosBtn = event.target.closest('#trainingPage .pos-toggle-btn');
+  const isTrainingThemeDropdown = event.target.closest('#trainingThemeDropdown');
+  const isTrainingPosDropdown = event.target.closest('#trainingPosDropdown');
+  
+  if (!isTrainingThemeBtn && !isTrainingThemeDropdown) {
+    if (trainingThemeDropdown) trainingThemeDropdown.style.display = 'none';
+  }
+  
+  if (!isTrainingPosBtn && !isTrainingPosDropdown) {
+    if (trainingPosDropdown) trainingPosDropdown.style.display = 'none';
+  }
+  
+  // ===== 3. ДЛЯ МОДАЛЬНОГО ОКНА ВХОДА =====
+  const loginModal = document.getElementById('loginModal');
+  if (loginModal && loginModal.classList.contains('active')) {
+    const isModalContent = event.target.closest('.modal-content');
+    const isModalClose = event.target.closest('.close');
+    const isModalBg = event.target === loginModal;
     
-    window.addEventListener('load', function() {
-      setTimeout(() => document.getElementById('searchInput').focus(), 300);
-    });
+    // Закрываем только если клик по фону (background) или по крестику
+    if (isModalBg || isModalClose) {
+      // Не закрываем, если клик внутри контента модалки
+      if (!isModalContent || isModalClose) {
+        closeModal('loginModal');
+      }
+    }
+  }
+  
+  // ===== 4. ДЛЯ ДРУГИХ МОДАЛЬНЫХ ОКОН (общее правило) =====
+  const allModals = document.querySelectorAll('.modal.active');
+  allModals.forEach(function(modal) {
+    // Пропускаем loginModal, так как мы его уже обработали выше
+    if (modal.id === 'loginModal') return;
+    
+    const isModalContent = event.target.closest('.modal-content');
+    const isModalClose = event.target.closest('.close');
+    const isModalBg = event.target === modal;
+    
+    if (isModalBg || isModalClose) {
+      if (!isModalContent || isModalClose) {
+        closeModal(modal.id);
+      }
+    }
+  });
+});
+
+// ===== ФОКУС НА ПОЛЕ ПОИСКА ПРИ ЗАГРУЗКЕ =====
+window.addEventListener('load', function() {
+  setTimeout(() => document.getElementById('searchInput').focus(), 300);
+});
   </script>
   <script>
   if ('serviceWorker' in navigator) {
