@@ -2784,6 +2784,100 @@ a,
 .btn-reset:active {
   transform: scale(0.95);
 }
+
+    #trainingPage .training-content .training-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 16px 0;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+    #trainingThemeDropdown,
+#trainingPosDropdown {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+#trainingThemeDropdown .theme-item .theme-gr,
+#trainingThemeDropdown .theme-item .theme-ru,
+#trainingPosDropdown .pos-item .pos-gr,
+#trainingPosDropdown .pos-item .pos-ru {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#trainingThemeDropdown .theme-item .theme-gr::-webkit-scrollbar,
+#trainingThemeDropdown .theme-item .theme-ru::-webkit-scrollbar,
+#trainingPosDropdown .pos-item .pos-gr::-webkit-scrollbar,
+#trainingPosDropdown .pos-item .pos-ru::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+  background: transparent;
+}
+
+/* Стиль вертикального скролла как в Словаре */
+#trainingThemeDropdown::-webkit-scrollbar,
+#trainingPosDropdown::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-track,
+#trainingPosDropdown::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0 8px 8px 0;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-thumb,
+#trainingPosDropdown::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-thumb:hover,
+#trainingPosDropdown::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
+    @media (min-width: 768px) {
+  #trainingPage .filters-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #trainingPage .filters-row-left {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+  }
+  
+  #trainingPage .filters-row-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  #trainingPage .filters-row .mode-selector {
+    max-width: 320px;
+    flex: 0 1 auto;
+    gap: 8px;
+  }
+  
+  #trainingPage .filters-row .mode-selector button {
+    max-width: 100px;
+    min-width: 70px;
+    padding: 6px 12px;
+    font-size: 14px;
+    flex: 1;
+    height: 40px;
+  }
+}
  </style>
 </head>
 <body>
@@ -3033,25 +3127,26 @@ a,
   <div class="training-content">
     
     <!-- Шапка тренировки -->
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
-      
-      <!-- Кнопка "Назад" -->
-      <button class="btn-back" onclick="exitTraining()">
-        <svg viewBox="0 0 24 24">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-      </button>
-      
-      <!-- Заголовок -->
-      <div style="display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50;">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          <line x1="9" y1="8" x2="15" y2="8"/>
-          <line x1="9" y1="12" x2="13" y2="12"/>
-        </svg>
-        <span>Тренировка</span>
-      </div>
+<div class="training-header">
+  <!-- Кнопка "Назад" -->
+  <button class="btn-back" onclick="exitTraining()">
+    <svg viewBox="0 0 24 24">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  <!-- Заголовок -->
+  <div style="display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: #2c3e50;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      <line x1="9" y1="8" x2="15" y2="8"/>
+      <line x1="9" y1="12" x2="13" y2="12"/>
+    </svg>
+    <span>Тренировка</span>
+  </div>
+  <!-- Кнопка сброса -->
+  <button class="btn-reset" onclick="openResetTrainingModal()">🔄</button>
+</div>
       
       <!-- Кнопка сброса -->
       <button class="btn-reset" onclick="openResetTrainingModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; padding: 8px; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">🔄</button>
@@ -3060,58 +3155,61 @@ a,
     <!-- КОНЕЦ шапки тренировки -->
 
     <!-- Фильтры -->
-    <div style="margin-bottom: 15px;">
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-        <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📂 Темы</button>
-        <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📚 Части речи</button>
+<div style="margin-bottom: 15px;">
+  <div class="filters-wrapper">
+    <div class="filters-row-left">
+      <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📂 Темы</button>
+      <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📚 Части речи</button>
+    </div>
+    
+    <div class="filters-row-center">
+      <div class="mode-selector" style="display: flex; gap: 6px; justify-content: center; min-width: 150px;">
+        <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+            <rect width="24" height="16" fill="#0d5eaf"/>
+            <rect y="0" width="24" height="2" fill="white"/>
+            <rect y="4" width="24" height="2" fill="white"/>
+            <rect y="8" width="24" height="2" fill="white"/>
+            <rect y="12" width="24" height="2" fill="white"/>
+            <rect x="0" y="0" width="8" height="6" fill="white"/>
+            <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
+            <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
+          </svg>
+        </button>
         
-        <!-- Кнопки выбора языка -->
-        <div class="mode-selector" style="display: flex; gap: 6px; flex: 1; justify-content: center; min-width: 150px;">
-          <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
-              <rect width="24" height="16" fill="#0d5eaf"/>
-              <rect y="0" width="24" height="2" fill="white"/>
-              <rect y="4" width="24" height="2" fill="white"/>
-              <rect y="8" width="24" height="2" fill="white"/>
-              <rect y="12" width="24" height="2" fill="white"/>
-              <rect x="0" y="0" width="8" height="6" fill="white"/>
-              <rect x="0" y="0" width="8" height="2" fill="#0d5eaf"/>
-              <rect x="0" y="4" width="8" height="2" fill="#0d5eaf"/>
-            </svg>
-          </button>
-          
-          <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <circle cx="12" cy="12" r="3.5"/>
-              <line x1="12" y1="5" x2="12" y2="7"/>
-              <line x1="12" y1="17" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="7" y2="12"/>
-              <line x1="17" y1="12" x2="19" y2="12"/>
-              <line x1="7.05" y1="7.05" x2="8.46" y2="8.46"/>
-              <line x1="15.54" y1="15.54" x2="16.95" y2="16.95"/>
-              <line x1="7.05" y1="16.95" x2="8.46" y2="15.54"/>
-              <line x1="15.54" y1="8.46" x2="16.95" y2="7.05"/>
-            </svg>
-          </button>
-          
-          <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
-              <rect width="24" height="16" fill="white"/>
-              <rect y="0" width="24" height="5.33" fill="white"/>
-              <rect y="5.33" width="24" height="5.33" fill="#0039a6"/>
-              <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Выпадающие списки -->
-      <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto;">
-        <div id="trainingThemeDropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto; border: 2px solid #f39c12; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
-        <div id="trainingPosDropdown" style="display: none; margin-top: 8px; max-height: 150px; overflow-y: auto; border: 2px solid #8e44ad; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+        <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <line x1="12" y1="5" x2="12" y2="7"/>
+            <line x1="12" y1="17" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="7" y2="12"/>
+            <line x1="17" y1="12" x2="19" y2="12"/>
+            <line x1="7.05" y1="7.05" x2="8.46" y2="8.46"/>
+            <line x1="15.54" y1="15.54" x2="16.95" y2="16.95"/>
+            <line x1="7.05" y1="16.95" x2="8.46" y2="15.54"/>
+            <line x1="15.54" y1="8.46" x2="16.95" y2="7.05"/>
+          </svg>
+        </button>
+        
+        <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+            <rect width="24" height="16" fill="white"/>
+            <rect y="0" width="24" height="5.33" fill="white"/>
+            <rect y="5.33" width="24" height="5.33" fill="#0039a6"/>
+            <rect y="10.66" width="24" height="5.34" fill="#d52b1e"/>
+          </svg>
+        </button>
       </div>
     </div>
+  </div>
+
+  <!-- Выпадающие списки -->
+  <div style="position: relative; width: 100%; max-width: 400px; margin: 8px auto 0;">
+    <div id="trainingThemeDropdown" style="display: none; max-height: 150px; overflow-y: auto; border: 2px solid #f39c12; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+    <div id="trainingPosDropdown" style="display: none; max-height: 150px; overflow-y: auto; border: 2px solid #8e44ad; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+  </div>
+</div>
 
     <!-- Карточка -->
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; min-height: 60vh;">
@@ -5967,16 +6065,6 @@ function confirmResetTraining() {
   closeResetTrainingModal();
 }
 
-// ========== ЗАКРЫТИЕ ВЫПАДАЮЩИХ СПИСКОВ ==========
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('#trainingPage .theme-toggle-btn') && 
-      !e.target.closest('#trainingThemeDropdown') &&
-      !e.target.closest('#trainingPage .pos-toggle-btn') &&
-      !e.target.closest('#trainingPosDropdown')) {
-    document.getElementById('trainingThemeDropdown').style.display = 'none';
-    document.getElementById('trainingPosDropdown').style.display = 'none';
-  }
-});
  </script>
 </body>
 </html>
