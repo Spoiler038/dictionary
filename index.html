@@ -1856,7 +1856,7 @@ a,
 }
 
   /* Тренировка — сдвиг кнопок выбора языка */
-  #trainingPage .filters-wrapper {
+   #trainingPage .filters-wrapper {
     display: flex;
     flex-direction: row;
     gap: 12px;
@@ -2716,7 +2716,74 @@ a,
 #trainingPage .mode-selector button.active .auto-icon use {
   stroke: #000000;
 }
-    
+    .controls-row .mode-selector button.active {
+  background: #ddd !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.controls-row .mode-selector button.active .auto-icon use {
+  stroke: #000000 !important;
+}
+
+    #trainingPage .mode-selector button.active {
+  background: #ddd !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+#trainingPage .mode-selector button.active .flag-icon {
+  opacity: 1;
+}
+
+#trainingPage .mode-selector button.active .auto-icon use {
+  stroke: #000000 !important;
+}
+    #trainingThemeDropdown::-webkit-scrollbar,
+#trainingPosDropdown::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-track,
+#trainingPosDropdown::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0 8px 8px 0;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-thumb,
+#trainingPosDropdown::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-thumb:hover,
+#trainingPosDropdown::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
+    .btn-reset {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+
+.btn-reset:hover {
+  background: #e0e0e0;
+}
+
+.btn-reset:active {
+  transform: scale(0.95);
+}
  </style>
 </head>
 <body>
@@ -5529,9 +5596,6 @@ function applyTrainingFilters() {
   trainingCurrentIndex = 0;
   trainingAnswered = {};
   trainingStats = { correct: 0, wrong: 0, total: 0 };
-  
-  document.getElementById('trainingFilterInfo').textContent = 
-    `${filtered.length} слов с фото`;
   
   if (trainingWords.length === 0) {
     document.getElementById('trainingWord').innerHTML = '😕 Нет слов с фото';
