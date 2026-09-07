@@ -2878,6 +2878,52 @@ a,
     height: 40px;
   }
 }
+    /* ===== МИНИАТЮРА ФОТО В МОДАЛКЕ ===== */
+#imagePreviewContainer {
+  display: none;
+  margin-top: 10px;
+  position: relative;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fafafa;
+  max-width: 150px;
+}
+
+#imagePreviewContainer img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
+
+#imageDeleteBtn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e74c3c;
+  color: white;
+  border: 2px solid white;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+}
+
+#imageDeleteBtn:hover {
+  transform: scale(1.1);
+  background: #c0392b;
+}
+
+#imageDeleteBtn:active {
+  transform: scale(0.9);
+}
  </style>
 </head>
 <body>
@@ -3330,6 +3376,15 @@ a,
     </button>
   </div>
   <div id="imageUploadStatus" style="font-size: 12px; color: #95a5a6; margin-top: 4px;"></div>
+  
+  <!-- БЛОК ДЛЯ МИНИАТЮРЫ И КНОПКИ УДАЛЕНИЯ -->
+  <div id="imagePreviewContainer" style="display: none; margin-top: 10px; position: relative; border: 2px solid #e0e0e0; border-radius: 8px; padding: 8px; background: #fafafa; max-width: 150px;">
+    <img id="imagePreview" src="" alt="Превью" style="width: 100%; height: auto; border-radius: 4px; display: block;">
+    <button id="imageDeleteBtn" onclick="deleteImage()" style="position: absolute; top: -8px; right: -8px; width: 28px; height: 28px; border-radius: 50%; background: #e74c3c; color: white; border: 2px solid white; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.2s;">
+      ✕
+    </button>
+    <div style="font-size: 11px; color: #95a5a6; text-align: center; margin-top: 4px;">Нажмите ✕ чтобы удалить</div>
+  </div>
 </div>
       
       <div class="form-actions">
@@ -4283,68 +4338,79 @@ function hideProgressWithDelay() {
       if (messageEl) messageEl.innerHTML = '';
     }
     
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-      toggleBodyScroll(false);
+   function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  toggleBodyScroll(false);
+  
+  if (id === 'editModal') {
+    // Скрываем миниатюру при закрытии
+    showImagePreview('');
+    const status = document.getElementById('imageUploadStatus');
+    if (status) {
+      status.textContent = '';
+      status.style.color = '#95a5a6';
     }
+  }
+}
     
-    function openLoginModal() {
-      document.getElementById('loginPassword').value = '';
-      openModal('loginModal');
-      setTimeout(() => document.getElementById('loginPassword').focus(), 300);
-    }
-    
-    function openLogoutModal() {
-      openModal('logoutModal');
-    }
-    
-    function openAdminModal() {
-      if (!isEditor) {
-        openLoginModal();
-        return;
-      }
-      document.getElementById('oldPassword').value = '';
-      document.getElementById('newPassword').value = '';
-      document.getElementById('adminMessage').innerHTML = '';
-      openModal('adminModal');
-    }
-    
-    function openAddModal() {
-      if (!isEditor) {
-        openLoginModal();
-        return;
-      }
-      document.getElementById('modalTitle').textContent = '➕ Добавить слово';
-      document.getElementById('editIcon').textContent = '➕';
-      document.getElementById('editWordGr').value = '';
-      document.getElementById('editWordRu').value = '';
-      document.getElementById('editThemeGr').value = '';
-      document.getElementById('editPosGr').value = '';
-      document.getElementById('editImageUrl').value = '';
-      document.getElementById('editMessage').innerHTML = '';
-      document.getElementById('themeDatalist').classList.remove('active');
-      document.getElementById('posDatalist').classList.remove('active');
-      editingId = null;
-      hideAllWarnings();
-      openModal('editModal');
-      document.getElementById('saveBtn').onclick = saveWord;
-    }
-    
-    function openEditModal(id, wordGr, wordRu, themeGr, posGr, imageUrl) {
+   function openAddModal() {
   if (!isEditor) {
     openLoginModal();
     return;
   }
+  
+  document.getElementById('modalTitle').textContent = '➕ Добавить слово';
+  document.getElementById('editIcon').textContent = '➕';
+  document.getElementById('editWordGr').value = '';
+  document.getElementById('editWordRu').value = '';
+  document.getElementById('editThemeGr').value = '';
+  document.getElementById('editPosGr').value = '';
+  document.getElementById('editImageUrl').value = '';
+  document.getElementById('editMessage').innerHTML = '';
+  document.getElementById('themeDatalist').classList.remove('active');
+  document.getElementById('posDatalist').classList.remove('active');
+  
+  // СКРЫВАЕМ МИНИАТЮРУ
+  showImagePreview('');
+  
+  const status = document.getElementById('imageUploadStatus');
+  if (status) {
+    status.textContent = '';
+    status.style.color = '#95a5a6';
+  }
+  
+  editingId = null;
+  hideAllWarnings();
+  openModal('editModal');
+  document.getElementById('saveBtn').onclick = saveWord;
+}
+    
+   function openEditModal(id, wordGr, wordRu, themeGr, posGr, imageUrl) {
+  if (!isEditor) {
+    openLoginModal();
+    return;
+  }
+  
   document.getElementById('modalTitle').textContent = 'Редактировать слово';
   document.getElementById('editIcon').textContent = '📝';
   document.getElementById('editWordGr').value = wordGr;
   document.getElementById('editWordRu').value = wordRu;
   document.getElementById('editThemeGr').value = themeGr;
   document.getElementById('editPosGr').value = posGr || '';
-  document.getElementById('editImageUrl').value = imageUrl || ''; // НОВОЕ
+  document.getElementById('editImageUrl').value = imageUrl || '';
   document.getElementById('editMessage').innerHTML = '';
   document.getElementById('themeDatalist').classList.remove('active');
   document.getElementById('posDatalist').classList.remove('active');
+  
+  // ПОКАЗЫВАЕМ МИНИАТЮРУ, ЕСЛИ ЕСТЬ ФОТО
+  showImagePreview(imageUrl || '');
+  
+  const status = document.getElementById('imageUploadStatus');
+  if (status) {
+    status.textContent = imageUrl ? '✅ Фото загружено' : '';
+    status.style.color = imageUrl ? '#27ae60' : '#95a5a6';
+  }
+  
   editingId = id;
   hideAllWarnings();
   checkDuplicate();
@@ -5149,50 +5215,40 @@ function uploadTrainingImage() {
     const file = e.target.files[0];
     if (!file) {
       status.textContent = '❌ Файл не выбран';
+      status.style.color = '#e74c3c';
       return;
     }
     
     if (file.size > 5 * 1024 * 1024) {
       status.textContent = '❌ Файл слишком большой (макс. 5MB)';
+      status.style.color = '#e74c3c';
       return;
     }
     
-    status.textContent = '⏳ Загрузка...';
+    status.textContent = '⏳ Загрузка на Cloudinary...';
+    status.style.color = '#f39c12';
     
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const base64 = ev.target.result;
-      
-      callGAS('uploadImage', {
-        imageData: base64,
-        fileName: file.name
-      }).then(result => {
-        if (result.success) {
-          input.value = result.url;
-          status.textContent = '✅ Фото загружено!';
-          showImagePreview(result.url);
-        } else {
-          status.textContent = '❌ ' + (result.error || 'Ошибка загрузки');
-        }
-      }).catch(err => {
-        status.textContent = '❌ Ошибка: ' + err.message;
-      });
-    };
-    reader.readAsDataURL(file);
+    uploadToCloudinary(file, status, input);
   };
   
   fileInput.click();
 }
-
+    
 function uploadToCloudinary(file, status, input) {
+  if (!CLOUDINARY_CONFIG.cloudName || !CLOUDINARY_CONFIG.uploadPreset) {
+    status.textContent = '❌ Ошибка: не настроен Cloudinary';
+    status.style.color = '#e74c3c';
+    return;
+  }
+  
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
-  formData.append('folder', CLOUDINARY_CONFIG.folder);
+  formData.append('folder', CLOUDINARY_CONFIG.folder || '');
   
-  // Добавляем уникальное имя файла
   const uniqueName = Date.now() + '_' + file.name.replace(/\s/g, '_');
   formData.append('public_id', uniqueName);
+  formData.append('tags', 'dictionary,word');
   
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
   
@@ -5202,7 +5258,11 @@ function uploadToCloudinary(file, status, input) {
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      return response.json().then(data => {
+        throw new Error(data.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+      }).catch(() => {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      });
     }
     return response.json();
   })
@@ -5211,20 +5271,17 @@ function uploadToCloudinary(file, status, input) {
       throw new Error(data.error.message || 'Ошибка загрузки');
     }
     
-    // Успешно загружено
     const imageUrl = data.secure_url || data.url;
     input.value = imageUrl;
     status.textContent = '✅ Фото загружено!';
     status.style.color = '#27ae60';
     
-    // Показываем превью
+    // ПОКАЗЫВАЕМ МИНИАТЮРУ
     showImagePreview(imageUrl);
-    
-    // Сохраняем ссылку в таблицу при сохранении слова
     showToast('✅ Фото загружено в Cloudinary');
   })
   .catch(error => {
-    console.error('Ошибка загрузки:', error);
+    console.error('❌ Ошибка загрузки:', error);
     status.textContent = `❌ Ошибка: ${error.message}`;
     status.style.color = '#e74c3c';
   });
@@ -5513,6 +5570,42 @@ function showImagePreview(url) {
     input.type = 'password';
     icon.setAttribute('href', '#icon-eye');
   }
+}
+
+    function showImagePreview(url) {
+  const container = document.getElementById('imagePreviewContainer');
+  const img = document.getElementById('imagePreview');
+  
+  if (url && url.trim() !== '') {
+    img.src = url;
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+    img.src = '';
+  }
+}
+
+    function deleteImage() {
+  const input = document.getElementById('editImageUrl');
+  const status = document.getElementById('imageUploadStatus');
+  
+  // Очищаем поле ввода
+  input.value = '';
+  
+  // Скрываем миниатюру
+  showImagePreview('');
+  
+  // Обновляем статус
+  status.textContent = '🗑️ Фото удалено';
+  status.style.color = '#e74c3c';
+  
+  // Показываем сообщение
+  showToast('🗑️ Фото удалено');
+  
+  // Если это редактирование, обновляем статус
+  setTimeout(() => {
+    status.textContent = '';
+  }, 2000);
 }
     
     // ===== ЗАКРЫТИЕ ВЫПАДАЮЩИХ СПИСКОВ И МОДАЛЬНЫХ ОКОН ПРИ КЛИКЕ ВНЕ =====
