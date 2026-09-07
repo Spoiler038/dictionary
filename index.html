@@ -4377,56 +4377,55 @@ function hideProgressWithDelay() {
     }
     
     function searchInCache(query, searchMode, theme, pos) {
-      const queryLower = query.toLowerCase().trim();
-      const themeLower = theme ? theme.toLowerCase().trim() : '';
-      const posLower = pos ? pos.toLowerCase().trim() : '';
-      
-      let searchInGreek = searchMode === 'greek';
-      let searchInRussian = searchMode === 'russian';
-      
-      if (searchMode === 'auto' && queryLower) {
-        const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
-        searchInGreek = greekRegex.test(queryLower);
-        searchInRussian = !searchInGreek;
-      }
-      
-      let results = allData.words || [];
-      
-      if (themeLower) {
-        results = results.filter(w => 
-          w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
-        );
-      }
-      
-      if (posLower) {
-        results = results.filter(w => 
-          w.posGr && w.posGr.toLowerCase().includes(posLower)
-        );
-      }
-      
-      if (queryLower) {
-        if (searchInGreek) {
-          results = results.filter(w => 
-            (w.wordGr && w.wordGr.toLowerCase().includes(queryLower)) || 
-            (w.themeGr && w.themeGr.toLowerCase().includes(queryLower)) ||
-            (w.posGr && w.posGr.toLowerCase().includes(queryLower))
-          );
-        } else if (searchInRussian) {
-          results = results.filter(w => 
-            (w.wordRu && w.wordRu.toLowerCase().includes(queryLower)) || 
-            (w.themeRu && w.themeRu.toLowerCase().includes(queryLower)) ||
-            (w.posRu && w.posRu.toLowerCase().includes(queryLower))
-          );
-        }
-      }
-      
-      return {
-        results: results,
-        total: results.length,
-        searchMode: searchInGreek ? 'greek' : 'russian',
-        version: allData.version
-      };
+  const queryLower = query.toLowerCase().trim();
+  const themeLower = theme ? theme.toLowerCase().trim() : '';
+  const posLower = pos ? pos.toLowerCase().trim() : '';
+  
+  let searchInGreek = searchMode === 'greek';
+  let searchInRussian = searchMode === 'russian';
+  
+  if (searchMode === 'auto' && queryLower) {
+    const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
+    searchInGreek = greekRegex.test(queryLower);
+    searchInRussian = !searchInGreek;
+  }
+  
+  let results = allData.words || [];
+  
+  // Фильтр по теме (только если выбрана)
+  if (themeLower) {
+    results = results.filter(w => 
+      w.themeGr && w.themeGr.toLowerCase().includes(themeLower)
+    );
+  }
+  
+  // Фильтр по части речи (только если выбрана)
+  if (posLower) {
+    results = results.filter(w => 
+      w.posGr && w.posGr.toLowerCase().includes(posLower)
+    );
+  }
+  
+  // Поиск по слову (ТОЛЬКО по столбцам wordGr и wordRu)
+  if (queryLower) {
+    if (searchInGreek) {
+      results = results.filter(w => 
+        w.wordGr && w.wordGr.toLowerCase().includes(queryLower)
+      );
+    } else if (searchInRussian) {
+      results = results.filter(w => 
+        w.wordRu && w.wordRu.toLowerCase().includes(queryLower)
+      );
     }
+  }
+  
+  return {
+    results: results,
+    total: results.length,
+    searchMode: searchInGreek ? 'greek' : 'russian',
+    version: allData.version
+  };
+}
     
     function handleResults(data) {
       if (data.error) {
@@ -5334,24 +5333,37 @@ function markTrainingWrong() {
 }
 
 function autoAdvance() {
-  // Автоматически переходим к следующей карточке через 2 секунды
   setTimeout(() => {
     if (trainingCurrentIndex < trainingWords.length - 1) {
       trainingCurrentIndex++;
       showTrainingCard();
     } else {
-      // Проверяем, все ли слова отвечены
+      // Все слова в текущем цикле показаны
       const allAnswered = trainingWords.every(w => trainingAnswered[w.id]);
+      
       if (allAnswered) {
-        document.getElementById('trainingWord').innerHTML = '🎉 Тренировка завершена!';
-        document.getElementById('trainingPrevBtn').disabled = true;
-        document.getElementById('trainingNextBtn').disabled = true;
-        document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
-        document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
-        document.getElementById('trainingWrongBtn').style.opacity = '0.6';
-        document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+        // Все слова отвечены
+        if (trainingRepeat) {
+          // 🔁 РЕЖИМ ПОВТОРА ВКЛЮЧЁН: перемешиваем и начинаем заново
+          trainingWords = shuffleArray([...trainingWords]);
+          trainingCurrentIndex = 0;
+          trainingAnswered = {};
+          trainingStats = { correct: 0, wrong: 0, total: 0 };
+          showTrainingCard();
+          showToast('🔄 Повтор: новый круг!');
+        } else {
+          // 🎉 Тренировка завершена
+          document.getElementById('trainingWord').innerHTML = '🎉 Тренировка завершена!';
+          document.getElementById('trainingPrevBtn').disabled = true;
+          document.getElementById('trainingNextBtn').disabled = true;
+          document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
+          document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
+          document.getElementById('trainingWrongBtn').style.opacity = '0.6';
+          document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+          showToast('🎉 Тренировка завершена!');
+        }
       } else {
-        // Есть неотвеченные слова - перемешиваем и начинаем заново
+        // Есть неотвеченные слова — перемешиваем и продолжаем
         const unanswered = trainingWords.filter(w => !trainingAnswered[w.id]);
         const answeredList = trainingWords.filter(w => trainingAnswered[w.id]);
         trainingWords = shuffleArray([...unanswered, ...answeredList]);
@@ -5384,13 +5396,15 @@ function toggleTrainingRepeat() {
   if (trainingRepeat) {
     btn.style.borderColor = '#27ae60';
     btn.style.color = '#27ae60';
-    btn.style.background = 'rgba(39, 174, 96, 0.1)';
+    btn.style.background = 'rgba(39, 174, 96, 0.15)';
     btn.textContent = '🔁 Повтор (вкл)';
+    showToast('🔁 Режим повтора включён');
   } else {
     btn.style.borderColor = '#95a5a6';
     btn.style.color = '#7f8c8d';
     btn.style.background = 'transparent';
     btn.textContent = '🔁 Повтор';
+    showToast('🔁 Режим повтора выключен');
   }
 }
 
