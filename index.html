@@ -2924,6 +2924,51 @@ a,
 #imageDeleteBtn:active {
   transform: scale(0.9);
 }
+    #trainingPage .pos-toggle-btn {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 10;
+  position: relative;
+}
+
+    #trainingThemeDropdown,
+#trainingPosDropdown {
+  width: 100% !important;
+  max-width: 400px !important;
+  min-width: 280px !important;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 767px) {
+  #trainingThemeDropdown,
+  #trainingPosDropdown {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+    /* Ширина выпадающих списков в Тренировке - как в Словаре */
+#trainingThemeDropdown,
+#trainingPosDropdown {
+  width: 100% !important;
+  max-width: 400px !important;
+  min-width: 280px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+  #trainingThemeDropdown,
+  #trainingPosDropdown {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+#trainingPage .pos-toggle-btn {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 10;
+  position: relative;
+}
  </style>
 </head>
 <body>
@@ -3196,12 +3241,12 @@ a,
 
     <!-- КОНЕЦ шапки тренировки -->
 
-    <!-- Фильтры -->
+   <!-- Фильтры -->
 <div style="margin-bottom: 15px;">
   <div class="filters-wrapper">
     <div class="filters-row-left">
       <button class="theme-toggle-btn" onclick="toggleTrainingTheme()" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📂 Темы</button>
-      <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px;">📚 Части речи</button>
+      <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; z-index: 10; position: relative;">📚 Части речи</button>
     </div>
     
     <div class="filters-row-center">
@@ -4238,11 +4283,24 @@ function hideProgressWithDelay() {
       }
     }
     
-    function handleTitleClick() {
-      if (!isEditor) {
-        openLoginModal();
-      }
+    function handleTitleClick(e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  // ВСЕГДА открываем модальное окно входа в редактор
+  if (typeof openLoginModal === 'function') {
+    openLoginModal();
+  } else {
+    console.error('openLoginModal не определена');
+    // Запасной вариант: открываем через openModal
+    if (typeof openModal === 'function') {
+      document.getElementById('loginPassword').value = '';
+      openModal('loginModal');
+      setTimeout(() => document.getElementById('loginPassword').focus(), 300);
     }
+  }
+}
     
    function updateHeaderButtons() {
   const container = document.getElementById('headerButtons');
@@ -5760,33 +5818,37 @@ function shuffleArray(array) {
 function populateTrainingDropdowns() {
   // Темы
   const themeDropdown = document.getElementById('trainingThemeDropdown');
-  themeDropdown.innerHTML = `
-    <div class="theme-item" onclick="selectTrainingFilter('theme', '')" style="justify-content: center;">📂 Все темы</div>
-    ${allThemes.map(t => `
-      <div class="theme-item" onclick="selectTrainingFilter('theme', '${t.gr}')">
-        <div class="theme-text-wrapper">
-          <span class="theme-gr">${t.gr}</span>
-          <span class="theme-ru">${t.ru}</span>
+  if (themeDropdown) {
+    themeDropdown.innerHTML = `
+      <div class="theme-item" onclick="selectTrainingFilter('theme', '')" style="justify-content: center;">📂 Все темы</div>
+      ${allThemes.map(t => `
+        <div class="theme-item" onclick="selectTrainingFilter('theme', '${t.gr}')">
+          <div class="theme-text-wrapper">
+            <span class="theme-gr">${t.gr}</span>
+            <span class="theme-ru">${t.ru}</span>
+          </div>
         </div>
-      </div>
-    `).join('')}
-  `;
+      `).join('')}
+    `;
+  }
   
   // Части речи
   const posDropdown = document.getElementById('trainingPosDropdown');
-  posDropdown.innerHTML = `
-    <div class="pos-item" onclick="selectTrainingFilter('pos', '')" style="justify-content: center;">📚 Все части речи</div>
-    ${allPos.map(p => `
-      <div class="pos-item" onclick="selectTrainingFilter('pos', '${p.gr}')">
-        <div class="pos-text-wrapper">
-          <span class="pos-gr">${p.gr}</span>
-          <span class="pos-ru">${p.ru}</span>
+  if (posDropdown) {
+    posDropdown.innerHTML = `
+      <div class="pos-item" onclick="selectTrainingFilter('pos', '')" style="justify-content: center;">📚 Все части речи</div>
+      ${allPos.map(p => `
+        <div class="pos-item" onclick="selectTrainingFilter('pos', '${p.gr}')">
+          <div class="pos-text-wrapper">
+            <span class="pos-gr">${p.gr}</span>
+            <span class="pos-ru">${p.ru}</span>
+          </div>
         </div>
-      </div>
-    `).join('')}
-  `;
+      `).join('')}
+    `;
+  }
 }
-
+  
 function toggleTrainingTheme() {
   const dropdown = document.getElementById('trainingThemeDropdown');
   const posDropdown = document.getElementById('trainingPosDropdown');
@@ -5795,10 +5857,31 @@ function toggleTrainingTheme() {
 }
 
 function toggleTrainingPos() {
+  console.log('toggleTrainingPos вызвана');
   const dropdown = document.getElementById('trainingPosDropdown');
   const themeDropdown = document.getElementById('trainingThemeDropdown');
-  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-  themeDropdown.style.display = 'none';
+  
+  if (!dropdown) {
+    console.error('trainingPosDropdown не найден');
+    return;
+  }
+  
+  console.log('dropdown найден, текущий display:', dropdown.style.display);
+  
+  if (themeDropdown) themeDropdown.style.display = 'none';
+  
+  if (dropdown.style.display === 'block') {
+    dropdown.style.display = 'none';
+    console.log('Список скрыт');
+  } else {
+    dropdown.style.display = 'block';
+    console.log('Список показан');
+    // Заполняем список, если он пустой
+    if (dropdown.children.length === 0) {
+      console.log('Заполняем список');
+      populateTrainingDropdowns();
+    }
+  }
 }
 
 function selectTrainingFilter(type, value) {
