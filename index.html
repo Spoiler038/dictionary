@@ -3291,10 +3291,10 @@ a,
   </div>
 
   <!-- Выпадающие списки -->
-  <div style="position: relative; width: 100%; max-width: 400px; margin: 8px auto 0;">
-    <div id="trainingThemeDropdown" style="display: none; max-height: 150px; overflow-y: auto; border: 2px solid #f39c12; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
-    <div id="trainingPosDropdown" style="display: none; max-height: 150px; overflow-y: auto; border: 2px solid #8e44ad; border-radius: 8px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
-  </div>
+<div style="position: relative; width: 100%; max-width: 400px; margin: 8px auto 0;">
+  <div id="trainingThemeDropdown" class="theme-dropdown" style="display: none;"></div>
+  <div id="trainingPosDropdown" class="pos-dropdown" style="display: none;"></div>
+</div>
 </div>
 
     <!-- Карточка -->
@@ -4385,18 +4385,17 @@ function hideProgressWithDelay() {
     }
     
     function openModal(id) {
-      document.getElementById(id).classList.add('active');
-      toggleBodyScroll(true);
-      const messageEl = document.getElementById(id.replace('Modal', 'Message'));
-      if (messageEl) messageEl.innerHTML = '';
-    }
+  document.getElementById(id).classList.add('active');
+  toggleBodyScroll(true);
+  const messageEl = document.getElementById(id.replace('Modal', 'Message'));
+  if (messageEl) messageEl.innerHTML = '';
+}
     
    function closeModal(id) {
   document.getElementById(id).classList.remove('active');
   toggleBodyScroll(false);
   
   if (id === 'editModal') {
-    // Скрываем миниатюру при закрытии
     showImagePreview('');
     const status = document.getElementById('imageUploadStatus');
     if (status) {
@@ -4405,6 +4404,17 @@ function hideProgressWithDelay() {
     }
   }
 }
+
+    function openLoginModal() {
+  document.getElementById('loginPassword').value = '';
+  openModal('loginModal');
+  setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+}
+
+function openLogoutModal() {
+  openModal('logoutModal');
+}
+    
     
    function openAddModal() {
   if (!isEditor) {
