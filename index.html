@@ -2939,16 +2939,154 @@ a,
     min-width: 0 !important;
   }
 }
-    /* Ширина выпадающих списков в Тренировке - как в Словаре */
+    /* ===== ВЫПАДАЮЩИЕ СПИСКИ В ТРЕНИРОВКЕ (как в Словаре) ===== */
 #trainingThemeDropdown,
 #trainingPosDropdown {
-  width: 100% !important;
-  max-width: 400px !important;
-  min-width: 280px !important;
-  box-sizing: border-box !important;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  width: 100%;
+  max-width: 400px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: slideDown 0.2s ease;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d0d0 transparent;
+  margin: 0 auto;
 }
 
-@media (max-width: 767px) {
+#trainingThemeDropdown {
+  border: 2px solid #f39c12;
+}
+
+#trainingPosDropdown {
+  border: 2px solid #8e44ad;
+}
+
+#trainingThemeDropdown .theme-item,
+#trainingPosDropdown .pos-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+#trainingThemeDropdown .theme-item:hover,
+#trainingPosDropdown .pos-item:hover {
+  background: #f0f0f0;
+}
+
+#trainingThemeDropdown .theme-item:last-child,
+#trainingPosDropdown .pos-item:last-child {
+  border-bottom: none;
+}
+
+#trainingThemeDropdown .theme-text-wrapper,
+#trainingPosDropdown .pos-text-wrapper {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#trainingThemeDropdown .theme-gr,
+#trainingPosDropdown .pos-gr {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+}
+
+#trainingThemeDropdown .theme-ru,
+#trainingPosDropdown .pos-ru {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+  text-align: left;
+}
+
+/* Скрываем горизонтальный скролл */
+#trainingThemeDropdown::-webkit-scrollbar,
+#trainingPosDropdown::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-track,
+#trainingPosDropdown::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0 8px 8px 0;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-thumb,
+#trainingPosDropdown::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+#trainingThemeDropdown::-webkit-scrollbar-thumb:hover,
+#trainingPosDropdown::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
+
+    /* Кнопки выбора языка в Тренировке — как в Словаре */
+#trainingPage .filters-row .mode-selector button {
+  max-width: 100px;
+  min-width: 70px;
+  padding: 6px 12px;
+  height: 40px;
+  border: 2px solid #ddd;
+  background: #fafafa;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+#trainingPage .filters-row .mode-selector button:hover {
+  background: #e8f4fd;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#trainingPage .filters-row .mode-selector button:active {
+  transform: scale(0.95);
+}
+
+#trainingPage .filters-row .mode-selector button.active {
+  background: #ddd;
+  color: #000000;
+  border-color: #000000;
+}
+    @media (max-width: 767px) {
   #trainingPage .filters-wrapper {
     display: flex;
     flex-direction: column;
@@ -2968,6 +3106,7 @@ a,
     flex: 1;
     max-width: 150px;
     justify-content: center;
+    white-space: nowrap;
   }
   
   #trainingPage .filters-row-center {
@@ -2982,40 +3121,6 @@ a,
     justify-content: center;
     width: 100%;
     max-width: 300px;
-  }
-  #trainingPage .filters-row .mode-selector button {
-    max-width: 100px;
-    min-width: 70px;
-    padding: 6px 12px;
-    font-size: 14px;
-    flex: 1;
-    height: 40px;
-    border: 2px solid #ddd;
-    background: #fafafa;
-    border-radius: 20px;
-    color: #000000;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-  
-  #trainingPage .filters-row .mode-selector button:hover {
-    background: #e8f4fd;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  
-  #trainingPage .filters-row .mode-selector button:active {
-    transform: scale(0.95);
-  }
-  
-  #trainingPage .filters-row .mode-selector button.active {
-    background: #ddd;
-    color: #000000;
-    border-color: #000000;
   }
 }
  </style>
@@ -4460,6 +4565,16 @@ function openLogoutModal() {
   openModal('logoutModal');
 }
     
+    function openAdminModal() {
+  if (!isEditor) {
+    openLoginModal();
+    return;
+  }
+  document.getElementById('oldPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('adminMessage').innerHTML = '';
+  openModal('adminModal');
+}
     
    function openAddModal() {
   if (!isEditor) {
@@ -5975,24 +6090,43 @@ function applyTrainingFilters() {
   trainingStats = { correct: 0, wrong: 0, total: 0 };
   
   if (trainingWords.length === 0) {
-    document.getElementById('trainingWord').innerHTML = '😕 Нет слов с фото';
-    document.getElementById('trainingImage').style.display = 'none';
-    document.getElementById('trainingPlaceholder').style.display = 'block';
-    document.getElementById('trainingPlaceholder').textContent = '📭';
+    // Не заменяем innerHTML, а просто показываем сообщение
+    const wordEl = document.getElementById('trainingWord');
+    if (wordEl) {
+      wordEl.style.display = 'flex';
+    }
+    
+    const wordFront = document.getElementById('trainingWordFront');
+    if (wordFront) {
+      wordFront.innerHTML = '😕 Нет слов с фото';
+    }
+    
+    const img = document.getElementById('trainingImage');
+    if (img) img.style.display = 'none';
+    
+    const placeholder = document.getElementById('trainingPlaceholder');
+    if (placeholder) {
+      placeholder.style.display = 'block';
+      placeholder.textContent = '📭';
+    }
+    
     document.getElementById('trainingCounter').textContent = '0/0';
     document.getElementById('trainingProgressInfo').textContent = 'Нет слов для тренировки';
     document.getElementById('trainingPrevBtn').disabled = true;
     document.getElementById('trainingNextBtn').disabled = true;
-    document.getElementById('trainingCorrectBtn').style.opacity = '0.6';
-    document.getElementById('trainingCorrectBtn').style.pointerEvents = 'none';
-    document.getElementById('trainingWrongBtn').style.opacity = '0.6';
-    document.getElementById('trainingWrongBtn').style.pointerEvents = 'none';
+    
     return;
+  }
+  
+  // Восстанавливаем отображение слова
+  const wordEl = document.getElementById('trainingWord');
+  if (wordEl) {
+    wordEl.style.display = 'flex';
   }
   
   showTrainingCard();
 }
-
+  
 // ========== ОТОБРАЖЕНИЕ КАРТОЧКИ ==========
 function showTrainingCard() {
   if (trainingWords.length === 0) return;
@@ -6005,12 +6139,25 @@ function showTrainingCard() {
   const wordInner = document.getElementById('trainingWordInner');
   const img = document.getElementById('trainingImage');
   const placeholder = document.getElementById('trainingPlaceholder');
-  const imgContainer = document.getElementById('trainingImageContainer');
   
-  // Проверка на существование элементов
-  if (!wordFront || !wordBackText || !wordInner || !img || !placeholder) {
-    console.warn('Элементы тренировки не найдены');
-    return;
+  // Если структура потеряна — восстанавливаем
+  if (!wordFront || !wordBackText || !wordInner) {
+    const wordEl = document.getElementById('trainingWord');
+    if (wordEl) {
+      wordEl.innerHTML = `
+        <div id="trainingWordInner" style="width: 100%; padding: 12px 24px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; position: relative; min-height: 60px; display: flex; align-items: center; justify-content: center;">
+          <div id="trainingWordFront" style="backface-visibility: hidden; width: 100%;">
+            Загрузка...
+            <span style="font-size: 14px; color: #95a5a6; font-weight: 400; margin-left: 8px;">👆 нажмите</span>
+          </div>
+          <div id="trainingWordBack" style="backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotateX(180deg); display: flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 12px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+            <span id="trainingWordBackText" style="font-size: 26px; font-weight: 700; color: #2c3e50;">---</span>
+          </div>
+        </div>
+      `;
+    }
+    // После восстановления — продолжаем
+    return showTrainingCard();
   }
   
   // Сбрасываем переворот
@@ -6029,7 +6176,7 @@ function showTrainingCard() {
   } else if (trainingMode === 'russian') {
     displayWord = word.wordRu;
     translationWord = word.wordGr;
-  } else { // auto
+  } else {
     const randomChoice = Math.random() < 0.5 ? 'gr' : 'ru';
     if (randomChoice === 'gr') {
       displayWord = word.wordGr;
