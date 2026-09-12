@@ -2955,18 +2955,74 @@ a,
 }
 
 @media (max-width: 767px) {
-  #trainingThemeDropdown,
-  #trainingPosDropdown {
-    max-width: 100% !important;
-    min-width: 0 !important;
+  #trainingPage .filters-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-}
-
-#trainingPage .pos-toggle-btn {
-  cursor: pointer !important;
-  pointer-events: auto !important;
-  z-index: 10;
-  position: relative;
+  
+  #trainingPage .filters-row-left {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  #trainingPage .filters-row-left .theme-toggle-btn,
+  #trainingPage .filters-row-left .pos-toggle-btn {
+    flex: 1;
+    max-width: 150px;
+    justify-content: center;
+  }
+  
+  #trainingPage .filters-row-center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  #trainingPage .filters-row-center .mode-selector {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+  }
+  #trainingPage .filters-row .mode-selector button {
+    max-width: 100px;
+    min-width: 70px;
+    padding: 6px 12px;
+    font-size: 14px;
+    flex: 1;
+    height: 40px;
+    border: 2px solid #ddd;
+    background: #fafafa;
+    border-radius: 20px;
+    color: #000000;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  #trainingPage .filters-row .mode-selector button:hover {
+    background: #e8f4fd;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  #trainingPage .filters-row .mode-selector button:active {
+    transform: scale(0.95);
+  }
+  
+  #trainingPage .filters-row .mode-selector button.active {
+    background: #ddd;
+    color: #000000;
+    border-color: #000000;
+  }
 }
  </style>
 </head>
@@ -3250,7 +3306,7 @@ a,
     
     <div class="filters-row-center">
       <div class="mode-selector" style="display: flex; gap: 6px; justify-content: center; min-width: 150px;">
-        <button id="trainingModeGreek" onclick="setTrainingMode('greek')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+        <button id="trainingModeGreek" onclick="setTrainingMode('greek')">
           <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
             <rect width="24" height="16" fill="#0d5eaf"/>
             <rect y="0" width="24" height="2" fill="white"/>
@@ -3263,7 +3319,7 @@ a,
           </svg>
         </button>
         
-        <button id="trainingModeAuto" class="active" onclick="setTrainingMode('auto')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+        <button id="trainingModeAuto" onclick="setTrainingMode('auto')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <circle cx="12" cy="12" r="3.5"/>
@@ -3278,7 +3334,7 @@ a,
           </svg>
         </button>
         
-        <button id="trainingModeRussian" onclick="setTrainingMode('russian')" style="padding: 6px 12px; border: 2px solid #ddd; background: #fafafa; border-radius: 20px; font-size: 14px; color: #000000; cursor: pointer; transition: all 0.3s; flex: 1; max-width: 100px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+        <button id="trainingModeRussian" onclick="setTrainingMode('russian')">
           <svg class="flag-icon" viewBox="0 0 24 16" style="width: 22px; height: 16px; display: inline-block; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
             <rect width="24" height="16" fill="white"/>
             <rect y="0" width="24" height="5.33" fill="white"/>
@@ -4282,23 +4338,18 @@ function hideProgressWithDelay() {
       }
     }
     
-    function handleTitleClick(e) {
+   function handleTitleClick(e) {
   if (e) {
+    // Проверяем, что клик был не по кнопкам шапки
+    const isClickOnButton = e.target.closest('.header-buttons button') || 
+                            e.target.closest('.editor-badge');
+    if (isClickOnButton) {
+      return;
+    }
     e.stopPropagation();
     e.preventDefault();
   }
-  // ВСЕГДА открываем модальное окно входа в редактор
-  if (typeof openLoginModal === 'function') {
-    openLoginModal();
-  } else {
-    console.error('openLoginModal не определена');
-    // Запасной вариант: открываем через openModal
-    if (typeof openModal === 'function') {
-      document.getElementById('loginPassword').value = '';
-      openModal('loginModal');
-      setTimeout(() => document.getElementById('loginPassword').focus(), 300);
-    }
-  }
+  openLoginModal();
 }
     
    function updateHeaderButtons() {
@@ -4309,10 +4360,10 @@ function hideProgressWithDelay() {
   if (isEditor) {
     container.innerHTML = `
       <span class="editor-badge">📝 РЕДАКТОР</span>
-      <button onclick="openAdminModal()">🔑 Пароль</button>
-      <button class="btn-logout" onclick="openLogoutModal()">🚪 Выйти</button>
-      <button class="btn-show-all" onclick="showAllWords()">📚 Все слова</button>
-      <button class="active-btn" onclick="openAddModal()">➕ Добавить слово</button>
+      <button onclick="event.stopPropagation(); openAdminModal()">🔑 Пароль</button>
+      <button class="btn-logout" onclick="event.stopPropagation(); openLogoutModal()">🚪 Выйти</button>
+      <button class="btn-show-all" onclick="event.stopPropagation(); showAllWords()">📚 Все слова</button>
+      <button class="active-btn" onclick="event.stopPropagation(); openAddModal()">➕ Добавить слово</button>
     `;
     if (trainingWrapper) trainingWrapper.style.display = 'none';
     if (trainingWrapperMobile) trainingWrapperMobile.style.display = 'none';
