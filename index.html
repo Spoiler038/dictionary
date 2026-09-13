@@ -2783,11 +2783,13 @@ a,
   transform: scale(0.95);
 }
 
-    #trainingPage .training-content .training-header {
+   #trainingPage .training-content .training-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 0 16px 0;
+  gap: 8px;
+  min-height: 44px;
 }
     
     #trainingThemeDropdown,
@@ -2864,15 +2866,6 @@ a,
     max-width: 400px;
     flex: 0 1 auto;
     gap: 8px;
-  }
-  
-  #trainingPage .filters-row .mode-selector button {
-    max-width: 100px;
-    min-width: 70px;
-    padding: 6px 12px;
-    font-size: 14px;
-    flex: 1;
-    height: 40px;
   }
 }
     /* ===== МИНИАТЮРА ФОТО В МОДАЛКЕ ===== */
@@ -3043,15 +3036,15 @@ a,
   background: #b0b0b0;
 }
 
-    /* Кнопки выбора языка в Тренировке — как в Словаре */
+   /* Кнопки выбора языка в Тренировке — как в Словаре */
 #trainingPage .filters-row .mode-selector button {
-  max-width: 100px;
-  min-width: 70px;
-  padding: 6px 12px;
-  height: 40px;
+  max-width: 110px;
+  min-width: 80px;
+  height: 44px;
+  padding: 8px 16px;
   border: 2px solid #ddd;
   background: #fafafa;
-  border-radius: 20px;
+  border-radius: 22px;
   font-size: 14px;
   color: #000000;
   cursor: pointer;
@@ -3060,7 +3053,8 @@ a,
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
+  box-sizing: border-box;
 }
 
 #trainingPage .filters-row .mode-selector button:hover {
@@ -3074,9 +3068,22 @@ a,
 }
 
 #trainingPage .filters-row .mode-selector button.active {
-  background: #ddd;
-  color: #000000;
-  border-color: #000000;
+  background: #ddd !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+#trainingPage .filters-row .mode-selector button .flag-icon {
+  width: 22px;
+  height: 16px;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+#trainingPage .filters-row .mode-selector button .auto-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
     @media (max-width: 767px) {
       
@@ -3142,22 +3149,31 @@ a,
     /* Заголовок Тренировки — как h1 в Словаре */
 .training-title {
   font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
 }
 
 .training-title-icon {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
+  vertical-align: middle;
 }
 
 @media (max-width: 767px) {
   .training-title {
     font-size: 20px;
+    line-height: 1.2;
   }
   
   .training-title-icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
 }
  </style>
@@ -3419,8 +3435,8 @@ a,
     </svg>
   </button>
   <!-- Заголовок -->
-  <div class="training-title" style="display: flex; align-items: center; font-weight: 700; color: #2c3e50;">
-  <svg class="training-title-icon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+ <div class="training-title">
+  <svg class="training-title-icon" viewBox="0 0 24 24" fill="none">
     <circle cx="12" cy="14" r="6" fill="#f39c12" stroke="#e67e22" stroke-width="1.5"/>
     <path d="M12 10.5l1.2 2.4 2.6.4-1.9 1.9.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.9 2.6-.4z" fill="#fff" stroke="#fff" stroke-width="0.5"/>
     <path d="M9 3l3 4 3-4" fill="#e74c3c" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3459,10 +3475,10 @@ a,
   </button>
   
   <button id="trainingModeAuto" onclick="setTrainingMode('auto')">
-    <svg class="auto-icon" viewBox="0 0 24 24" width="22" height="22">
-      <use href="#icon-auto"/>
-    </svg>
-  </button>
+  <svg class="auto-icon" viewBox="0 0 24 24">
+    <use href="#icon-auto"/>
+  </svg>
+</button>
   
   <button id="trainingModeRussian" onclick="setTrainingMode('russian')">
     <svg class="flag-icon" viewBox="0 0 24 16">
