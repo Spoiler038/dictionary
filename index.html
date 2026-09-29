@@ -1894,15 +1894,6 @@ a,
     flex: 0 1 auto;
     gap: 8px;
   }
-  
-  #trainingPage .filters-row .mode-selector button {
-    max-width: 100px;
-    min-width: 70px;
-    padding: 6px 12px;
-    font-size: 14px;
-    flex: 1;
-    height: 40px;
-  }
 }
 
 /* ===== МОБИЛЬНЫЕ СТИЛИ ===== */
@@ -2863,7 +2854,7 @@ a,
   }
   
   #trainingPage .filters-row .mode-selector {
-    max-width: 400px;
+    max-width: 320px;
     flex: 0 1 auto;
     gap: 8px;
   }
@@ -3037,7 +3028,7 @@ a,
 }
 
    /* Кнопки выбора языка в Тренировке — как в Словаре */
-#trainingPage .filters-row .mode-selector button {
+#trainingPage .mode-selector button {
   max-width: 110px;
   min-width: 80px;
   height: 44px;
@@ -3057,34 +3048,36 @@ a,
   box-sizing: border-box;
 }
 
-#trainingPage .filters-row .mode-selector button:hover {
+#trainingPage .mode-selector button:hover {
   background: #e8f4fd;
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-#trainingPage .filters-row .mode-selector button:active {
+#trainingPage .mode-selector button:active {
   transform: scale(0.95);
 }
 
-#trainingPage .filters-row .mode-selector button.active {
+#trainingPage .mode-selector button.active {
   background: #ddd !important;
   color: #000000 !important;
   border-color: #000000 !important;
+  border-radius: 22px !important;
 }
 
-#trainingPage .filters-row .mode-selector button .flag-icon {
+#trainingPage .mode-selector button .flag-icon {
   width: 22px;
   height: 16px;
   margin-right: 0;
   flex-shrink: 0;
 }
 
-#trainingPage .filters-row .mode-selector button .auto-icon {
+#trainingPage .mode-selector button .auto-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
+    
     @media (max-width: 767px) {
       
 .result-item .actions button {
@@ -3125,7 +3118,15 @@ a,
     gap: 6px;
     justify-content: center;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
+  }
+
+      #trainingPage .mode-selector button {
+    min-width: 70px;
+    height: 44px;
+    padding: 6px 12px;
+    border-radius: 22px;
+    box-sizing: border-box;
   }
       
 #trainingCorrectBtn,
@@ -3459,8 +3460,8 @@ a,
       <button class="pos-toggle-btn" onclick="toggleTrainingPos()" style="padding: 8px 16px; background: #8e44ad; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 4px; z-index: 10; position: relative;">📚 Части речи</button>
     </div>
     
-    <div class="filters-row-center">
-      <div class="mode-selector" style="display: flex; gap: 6px; justify-content: center; min-width: 150px;">
+        <div class="filters-row-center">
+      <div class="mode-selector">
   <button id="trainingModeGreek" onclick="setTrainingMode('greek')">
     <svg class="flag-icon" viewBox="0 0 24 16">
       <rect width="24" height="16" fill="#0d5eaf"/>
