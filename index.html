@@ -3113,12 +3113,14 @@ a,
     width: 100%;
   }
   
-  #trainingPage .filters-row-center .mode-selector {
+    #trainingPage .filters-row-center .mode-selector {
     display: flex;
-    gap: 6px;
+    flex-direction: row;
+    gap: 8px;
+    max-width: 360px;
+    flex: 0 1 auto;
     justify-content: center;
-    width: 100%;
-    max-width: 320px;
+    align-items: center;
   }
 
       #trainingPage .mode-selector button {
