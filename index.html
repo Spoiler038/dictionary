@@ -5057,21 +5057,33 @@ function openLogoutModal() {
     }
     
     function checkDuplicate() {
+  // При редактировании проверку дубликатов не делаем
+  // (при редактировании меняются тема/ЧР/фото, а слово остаётся тем же)
+  if (editingId !== null) {
+    document.getElementById('duplicateWordGr').classList.remove('visible');
+    document.getElementById('duplicateWordRu').classList.remove('visible');
+    
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.style.opacity = '1';
+      saveBtn.style.cursor = 'pointer';
+      saveBtn.innerHTML = '💾 Сохранить';
+    }
+    return;
+  }
+  
+  // Режим добавления — проверка на дубликаты активна
   const wordGr = document.getElementById('editWordGr').value.trim();
   const wordRu = document.getElementById('editWordRu').value.trim();
   const saveBtn = document.getElementById('saveBtn');
   
   let hasDuplicate = false;
   
-  // Приводим editingId к числу (на случай, если пришёл строкой)
-  const currentEditingId = editingId !== null ? Number(editingId) : null;
-  
   if (wordGr && allData) {
-    const exists = allData.words.some(w => {
-      // Пропускаем редактируемое слово
-      if (currentEditingId !== null && Number(w.id) === currentEditingId) return false;
-      return w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase();
-    });
+    const exists = allData.words.some(w => 
+      w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase()
+    );
     document.getElementById('duplicateWordGr').classList.toggle('visible', exists);
     if (exists) hasDuplicate = true;
   } else {
@@ -5079,10 +5091,9 @@ function openLogoutModal() {
   }
   
   if (wordRu && allData) {
-    const exists = allData.words.some(w => {
-      if (currentEditingId !== null && Number(w.id) === currentEditingId) return false;
-      return w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase();
-    });
+    const exists = allData.words.some(w => 
+      w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase()
+    );
     document.getElementById('duplicateWordRu').classList.toggle('visible', exists);
     if (exists) hasDuplicate = true;
   } else {
@@ -5627,18 +5638,15 @@ function showImagePreview(url) {
   }
   
   // Проверка на дубликаты
-   if (allData && allData.words) {
-    const currentEditingId = editingId !== null ? Number(editingId) : null;
+     // Проверка на дубликаты — только при добавлении нового слова
+  if (editingId === null && allData && allData.words) {
+    const duplicateGr = allData.words.some(w => 
+      w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase()
+    );
     
-    const duplicateGr = allData.words.some(w => {
-      if (currentEditingId !== null && Number(w.id) === currentEditingId) return false;
-      return w.wordGr && w.wordGr.toLowerCase() === wordGr.toLowerCase();
-    });
-    
-    const duplicateRu = allData.words.some(w => {
-      if (currentEditingId !== null && Number(w.id) === currentEditingId) return false;
-      return w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase();
-    });
+    const duplicateRu = allData.words.some(w => 
+      w.wordRu && w.wordRu.toLowerCase() === wordRu.toLowerCase()
+    );
     
     if (duplicateGr) {
       document.getElementById('editMessage').innerHTML = '<div class="error">❌ Слово (греческий) уже существует!</div>';
